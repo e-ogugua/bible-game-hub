@@ -1,0 +1,287 @@
+'use client'
+
+import React from 'react'
+import Link from 'next/link'
+import { BookOpen, Brain, Target, Trophy, Users, Calendar, Star, RotateCcw, Crown } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { useAuth } from '@/contexts/AuthContext'
+import { localStorageService } from '@/lib/localStorage'
+
+export default function Home() {
+  const { user, resetProgress } = useAuth()
+
+  const games = [
+    {
+      id: 'quiz',
+      title: 'Bible Quiz Challenge',
+      description: 'Test your knowledge of biblical stories and characters',
+      icon: BookOpen,
+      href: '/quiz',
+      color: 'from-blue-500 to-purple-600'
+    },
+    {
+      id: 'memory',
+      title: 'Scripture Memory',
+      description: 'Memorize and recall famous Bible verses',
+      icon: Brain,
+      href: '/stories',
+      color: 'from-green-500 to-teal-600'
+    },
+    {
+      id: 'story',
+      title: 'Character Stories',
+      description: 'Walk through the lives of biblical heroes',
+      icon: Users,
+      href: '/stories/characters',
+      color: 'from-yellow-500 to-orange-600'
+    },
+    {
+      id: 'adventure',
+      title: 'Bible Adventures',
+      description: 'Embark on epic journeys through biblical history',
+      icon: Target,
+      href: '/adventure',
+      color: 'from-purple-500 to-pink-600'
+    },
+    {
+      id: 'faithverse',
+      title: 'FaithVerse Portal',
+      description: 'Enter the future of biblical gaming and exploration',
+      icon: Crown,
+      href: '/faithverse',
+      color: 'from-purple-500 to-indigo-600'
+    },
+  ]
+
+  const dailyChallenges = [
+    {
+      id: 'daily_verse',
+      title: 'Daily Bible Verse',
+      description: 'Memorize today\'s featured verse',
+      icon: BookOpen,
+      completed: false
+    },
+    {
+      id: 'quiz_streak',
+      title: 'Quiz Streak',
+      description: 'Complete 3 quizzes in a row',
+      icon: Target,
+      completed: true
+    }
+  ]
+
+  const handleResetProgress = async () => {
+    if (window.confirm('Are you sure you want to reset all your progress? This cannot be undone.')) {
+      await resetProgress()
+    }
+  }
+
+  const getBestScores = () => {
+    if (!user) return {}
+
+    return {
+      quiz: localStorageService.getBestScore('quiz', user.id)?.score || 0,
+      memory: localStorageService.getBestScore('memory', user.id)?.score || 0,
+      story: localStorageService.getBestScore('story', user.id)?.score || 0,
+      adventure: localStorageService.getBestScore('adventure', user.id)?.score || 0
+    }
+  }
+
+  const bestScores = getBestScores()
+
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white">
+      <div className="container mx-auto px-6 py-20">
+        {/* Header with User Stats */}
+        <div className="mb-16">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+            <div>
+              <h1 className="text-5xl md:text-7xl font-bold font-serif mb-6 bg-gradient-to-r from-purple-300 to-blue-200 bg-clip-text text-transparent">
+                Bible Game Hub
+              </h1>
+              <p className="text-xl md:text-2xl text-blue-100 mb-4">
+                Interactive Scripture Games & Biblical Knowledge
+              </p>
+              {user && (
+                <div className="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-4 md:space-y-0">
+                  <div className="flex items-center space-x-6 text-lg">
+                    <div className="flex items-center space-x-2">
+                      <Star className="w-5 h-5 text-yellow-400" />
+                      <span>Level {user.level}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Trophy className="w-5 h-5 text-purple-400" />
+                      <span>{user.xp} XP</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleResetProgress}
+                    className="flex items-center space-x-2 text-red-400 hover:text-red-300 transition-colors"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    <span className="text-sm">Reset Progress</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {!user && (
+              <div className="mt-8 md:mt-0">
+                <Link
+                  href="/auth"
+                  className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
+                >
+                  Sign In to Track Progress
+                </Link>
+              </div>
+            )}
+          </div>
+
+          <p className="text-lg text-blue-200 max-w-3xl">
+            Learn, play, and grow in your faith through engaging Bible games,
+            quizzes, and interactive challenges for all ages
+          </p>
+        </div>
+
+        {/* Game Cards Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {games.map((game, index) => (
+            <motion.div
+              key={game.id}
+              className="group relative bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-500 overflow-hidden cursor-pointer"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 + 0.6 }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {/* Animated background gradient */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+
+              {/* Pulsing border effect */}
+              <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-white/30 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-white/10" />
+
+              {/* Icon with enhanced styling */}
+              <motion.div
+                className={`inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br ${game.color} rounded-2xl mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
+                whileHover={{ rotate: 5, scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                <game.icon className="w-10 h-10 text-white" />
+              </motion.div>
+
+              {/* Content with improved typography */}
+              <h3 className="text-2xl font-bold mb-3 group-hover:text-yellow-300 transition-colors duration-300">
+                {game.title}
+              </h3>
+
+              <p className="text-blue-100 leading-relaxed mb-6">
+                {game.description}
+              </p>
+
+              {/* Enhanced call-to-action */}
+              <div className="flex items-center text-sm font-medium text-purple-300 group-hover:text-yellow-300 transition-colors duration-300">
+                <span>Start Journey</span>
+                <motion.div
+                  className="ml-2"
+                  animate={{ x: [0, 4, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  →
+                </motion.div>
+              </div>
+
+              {/* Floating particles on hover */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-2 h-2 bg-yellow-400 rounded-full"
+                    style={{
+                      left: `${20 + (i * 12)}%`,
+                      top: `${30 + (i % 2) * 40}%`,
+                    }}
+                    animate={{
+                      y: [0, -15, 0],
+                      opacity: [0, 0.8, 0],
+                      scale: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: i * 0.3,
+                    }}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Daily Challenges */}
+        <div className="mb-16">
+          <div className="flex items-center mb-6">
+            <Calendar className="w-6 h-6 text-yellow-400 mr-3" />
+            <h2 className="text-2xl font-bold">Daily Challenges</h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {dailyChallenges.map((challenge) => (
+              <div
+                key={challenge.id}
+                className={`bg-white/10 backdrop-blur-sm rounded-xl p-4 border ${
+                  challenge.completed ? 'border-green-400 bg-green-900/20' : 'border-white/20'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <challenge.icon className={`w-6 h-6 ${challenge.completed ? 'text-green-400' : 'text-blue-400'}`} />
+                    <div>
+                      <h3 className="font-semibold">{challenge.title}</h3>
+                      <p className="text-sm text-blue-200">{challenge.description}</p>
+                    </div>
+                  </div>
+                </div>
+                <Link
+                  href="/stories/characters"
+                  className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold transition-colors"
+                >
+                  Continue
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Enhanced footer section */}
+        <motion.div
+          className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+        >
+          <div className="flex justify-center items-center space-x-2 mb-4">
+            <Star className="w-6 h-6 text-yellow-400" />
+            <Star className="w-5 h-5 text-yellow-400" />
+            <Star className="w-6 h-6 text-yellow-400" />
+          </div>
+
+          <h2 className="text-3xl font-bold mb-4 text-transparent bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text">
+            Ready to Begin Your Journey?
+          </h2>
+
+          <p className="text-lg text-blue-100 mb-6 max-w-2xl mx-auto">
+            Choose your path and discover the beauty, wisdom, and power of God's Word
+            through immersive, interactive experiences that will strengthen your faith.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-blue-200">
+            <span className="bg-blue-900/30 px-4 py-2 rounded-full">✨ 3D Visualizations</span>
+            <span className="bg-purple-900/30 px-4 py-2 rounded-full">🎵 Immersive Audio</span>
+            <span className="bg-indigo-900/30 px-4 py-2 rounded-full">📚 Bible-Based Stories</span>
+            <span className="bg-cyan-900/30 px-4 py-2 rounded-full">🎮 Interactive Gameplay</span>
+          </div>
+        </motion.div>
+      </div>
+    </main>
+  )
