@@ -24,7 +24,7 @@ export default function Home() {
       title: 'Scripture Memory',
       description: 'Memorize and recall famous Bible verses',
       icon: Brain,
-      href: '/stories',
+      href: '/stories/characters',
       color: 'from-green-500 to-teal-600'
     },
     {
@@ -154,75 +154,76 @@ export default function Home() {
         {/* Game Cards Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {games.map((game, index) => (
-            <motion.div
-              key={game.id}
-              className="group relative bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-500 overflow-hidden cursor-pointer"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 + 0.6 }}
-              whileHover={{ scale: 1.02, y: -5 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              {/* Animated background gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
-
-              {/* Pulsing border effect */}
-              <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-white/30 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-white/10" />
-
-              {/* Icon with enhanced styling */}
+            <Link key={game.id} href={game.href}>
               <motion.div
-                className={`inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br ${game.color} rounded-2xl mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
-                whileHover={{ rotate: 5, scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 400 }}
+                className="group relative bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-500 overflow-hidden cursor-pointer"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 + 0.6 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <game.icon className="w-10 h-10 text-white" />
-              </motion.div>
+                {/* Animated background gradient */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
 
-              {/* Content with improved typography */}
-              <h3 className="text-2xl font-bold mb-3 group-hover:text-yellow-300 transition-colors duration-300">
-                {game.title}
-              </h3>
+                {/* Pulsing border effect */}
+                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-white/30 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-white/10" />
 
-              <p className="text-blue-100 leading-relaxed mb-6">
-                {game.description}
-              </p>
-
-              {/* Enhanced call-to-action */}
-              <div className="flex items-center text-sm font-medium text-purple-300 group-hover:text-yellow-300 transition-colors duration-300">
-                <span>Start Journey</span>
+                {/* Icon with enhanced styling */}
                 <motion.div
-                  className="ml-2"
-                  animate={{ x: [0, 4, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
+                  className={`inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br ${game.color} rounded-2xl mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
+                  whileHover={{ rotate: 5, scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 400 }}
                 >
-                  →
+                  <game.icon className="w-10 h-10 text-white" />
                 </motion.div>
-              </div>
 
-              {/* Floating particles on hover */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                {Array.from({ length: 6 }).map((_, i) => (
+                {/* Content with improved typography */}
+                <h3 className="text-2xl font-bold mb-3 group-hover:text-yellow-300 transition-colors duration-300">
+                  {game.title}
+                </h3>
+
+                <p className="text-blue-100 leading-relaxed mb-6">
+                  {game.description}
+                </p>
+
+                {/* Enhanced call-to-action */}
+                <div className="flex items-center text-sm font-medium text-purple-300 group-hover:text-yellow-300 transition-colors duration-300">
+                  <span>Start Journey</span>
                   <motion.div
-                    key={i}
-                    className="absolute w-2 h-2 bg-yellow-400 rounded-full"
-                    style={{
-                      left: `${20 + (i * 12)}%`,
-                      top: `${30 + (i % 2) * 40}%`,
-                    }}
-                    animate={{
-                      y: [0, -15, 0],
-                      opacity: [0, 0.8, 0],
-                      scale: [0.5, 1, 0.5],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      delay: i * 0.3,
-                    }}
-                  />
-                ))}
-              </div>
-            </motion.div>
+                    className="ml-2"
+                    animate={{ x: [0, 4, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    →
+                  </motion.div>
+                </div>
+
+                {/* Floating particles on hover */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute w-2 h-2 bg-yellow-400 rounded-full"
+                      style={{
+                        left: `${20 + (i * 12)}%`,
+                        top: `${30 + (i % 2) * 40}%`,
+                      }}
+                      animate={{
+                        y: [0, -15, 0],
+                        opacity: [0, 0.8, 0],
+                        scale: [0.5, 1, 0.5],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        delay: i * 0.3,
+                      }}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            </Link>
           ))}
         </div>
 
