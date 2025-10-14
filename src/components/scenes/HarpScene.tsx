@@ -1,23 +1,35 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Box, Cylinder, Plane, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
 export const HarpScene: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   const harpRef = useRef<THREE.Group>(null);
   const stringsRef = useRef<THREE.Group>(null);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   useFrame((state) => {
+    if (!isClient) return;
+
     if (harpRef.current) {
       harpRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.05;
     }
     if (stringsRef.current) {
       stringsRef.current.children.forEach((string, index) => {
-        const offset = index * 0.2;
-        string.position.z = Math.sin(state.clock.elapsedTime * 2 + offset) * 0.05;
+        const mesh = string as THREE.Mesh;
+        mesh.scale.y = 1 + Math.sin(state.clock.elapsedTime * 2 + index * 0.5) * 0.1;
       });
     }
   });
+
+  // Don't render during SSR
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <group>

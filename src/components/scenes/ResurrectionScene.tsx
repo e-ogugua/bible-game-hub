@@ -1,14 +1,21 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Box, Sphere, Plane } from '@react-three/drei';
 import * as THREE from 'three';
 
 export const ResurrectionScene: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   const lightRaysRef = useRef<THREE.Group>(null);
   const crossRef = useRef<THREE.Group>(null);
   const stoneRef = useRef<THREE.Mesh>(null);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   useFrame((state) => {
+    if (!isClient) return;
+
     if (lightRaysRef.current) {
       lightRaysRef.current.rotation.y = state.clock.elapsedTime * 0.2;
       lightRaysRef.current.children.forEach((ray, index) => {
@@ -16,12 +23,17 @@ export const ResurrectionScene: React.FC = () => {
       });
     }
     if (crossRef.current) {
-      crossRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+      crossRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
     }
     if (stoneRef.current) {
-      stoneRef.current.position.x = -2 + Math.sin(state.clock.elapsedTime * 0.3) * 0.5;
+      stoneRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.3) * 0.2;
     }
   });
+
+  // Don't render during SSR
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <group>

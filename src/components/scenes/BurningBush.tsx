@@ -1,12 +1,17 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Sphere, Plane, Float } from '@react-three/drei';
 import * as THREE from 'three';
 
 export const BurningBush: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   const bushRef = useRef<THREE.Group>(null);
   const fireRef = useRef<THREE.Group>(null);
   const particlesRef = useRef<THREE.Group>(null);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Create particle positions
   const particlePositions = useMemo(() => {
@@ -20,6 +25,8 @@ export const BurningBush: React.FC = () => {
   }, []);
 
   useFrame((state) => {
+    if (!isClient) return;
+
     if (bushRef.current) {
       bushRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
       bushRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.05;
@@ -48,6 +55,11 @@ export const BurningBush: React.FC = () => {
       });
     }
   });
+
+  // Don't render during SSR
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <group>

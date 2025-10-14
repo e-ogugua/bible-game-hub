@@ -79,7 +79,7 @@ export default function Home() {
   ]
 
   const handleResetProgress = async () => {
-    if (window.confirm('Are you sure you want to reset all your progress? This cannot be undone.')) {
+    if (typeof window !== 'undefined' && window.confirm('Are you sure you want to reset all your progress? This cannot be undone.')) {
       await resetProgress()
     }
   }

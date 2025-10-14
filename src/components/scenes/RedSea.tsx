@@ -1,23 +1,35 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Box, Plane } from '@react-three/drei';
 import * as THREE from 'three';
 
 export const RedSea: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   const waterRef = useRef<THREE.Mesh>(null);
   const leftWallRef = useRef<THREE.Mesh>(null);
   const rightWallRef = useRef<THREE.Mesh>(null);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   useFrame((state) => {
+    if (!isClient) return;
+
     if (waterRef.current) {
       waterRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
     }
     if (leftWallRef.current && rightWallRef.current) {
       const time = state.clock.elapsedTime;
-      leftWallRef.current.position.x = -2 + Math.sin(time * 0.3) * 0.5;
-      rightWallRef.current.position.x = 2 - Math.sin(time * 0.3) * 0.5;
+      leftWallRef.current.scale.y = 1 + Math.sin(time * 0.3) * 0.1;
+      rightWallRef.current.scale.y = 1 + Math.sin(time * 0.3 + Math.PI) * 0.1;
     }
   });
+
+  // Don't render during SSR
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <group>

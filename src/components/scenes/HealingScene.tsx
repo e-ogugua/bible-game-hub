@@ -1,24 +1,38 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Sphere, Box, Plane, Cylinder } from '@react-three/drei';
 import * as THREE from 'three';
 
 export const HealingScene: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   const jesusRef = useRef<THREE.Group>(null);
   const healingLightRef = useRef<THREE.Mesh>(null);
   const personRef = useRef<THREE.Group>(null);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   useFrame((state) => {
+    if (!isClient) return;
+
     if (jesusRef.current) {
       jesusRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
     }
     if (healingLightRef.current) {
-      healingLightRef.current.scale.setScalar(1 + Math.sin(state.clock.elapsedTime * 2) * 0.2);
+      const time = state.clock.elapsedTime;
+      healingLightRef.current.scale.setScalar(1 + Math.sin(time * 2) * 0.3);
+      healingLightRef.current.rotation.y = time * 0.5;
     }
     if (personRef.current) {
-      personRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.05;
+      personRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.05;
     }
   });
+
+  // Don't render during SSR
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <group>

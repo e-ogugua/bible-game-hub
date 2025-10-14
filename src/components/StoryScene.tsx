@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Scene3D } from '@/components/Scene3D';
 import { BurningBush } from '@/components/scenes/BurningBush';
 import { RedSea } from '@/components/scenes/RedSea';
@@ -13,6 +14,12 @@ interface StorySceneProps {
 }
 
 export const StoryScene: React.FC<StorySceneProps> = ({ character, chapter }) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const getSceneForChapter = () => {
     switch (character) {
       case 'moses':
@@ -25,6 +32,18 @@ export const StoryScene: React.FC<StorySceneProps> = ({ character, chapter }) =>
         return <BurningBush />;
     }
   };
+
+  // Don't render React Three Fiber components during SSR
+  if (!isClient) {
+    return (
+      <div className="w-full h-64 md:h-80 bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-lg flex items-center justify-center">
+        <div className="text-white text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
+          <p className="text-sm">Loading 3D scene...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative">
