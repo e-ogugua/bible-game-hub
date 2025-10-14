@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { MemoryGame } from '@/modules/memory/MemoryGame'
+import { HelpCircle } from 'lucide-react'
 
 export default function MemoryGamePage() {
   return (
@@ -12,8 +13,7 @@ export default function MemoryGamePage() {
             Scripture Memory Game
           </h1>
           <p className="text-lg text-blue-100 max-w-2xl">
-            Match Bible verses with their references to strengthen your Scripture knowledge and memory.
-            Find the pairs to complete each level!
+            Test your Bible knowledge by matching verses with their references! Choose your difficulty level and find all the matching pairs to complete each challenge.
           </p>
         </div>
 
@@ -51,9 +51,26 @@ export default function MemoryGamePage() {
             </div>
 
             <div className="bg-gradient-to-br from-indigo-900/30 to-cyan-900/30 rounded-xl p-6 border border-indigo-400/20">
-              <div className="text-3xl mb-3">🎵</div>
-              <h3 className="text-lg font-semibold mb-2">Audio Scripture</h3>
-              <p className="text-sm text-blue-200 opacity-75">Listen to verses and match them without seeing the text</p>
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold mb-4 flex items-center">
+                  <HelpCircle className="w-6 h-6 mr-2 text-yellow-400" />
+                  How to Play
+                </h3>
+                <div className="space-y-3 text-blue-100">
+                  <div className="flex items-start space-x-3">
+                    <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">1</span>
+                    <p>Click on cards to flip them and reveal Bible verses or references</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">2</span>
+                    <p>Find matching pairs - each verse matches with its Bible reference</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">3</span>
+                    <p>Match all pairs to complete the level and earn points!</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="bg-gradient-to-br from-red-900/30 to-pink-900/30 rounded-xl p-6 border border-red-400/20">
