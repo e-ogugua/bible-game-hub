@@ -4,6 +4,26 @@ A comprehensive, immersive faith-based gaming platform built with Next.js 15, fe
 
 ## 🌟 Features
 
+### ✅ **Recently Fixed & Enhanced**
+
+#### **🎮 Quiz Game - Completely Rebuilt**
+- **Smooth question transitions** with proper state management
+- **Enhanced UI/UX** with beautiful animations and feedback
+- **Responsive design** with improved visual indicators
+- **Fixed all runtime errors** and import issues
+- **Perfect question flow** - no more answer persistence issues
+
+#### **📚 Scripture Memory Game**
+- **Verse-reference matching** gameplay
+- **Coming Soon features** section for future enhancements
+- **Beautiful dark theme** integration
+
+#### **⚡ Technical Improvements**
+- **All ESLint errors fixed** - clean, production-ready code
+- **Proper component lifecycle** management
+- **Enhanced animations** and transitions
+- **Better error handling** and loading states
+
 ### 🎮 Game Modes
 - **Bible Quiz Challenge** - Test your knowledge with scripture-based questions
 - **Scripture Memory** - Memorize and recall famous Bible verses
@@ -22,14 +42,38 @@ A comprehensive, immersive faith-based gaming platform built with Next.js 15, fe
 - **Save Sync** - Local storage with export/import functionality
 - **Social Preview** - Community features roadmap and early access
 
-### 🛠️ Technical Features
-- **Next.js 15** - Latest App Router with server-side rendering
-- **TypeScript** - Full type safety throughout the application
-- **Tailwind CSS** - Modern, responsive styling
-- **Framer Motion** - Smooth animations and transitions
-- **React Three Fiber** - 3D graphics and visual effects
-- **Howler.js** - Audio management and playback
-- **Local Storage** - Offline-first architecture
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/e-ogugua/bible-game-hub.git
+cd bible-game-hub
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Run the development server:
+```bash
+npm run dev
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Build for Production
+
+```bash
+npm run build
+npm start
+```
 
 ## 🚀 Quick Start
 
@@ -228,4 +272,4 @@ Built with love and faith for the global Christian community. Special thanks to:
 
 ---
 
-*"For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future."* - Jeremiah 29:11
+*"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."* - Jeremiah 29:11
