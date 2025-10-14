@@ -32,6 +32,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Only run on client side to avoid SSR issues
+    if (typeof window === 'undefined') return
+
     // Load user profile on mount
     const loadUser = () => {
       try {
@@ -51,6 +54,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [])
 
   const signUp = async (username: string, email?: string) => {
+    // Ensure we're on client side
+    if (typeof window === 'undefined') {
+      return { success: false, error: 'Cannot sign up during server-side rendering' }
+    }
+
     try {
       // Check if username already exists
       const existingUsers = JSON.parse(localStorage.getItem('bible_game_user_profiles') || '[]')
@@ -85,6 +93,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   const signIn = async (username: string) => {
+    // Ensure we're on client side
+    if (typeof window === 'undefined') {
+      return { success: false, error: 'Cannot sign in during server-side rendering' }
+    }
+
     try {
       // Find user by username
       const users = JSON.parse(localStorage.getItem('bible_game_user_profiles') || '[]')
@@ -118,6 +131,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   const signOut = async () => {
+    // Ensure we're on client side
+    if (typeof window === 'undefined') return
+
     try {
       localStorage.removeItem('bible_game_user_profile')
       setUser(null)
@@ -128,6 +144,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const updateProfile = async (updates: { username?: string; avatar?: string }) => {
     if (!user) return { success: false, error: 'No user logged in' }
+
+    // Ensure we're on client side
+    if (typeof window === 'undefined') {
+      return { success: false, error: 'Cannot update profile during server-side rendering' }
+    }
 
     try {
       const updatedUser = {
@@ -154,6 +175,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const resetProgress = async () => {
     if (!user) return
+
+    // Ensure we're on client side
+    if (typeof window === 'undefined') return
 
     try {
       // Clear all user data except profile
