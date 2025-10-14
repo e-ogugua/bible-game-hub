@@ -51,6 +51,56 @@ const StoryGameContent: React.FC = () => {
     }
   }, [gameState.gameStarted, gameState.currentGame, startGame])
 
+  // Auto-select first character (Moses) when component mounts to show story immediately
+  useEffect(() => {
+    if (showCharacterSelect && !currentStory && !storyState.currentCharacter) {
+      // Auto-select Moses as the default character to show the story immediately
+      const autoSelectCharacter = () => {
+        const story = characterStories['moses']
+
+        // Start ambient music for the character
+        audioManager.playAmbientMusic('moses');
+
+        // Load existing progress if user is logged in
+        let existingProgress: StoryProgress | null = null
+        if (user) {
+          existingProgress = localStorageService.getStoryProgress(user.id, 'moses')
+        }
+
+        if (existingProgress) {
+          // Resume from saved progress
+          setStoryState({
+            currentCharacter: 'moses',
+            currentChapter: existingProgress.currentChapter,
+            completedChapters: existingProgress.completedChapters,
+            totalScore: existingProgress.totalScore,
+            faith: existingProgress.faith,
+            courage: existingProgress.courage,
+            obedience: existingProgress.obedience,
+            gameCompleted: existingProgress.completed
+          })
+        } else {
+          // Start fresh
+          setStoryState({
+            currentCharacter: 'moses',
+            currentChapter: 1,
+            completedChapters: [],
+            totalScore: 0,
+            faith: 0,
+            courage: 0,
+            obedience: 0,
+            gameCompleted: false
+          })
+        }
+
+        setCurrentStory(story)
+        setShowCharacterSelect(false)
+      }
+
+      setTimeout(autoSelectCharacter, 100) // Small delay to ensure proper initialization
+    }
+  }, [showCharacterSelect, currentStory, storyState.currentCharacter, user])
+
   const selectCharacter = (characterId: string) => {
     const story = characterStories[characterId as keyof typeof characterStories]
 
@@ -484,11 +534,7 @@ const StoryGameContent: React.FC = () => {
   )
 }
 
-// SSR-safe wrapper component
+// Main exported component for the story game
 export const StoryGame: React.FC = () => {
-  return (
-    <div>
-      <StoryGameContent />
-    </div>
-  )
+  return <StoryGameContent />
 }

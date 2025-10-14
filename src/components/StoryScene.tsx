@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Scene3D } from '@/components/Scene3D';
-import { BurningBush } from '@/components/scenes/BurningBush';
-import { RedSea } from '@/components/scenes/RedSea';
-import { GoliathScene } from '@/components/scenes/GoliathScene';
-import { HarpScene } from '@/components/scenes/HarpScene';
-import { HealingScene } from '@/components/scenes/HealingScene';
-import { ResurrectionScene } from '@/components/scenes/ResurrectionScene';
+import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
+
+// Dynamically import React Three Fiber components to avoid SSR issues
+const Scene3D = dynamic(() => import('@/components/Scene3D').then(mod => ({ default: mod.Scene3D })), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-64 bg-gradient-to-br from-blue-900/50 to-purple-900/50 rounded-lg flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+    </div>
+  )
+});
+
+const BurningBush = dynamic(() => import('@/components/scenes/BurningBush').then(mod => ({ default: mod.BurningBush })), { ssr: false });
+const RedSea = dynamic(() => import('@/components/scenes/RedSea').then(mod => ({ default: mod.RedSea })), { ssr: false });
+const GoliathScene = dynamic(() => import('@/components/scenes/GoliathScene').then(mod => ({ default: mod.GoliathScene })), { ssr: false });
+const HarpScene = dynamic(() => import('@/components/scenes/HarpScene').then(mod => ({ default: mod.HarpScene })), { ssr: false });
+const HealingScene = dynamic(() => import('@/components/scenes/HealingScene').then(mod => ({ default: mod.HealingScene })), { ssr: false });
+const ResurrectionScene = dynamic(() => import('@/components/scenes/ResurrectionScene').then(mod => ({ default: mod.ResurrectionScene })), { ssr: false });
 
 interface StorySceneProps {
   character: string;
@@ -20,6 +31,14 @@ export const StoryScene: React.FC<StorySceneProps> = ({ character, chapter }) =>
     setIsClient(true);
   }, []);
 
+  if (!isClient) {
+    return (
+      <div className="w-full h-64 bg-gradient-to-br from-blue-900/50 to-purple-900/50 rounded-lg flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+      </div>
+    );
+  }
+
   const getSceneForChapter = () => {
     switch (character) {
       case 'moses':
@@ -32,18 +51,6 @@ export const StoryScene: React.FC<StorySceneProps> = ({ character, chapter }) =>
         return <BurningBush />;
     }
   };
-
-  // Don't render React Three Fiber components during SSR
-  if (!isClient) {
-    return (
-      <div className="w-full h-64 md:h-80 bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-lg flex items-center justify-center">
-        <div className="text-white text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
-          <p className="text-sm">Loading 3D scene...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative">

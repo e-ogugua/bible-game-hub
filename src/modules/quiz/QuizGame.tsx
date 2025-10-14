@@ -7,15 +7,16 @@ import { useRouter } from 'next/navigation';
 import { QuizQuestion, getQuestionsByDifficulty } from './data';
 import { useGameContext } from '@/contexts/GameContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { ProgressBar } from './ProgressBar';
 import { localStorageService } from '@/lib/localStorage';
+import { dailyChallengesService } from '@/lib/dailyChallenges';
 import { ScoreDisplay } from './ScoreDisplay';
 import { QuestionCard } from './QuestionCard';
+import { ProgressBar } from './ProgressBar';
 
 type Difficulty = 'easy' | 'medium' | 'hard';
 
 export const QuizGame: React.FC = () => {
-  const { gameState, startGame, resetGame, updateScore, nextQuestion } = useGameContext();
+  const { gameState, startGame, updateScore, nextQuestion } = useGameContext();
   const { user } = useAuth();
   const router = useRouter();
   const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>([]);
@@ -35,10 +36,8 @@ export const QuizGame: React.FC = () => {
 
   const handleDifficultySelect = (difficulty: Difficulty) => {
     const questions = getQuestionsByDifficulty(difficulty);
-    const shuffled = [...questions].sort(() => Math.random() - 0.5).slice(0, 10);
-    setCurrentQuestions(shuffled);
+    setCurrentQuestions(questions);
     setShowDifficultySelection(false);
-    setGameCompleted(false);
     startGame('quiz');
   };
 
@@ -48,11 +47,9 @@ export const QuizGame: React.FC = () => {
     }
 
     setTimeout(() => {
-      if (gameState.currentQuestion < 9) {
-        nextQuestion();
-      } else {
+      if (gameState.currentQuestion >= 9) {
+        // Game completed
         setGameCompleted(true);
-        resetGame();
 
         // Save score to localStorage if user is logged in
         if (user) {
@@ -63,7 +60,12 @@ export const QuizGame: React.FC = () => {
             xpGained: Math.floor((gameState.score + (isCorrect ? 1 : 0)) * 10), // 10 XP per correct answer
             difficulty: 'medium' // Default difficulty
           });
+
+          // Update quiz streak in daily challenges
+          dailyChallengesService.updateQuizStreak(user.id, gameState.score + (isCorrect ? 1 : 0) >= 7); // Consider 70%+ as completion
         }
+      } else {
+        nextQuestion();
       }
     }, 2000); // Delay to show feedback
   };
@@ -97,24 +99,44 @@ export const QuizGame: React.FC = () => {
           className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 max-w-md w-full"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl font-bold text-center mb-8">Choose Difficulty</h2>
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4 shadow-lg">
+              <span className="text-2xl">📚</span>
+            </div>
+            <h2 className="text-3xl font-bold mb-2">Choose Your Challenge</h2>
+            <p className="text-blue-200">Select difficulty level to begin your Bible knowledge journey</p>
+          </div>
+
           <div className="space-y-4">
-            {(['easy', 'medium', 'hard'] as Difficulty[]).map((difficulty) => (
+            {(['easy', 'medium', 'hard'] as Difficulty[]).map((difficulty, index) => (
               <motion.button
                 key={difficulty}
-                className={`w-full p-4 rounded-lg font-semibold capitalize transition-all duration-300 ${
-                  difficulty === 'easy' ? 'bg-green-600 hover:bg-green-700' :
-                  difficulty === 'medium' ? 'bg-yellow-600 hover:bg-yellow-700' :
-                  'bg-red-600 hover:bg-red-700'
+                className={`w-full p-4 rounded-lg font-semibold capitalize transition-all duration-300 relative overflow-hidden ${
+                  difficulty === 'easy' ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700' :
+                  difficulty === 'medium' ? 'bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700' :
+                  'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700'
                 }`}
                 onClick={() => handleDifficultySelect(difficulty)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
               >
-                {difficulty}
+                <div className="flex items-center justify-center space-x-3">
+                  <span className="text-lg">
+                    {difficulty === 'easy' ? '🌱' : difficulty === 'medium' ? '⚡' : '🔥'}
+                  </span>
+                  <span className="text-xl">{difficulty}</span>
+                </div>
               </motion.button>
             ))}
+          </div>
+
+          <div className="mt-6 text-center text-sm text-blue-200">
+            <p>Easy: Basic Bible knowledge • Medium: Intermediate questions • Hard: Advanced study</p>
           </div>
         </motion.div>
       </div>
@@ -176,13 +198,22 @@ export const QuizGame: React.FC = () => {
         </motion.div>
 
         {/* Question Card */}
-        {currentQuestion && (
-          <QuestionCard
-            question={currentQuestion}
-            onAnswer={handleAnswer}
-            disabled={gameState.gameStarted && !gameState.currentGame}
-          />
-        )}
+        <motion.div
+          key={`question-${gameState.currentQuestion}`}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -50 }}
+          transition={{ duration: 0.3 }}
+        >
+          {currentQuestion && (
+            <QuestionCard
+              question={currentQuestion}
+              onAnswer={handleAnswer}
+              disabled={gameState.gameStarted && !gameState.currentGame}
+              questionKey={`${gameState.currentQuestion}-${currentQuestion.id}`}
+            />
+          )}
+        </motion.div>
       </div>
     </div>
   );

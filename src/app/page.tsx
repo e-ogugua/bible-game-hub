@@ -1,14 +1,46 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { BookOpen, Brain, Target, Trophy, Users, Calendar, Star, RotateCcw, Crown } from 'lucide-react'
+import { BookOpen, Brain, Target, Trophy, Users, Calendar, Star, RotateCcw, Crown, type LucideIcon } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '@/contexts/AuthContext'
 import { localStorageService } from '@/lib/localStorage'
+import { dailyChallengesService, DailyChallenge } from '@/lib/dailyChallenges'
 
 export default function Home() {
   const { user, resetProgress } = useAuth()
+  const [dailyChallenges, setDailyChallenges] = useState<DailyChallenge[]>([])
+
+  // Update daily challenges when user changes
+  useEffect(() => {
+    if (user) {
+      const challenges = dailyChallengesService.getDailyChallenges(user.id)
+      setDailyChallenges(challenges)
+    } else {
+      // Default challenges for non-logged-in users
+      setDailyChallenges([
+        {
+          id: 'daily_verse',
+          title: 'Daily Bible Verse',
+          description: 'Memorize today\'s featured verse',
+          icon: BookOpen as LucideIcon,
+          completed: false,
+          type: 'daily_verse'
+        },
+        {
+          id: 'quiz_streak',
+          title: 'Quiz Streak',
+          description: 'Complete 3 quizzes in a row',
+          icon: Target as LucideIcon,
+          completed: false,
+          type: 'quiz_streak',
+          target: 3,
+          current: 0
+        }
+      ])
+    }
+  }, [user])
 
   const games = [
     {
@@ -24,7 +56,7 @@ export default function Home() {
       title: 'Scripture Memory',
       description: 'Memorize and recall famous Bible verses',
       icon: Brain,
-      href: '/stories/characters',
+      href: '/memory',
       color: 'from-green-500 to-teal-600'
     },
     {
@@ -59,23 +91,6 @@ export default function Home() {
       href: '/leaderboard',
       color: 'from-yellow-500 to-orange-600'
     },
-  ]
-
-  const dailyChallenges = [
-    {
-      id: 'daily_verse',
-      title: 'Daily Bible Verse',
-      description: 'Memorize today\'s featured verse',
-      icon: BookOpen,
-      completed: false
-    },
-    {
-      id: 'quiz_streak',
-      title: 'Quiz Streak',
-      description: 'Complete 3 quizzes in a row',
-      icon: Target,
-      completed: true
-    }
   ]
 
   const handleResetProgress = async () => {
@@ -244,10 +259,15 @@ export default function Home() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <challenge.icon className={`w-6 h-6 ${challenge.completed ? 'text-green-400' : 'text-blue-400'}`} />
+                    {challenge.icon && <challenge.icon className={`w-6 h-6 ${challenge.completed ? 'text-green-400' : 'text-blue-400'}`} />}
                     <div>
                       <h3 className="font-semibold">{challenge.title}</h3>
                       <p className="text-sm text-blue-200">{challenge.description}</p>
+                      {challenge.target && (
+                        <p className="text-xs text-purple-300 mt-1">
+                          {challenge.current || 0} / {challenge.target}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
