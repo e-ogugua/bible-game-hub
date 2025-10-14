@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Scene3D } from '@/components/Scene3D';
 import { BurningBush } from '@/components/scenes/BurningBush';
 import { RedSea } from '@/components/scenes/RedSea';
