@@ -2,13 +2,17 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, RotateCcw, Clock, Target, Volume2, VolumeX, HelpCircle, CheckCircle } from 'lucide-react';
+import {
+  Home, RotateCcw, Clock, Target, Volume2, VolumeX,
+  Star, Zap, Trophy, Flame, Sparkles, PlayCircle, Timer, Infinity
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useGameContext } from '@/contexts/GameContext';
-import { MemoryCard, easyCards, mediumCards, hardCards, shuffleCards } from './data';
+import { MemoryCard, classicCards, newTestamentCards, psalmsCards, wisdomCards, shuffleCards } from './data';
 import { Card } from './Card';
 
-type Difficulty = 'easy' | 'medium' | 'hard';
+type GameMode = 'classic' | 'time-trial' | 'endless';
+type Theme = 'classic' | 'new-testament' | 'psalms' | 'wisdom';
 
 export const MemoryGame: React.FC = () => {
   const { gameState, startGame, updateScore } = useGameContext();
@@ -19,10 +23,17 @@ export const MemoryGame: React.FC = () => {
   const [moves, setMoves] = useState(0);
   const [time, setTime] = useState(0);
   const [gameCompleted, setGameCompleted] = useState(false);
-  const [currentDifficulty, setCurrentDifficulty] = useState<Difficulty>('easy');
-  const [showInstructions, setShowInstructions] = useState(true);
+  const [currentTheme, setCurrentTheme] = useState<Theme>('classic');
+  const [gameMode, setGameMode] = useState<GameMode>('classic');
+  const [showModeSelection, setShowModeSelection] = useState(true);
+  const [showThemeSelection, setShowThemeSelection] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [streak, setStreak] = useState(0);
+  const [combo, setCombo] = useState(0);
+  const [score, setScore] = useState(0);
+  const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, color: string}>>([]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const comboTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (gameState.gameStarted && !gameState.currentGame) {
@@ -30,39 +41,58 @@ export const MemoryGame: React.FC = () => {
     }
   }, [gameState.gameStarted, gameState.currentGame, startGame]);
 
-  const getCardsForDifficulty = (difficulty: Difficulty): MemoryCard[] => {
-    switch (difficulty) {
-      case 'easy': return easyCards;
-      case 'medium': return mediumCards;
-      case 'hard': return hardCards;
+  const getCardsForTheme = (theme: Theme): MemoryCard[] => {
+    switch (theme) {
+      case 'classic': return classicCards;
+      case 'new-testament': return newTestamentCards;
+      case 'psalms': return psalmsCards;
+      case 'wisdom': return wisdomCards;
     }
   };
 
-  const getGridCols = (difficulty: Difficulty): string => {
-    switch (difficulty) {
-      case 'easy': return 'grid-cols-4'; // 2x4 grid
-      case 'medium': return 'grid-cols-4'; // 3x4 grid
-      case 'hard': return 'grid-cols-4'; // 4x4 grid
-    }
+  const getGridCols = (theme: Theme): string => {
+    const cardCount = getCardsForTheme(theme).length;
+    if (cardCount <= 8) return 'grid-cols-4'; // 2x4 or smaller
+    if (cardCount <= 12) return 'grid-cols-4'; // 3x4
+    return 'grid-cols-4'; // 4x4 for larger sets
   };
 
-  const startNewGame = (difficulty: Difficulty) => {
-    const cardsForDifficulty = getCardsForDifficulty(difficulty);
-    const shuffledCards = shuffleCards(cardsForDifficulty);
+  const startNewGame = (theme: Theme, mode: GameMode) => {
+    const cardsForTheme = getCardsForTheme(theme);
+    const shuffledCards = shuffleCards(cardsForTheme);
     setCards(shuffledCards);
     setFlippedCards([]);
     setMatchedPairs([]);
     setMoves(0);
     setTime(0);
     setGameCompleted(false);
-    setCurrentDifficulty(difficulty);
-    setShowInstructions(false);
+    setCurrentTheme(theme);
+    setGameMode(mode);
+    setScore(0);
+    setStreak(0);
+    setCombo(0);
+    setShowModeSelection(false);
+    setShowThemeSelection(false);
     startGame('memory');
 
-    // Start timer
-    intervalRef.current = setInterval(() => {
-      setTime(prev => prev + 1);
-    }, 1000);
+    // Start timer for time-trial mode
+    if (mode === 'time-trial') {
+      intervalRef.current = setInterval(() => {
+        setTime(prev => {
+          if (prev >= 120) { // 2 minutes for time trial
+            setGameCompleted(true);
+            if (intervalRef.current) clearInterval(intervalRef.current);
+            return prev;
+          }
+          return prev + 1;
+        });
+      }, 1000);
+    } else if (mode === 'classic') {
+      intervalRef.current = setInterval(() => {
+        setTime(prev => prev + 1);
+      }, 1000);
+    }
+    // Endless mode doesn't have a timer
   };
 
   const handleCardClick = (cardId: number) => {
@@ -83,14 +113,37 @@ export const MemoryGame: React.FC = () => {
       const [firstCard, secondCard] = newFlippedCards.map(id => cards.find(c => c.id === id)!);
 
       if (firstCard.pairId === secondCard.pairId) {
-        // Match found
+        // Match found - increase combo and streak
+        setCombo(prev => prev + 1);
+        setStreak(prev => prev + 1);
+
+        // Clear combo timeout
+        if (comboTimeoutRef.current) clearTimeout(comboTimeoutRef.current);
+
+        // Calculate score with combo multiplier
+        const baseScore = 100;
+        const comboMultiplier = Math.min(combo + 1, 5); // Max 5x multiplier
+        const newScore = score + (baseScore * comboMultiplier);
+        setScore(newScore);
+
+        // Create celebration particles
+        createParticles();
+
         setTimeout(() => {
           setMatchedPairs(prev => [...prev, firstCard.pairId]);
           setFlippedCards([]);
           if (soundEnabled) playSound('correct');
         }, 1000);
+
+        // Reset combo after delay
+        comboTimeoutRef.current = setTimeout(() => {
+          setCombo(0);
+        }, 3000);
       } else {
-        // No match
+        // No match - reset combo
+        setCombo(0);
+        setStreak(prev => Math.max(0, prev - 1));
+
         setTimeout(() => {
           setFlippedCards([]);
           if (soundEnabled) playSound('wrong');
@@ -99,10 +152,23 @@ export const MemoryGame: React.FC = () => {
     }
   };
 
+  const createParticles = () => {
+    const newParticles = Array.from({ length: 8 }, (_, i) => ({
+      id: Date.now() + i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      color: ['#fbbf24', '#f59e0b', '#d97706', '#92400e'][Math.floor(Math.random() * 4)]
+    }));
+    setParticles(newParticles);
+
+    setTimeout(() => {
+      setParticles([]);
+    }, 2000);
+  };
+
   const playSound = (type: 'correct' | 'wrong') => {
     if (!soundEnabled) return;
 
-    // Simple Web Audio API for sound effects
     const AudioContextClass = window.AudioContext || (window as typeof window & {webkitAudioContext: typeof AudioContext}).webkitAudioContext;
     const audioContext = new AudioContextClass();
     const oscillator = audioContext.createOscillator();
@@ -114,32 +180,51 @@ export const MemoryGame: React.FC = () => {
     if (type === 'correct') {
       oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
       oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.1);
+      gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
     } else {
       oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
     }
 
-    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
 
     oscillator.start(audioContext.currentTime);
     oscillator.stop(audioContext.currentTime + 0.5);
   };
 
-  const calculateScore = useCallback(() => {
-    const baseScore = 1000;
-    const timeBonus = Math.max(0, 300 - time); // Bonus for completing quickly
-    const movesPenalty = moves * 10;
-    return Math.max(0, baseScore + timeBonus - movesPenalty);
-  }, [time, moves]);
+  const calculateFinalScore = useCallback(() => {
+    let baseScore = score;
+
+    // Time bonus for classic mode
+    if (gameMode === 'classic') {
+      const timeBonus = Math.max(0, 600 - time); // Bonus for completing quickly
+      baseScore += timeBonus;
+    }
+
+    // Streak bonus
+    if (streak >= 5) {
+      baseScore += streak * 50;
+    }
+
+    // Mode multiplier
+    if (gameMode === 'time-trial') {
+      baseScore *= 1.5;
+    }
+
+    return Math.max(0, Math.floor(baseScore));
+  }, [score, time, streak, gameMode]);
 
   useEffect(() => {
-    const totalPairs = getCardsForDifficulty(currentDifficulty).length / 2;
-    if (matchedPairs.length === totalPairs) {
-      setGameCompleted(true);
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      updateScore(calculateScore());
+    if (gameMode === 'classic' || gameMode === 'time-trial') {
+      const totalPairs = getCardsForTheme(currentTheme).length / 2;
+      if (matchedPairs.length === totalPairs) {
+        setGameCompleted(true);
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        const finalScore = calculateFinalScore();
+        updateScore(finalScore);
+      }
     }
-  }, [matchedPairs, updateScore, calculateScore, currentDifficulty]);
+  }, [matchedPairs, updateScore, calculateFinalScore, currentTheme, gameMode]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -149,23 +234,34 @@ export const MemoryGame: React.FC = () => {
 
   const handleReplay = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
-    startNewGame(currentDifficulty);
+    if (comboTimeoutRef.current) clearTimeout(comboTimeoutRef.current);
+    startNewGame(currentTheme, gameMode);
   };
 
   const handleGoHome = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
+    if (comboTimeoutRef.current) clearTimeout(comboTimeoutRef.current);
     router.push('/');
   };
 
-  const getDifficultyInfo = (difficulty: Difficulty) => {
-    switch (difficulty) {
-      case 'easy': return { pairs: 4, gridCols: 'grid-cols-4', description: '4 pairs • Perfect for beginners' };
-      case 'medium': return { pairs: 6, gridCols: 'grid-cols-4', description: '6 pairs • Good challenge' };
-      case 'hard': return { pairs: 8, gridCols: 'grid-cols-4', description: '8 pairs • For experts' };
+  const getThemeInfo = (theme: Theme) => {
+    switch (theme) {
+      case 'classic': return { name: 'Classic Mix', icon: '📚', color: 'from-blue-500 to-purple-600' };
+      case 'new-testament': return { name: 'New Testament', icon: '✝️', color: 'from-green-500 to-teal-600' };
+      case 'psalms': return { name: 'Psalms', icon: '🎵', color: 'from-purple-500 to-pink-600' };
+      case 'wisdom': return { name: 'Wisdom', icon: '🦉', color: 'from-yellow-500 to-orange-600' };
     }
   };
 
-  if (showInstructions) {
+  const getModeInfo = (mode: GameMode) => {
+    switch (mode) {
+      case 'classic': return { name: 'Classic', icon: <Target className="w-5 h-5" />, description: 'Find all pairs at your own pace' };
+      case 'time-trial': return { name: 'Time Trial', icon: <Timer className="w-5 h-5" />, description: 'Race against time (2 minutes)' };
+      case 'endless': return { name: 'Endless', icon: <Infinity className="w-5 h-5" />, description: 'Keep playing for high scores' };
+    }
+  };
+
+  if (showModeSelection) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white flex items-center justify-center p-6">
         <motion.div
@@ -178,81 +274,107 @@ export const MemoryGame: React.FC = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4 shadow-lg">
               <span className="text-2xl">🧠</span>
             </div>
-            <h2 className="text-3xl font-bold mb-4">Scripture Memory Game</h2>
-            <p className="text-blue-200 text-lg">Match Bible verses with their references to strengthen your memory!</p>
+            <h2 className="text-3xl font-bold mb-4">Scripture Memory Challenge</h2>
+            <p className="text-blue-200 text-lg">Choose your game mode and dive into Bible verse memorization!</p>
           </div>
 
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4 flex items-center">
-              <HelpCircle className="w-6 h-6 mr-2 text-yellow-400" />
-              How to Play
-            </h3>
-            <div className="space-y-3 text-blue-100">
-              <div className="flex items-start space-x-3">
-                <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">1</span>
-                <p>Click on cards to flip them and reveal Bible verses or references</p>
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            <motion.button
+              className="bg-gradient-to-br from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 p-6 rounded-xl font-semibold text-lg border border-blue-400/30"
+              onClick={() => setShowThemeSelection(true)}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className="text-center">
+                <Target className="w-8 h-8 mx-auto mb-3 text-blue-300" />
+                <div className="font-bold">Classic Mode</div>
+                <div className="text-sm opacity-75 mt-1">Find all pairs at your own pace</div>
               </div>
-              <div className="flex items-start space-x-3">
-                <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">2</span>
-                <p>Find matching pairs - each verse matches with its Bible reference</p>
+            </motion.button>
+
+            <motion.button
+              className="bg-gradient-to-br from-green-600 to-teal-700 hover:from-green-700 hover:to-teal-800 p-6 rounded-xl font-semibold text-lg border border-green-400/30"
+              onClick={() => setShowThemeSelection(true)}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className="text-center">
+                <Timer className="w-8 h-8 mx-auto mb-3 text-green-300" />
+                <div className="font-bold">Time Trial</div>
+                <div className="text-sm opacity-75 mt-1">Race against time (2 minutes)</div>
               </div>
-              <div className="flex items-start space-x-3">
-                <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">3</span>
-                <p>Match all pairs to complete the level and earn points!</p>
+            </motion.button>
+
+            <motion.button
+              className="bg-gradient-to-br from-yellow-600 to-orange-700 hover:from-yellow-700 hover:to-orange-800 p-6 rounded-xl font-semibold text-lg border border-yellow-400/30"
+              onClick={() => setShowThemeSelection(true)}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className="text-center">
+                <Infinity className="w-8 h-8 mx-auto mb-3 text-yellow-300" />
+                <div className="font-bold">Endless Mode</div>
+                <div className="text-sm opacity-75 mt-1">Keep playing for high scores</div>
               </div>
+            </motion.button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (showThemeSelection) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white flex items-center justify-center p-6">
+        <motion.div
+          className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 max-w-2xl w-full"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full mb-4 shadow-lg">
+              <span className="text-2xl">📖</span>
             </div>
+            <h2 className="text-3xl font-bold mb-4">Choose Your Scripture Theme</h2>
+            <p className="text-blue-200 text-lg">Select the Bible verses you want to memorize and match!</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4 mb-8">
-            <motion.button
-              className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 p-4 rounded-lg font-semibold text-lg"
-              onClick={() => startNewGame('easy')}
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="text-center">
-                <span className="text-2xl mb-2 block">🌱</span>
-                <div>Easy</div>
-                <div className="text-sm opacity-75">4 pairs</div>
-              </div>
-            </motion.button>
-
-            <motion.button
-              className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 p-4 rounded-lg font-semibold text-lg"
-              onClick={() => startNewGame('medium')}
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="text-center">
-                <span className="text-2xl mb-2 block">⚡</span>
-                <div>Medium</div>
-                <div className="text-sm opacity-75">6 pairs</div>
-              </div>
-            </motion.button>
-
-            <motion.button
-              className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 p-4 rounded-lg font-semibold text-lg"
-              onClick={() => startNewGame('hard')}
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="text-center">
-                <span className="text-2xl mb-2 block">🔥</span>
-                <div>Hard</div>
-                <div className="text-sm opacity-75">8 pairs</div>
-              </div>
-            </motion.button>
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            {(['classic', 'new-testament', 'psalms', 'wisdom'] as Theme[]).map((theme) => {
+              const themeInfo = getThemeInfo(theme);
+              return (
+                <motion.button
+                  key={theme}
+                  className={`bg-gradient-to-br ${themeInfo.color} hover:opacity-90 p-6 rounded-xl font-semibold text-lg border border-white/20`}
+                  onClick={() => startNewGame(theme, gameMode)}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="text-center">
+                    <span className="text-3xl mb-3 block">{themeInfo.icon}</span>
+                    <div className="font-bold">{themeInfo.name}</div>
+                    <div className="text-sm opacity-75 mt-1">
+                      {theme === 'classic' ? 'Mixed verses from different books' :
+                       theme === 'new-testament' ? 'Focus on New Testament teachings' :
+                       theme === 'psalms' ? 'Beautiful psalms and worship' :
+                       'Wisdom from Proverbs and more'}
+                    </div>
+                  </div>
+                </motion.button>
+              );
+            })}
           </div>
 
           <div className="text-center">
-            <button
-              onClick={() => setSoundEnabled(!soundEnabled)}
-              className={`p-3 rounded-full border-2 transition-colors ${
-                soundEnabled ? 'bg-green-500/20 border-green-400 text-green-300' : 'bg-gray-500/20 border-gray-400 text-gray-300'
-              }`}
+            <motion.button
+              className="bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-lg font-semibold"
+              onClick={() => setShowModeSelection(true)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
-            </button>
+              ← Back to Game Modes
+            </motion.button>
           </div>
         </motion.div>
       </div>
@@ -260,7 +382,10 @@ export const MemoryGame: React.FC = () => {
   }
 
   if (gameCompleted) {
-    const difficultyInfo = getDifficultyInfo(currentDifficulty);
+    const themeInfo = getThemeInfo(currentTheme);
+    const modeInfo = getModeInfo(gameMode);
+    const finalScore = calculateFinalScore();
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white flex items-center justify-center p-6">
         <motion.div
@@ -269,18 +394,49 @@ export const MemoryGame: React.FC = () => {
           animate={{ opacity: 1, scale: 1 }}
         >
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 0.5 }}
+            animate={{ rotate: 360, scale: [1, 1.2, 1] }}
+            transition={{ duration: 1, type: "spring" }}
           >
-            <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-6" />
+            <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-6" />
           </motion.div>
-          <h2 className="text-3xl font-bold mb-4">Level Complete!</h2>
-          <div className="space-y-3 mb-6">
-            <p className="text-xl font-semibold">Score: {gameState.score}</p>
-            <p className="text-lg">Moves: {moves}</p>
-            <p className="text-lg">Time: {formatTime(time)}</p>
-            <p className="text-sm text-blue-200">Difficulty: {currentDifficulty} ({difficultyInfo.pairs} pairs)</p>
+
+          <h2 className="text-3xl font-bold mb-4">Challenge Complete!</h2>
+
+          <div className="space-y-4 mb-6">
+            <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-lg p-4 border border-yellow-400/30">
+              <p className="text-2xl font-bold text-yellow-300">Final Score: {finalScore}</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="bg-blue-500/20 rounded-lg p-3">
+                <div className="flex items-center justify-center mb-2">
+                  <Target className="w-4 h-4 mr-1" />
+                  <span>Moves</span>
+                </div>
+                <p className="font-semibold">{moves}</p>
+              </div>
+              <div className="bg-purple-500/20 rounded-lg p-3">
+                <div className="flex items-center justify-center mb-2">
+                  <Clock className="w-4 h-4 mr-1" />
+                  <span>Time</span>
+                </div>
+                <p className="font-semibold">{formatTime(time)}</p>
+              </div>
+            </div>
+
+            <div className="bg-green-500/20 rounded-lg p-3">
+              <div className="flex items-center justify-center mb-2">
+                <Flame className="w-4 h-4 mr-1" />
+                <span>Best Streak</span>
+              </div>
+              <p className="font-semibold">{streak} matches</p>
+            </div>
+
+            <div className="text-xs text-blue-200">
+              <p>Theme: {themeInfo.name} • Mode: {modeInfo.name}</p>
+            </div>
           </div>
+
           <div className="flex justify-center space-x-4">
             <motion.button
               className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold flex items-center space-x-2"
@@ -291,14 +447,20 @@ export const MemoryGame: React.FC = () => {
               <RotateCcw className="w-5 h-5" />
               <span>Play Again</span>
             </motion.button>
+
             <motion.button
               className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold flex items-center space-x-2"
-              onClick={() => setShowInstructions(true)}
+              onClick={() => {
+                setShowModeSelection(true);
+                setGameMode('classic');
+              }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span>Change Level</span>
+              <PlayCircle className="w-5 h-5" />
+              <span>New Game</span>
             </motion.button>
+
             <motion.button
               className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold flex items-center space-x-2"
               onClick={handleGoHome}
@@ -325,17 +487,52 @@ export const MemoryGame: React.FC = () => {
         >
           <div className="text-center md:text-left">
             <h1 className="text-4xl font-bold mb-2">Scripture Memory</h1>
-            <p className="text-blue-200">Match {getDifficultyInfo(currentDifficulty).pairs} pairs • {currentDifficulty} level</p>
+            <div className="flex items-center space-x-2 text-blue-200">
+              <span className="text-lg">{getThemeInfo(currentTheme).icon} {getThemeInfo(currentTheme).name}</span>
+              <span>•</span>
+              <span className="text-lg">{getModeInfo(gameMode).name}</span>
+            </div>
           </div>
+
           <div className="flex items-center space-x-6">
+            {/* Score Display */}
+            <div className="flex items-center space-x-2 bg-yellow-500/20 px-4 py-2 rounded-full border border-yellow-400/30">
+              <Star className="w-5 h-5 text-yellow-400" />
+              <span className="font-semibold">{score}</span>
+            </div>
+
+            {/* Combo Display */}
+            {combo > 0 && (
+              <motion.div
+                className="flex items-center space-x-2 bg-orange-500/20 px-4 py-2 rounded-full border border-orange-400/30"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 0.5, repeat: Infinity }}
+              >
+                <Zap className="w-5 h-5 text-orange-400" />
+                <span className="font-semibold">{combo}x Combo</span>
+              </motion.div>
+            )}
+
+            {/* Streak Display */}
+            {streak > 0 && (
+              <div className="flex items-center space-x-2 bg-red-500/20 px-4 py-2 rounded-full border border-red-400/30">
+                <Flame className="w-5 h-5 text-red-400" />
+                <span className="font-semibold">{streak}</span>
+              </div>
+            )}
+
             <div className="flex items-center space-x-2">
               <Target className="w-5 h-5 text-purple-400" />
               <span>Moves: {moves}</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <Clock className="w-5 h-5 text-blue-400" />
-              <span>Time: {formatTime(time)}</span>
-            </div>
+
+            {(gameMode === 'classic' || gameMode === 'time-trial') && (
+              <div className="flex items-center space-x-2">
+                <Clock className="w-5 h-5 text-blue-400" />
+                <span>Time: {formatTime(time)}</span>
+              </div>
+            )}
+
             <button
               onClick={() => setSoundEnabled(!soundEnabled)}
               className={`p-2 rounded-full border transition-colors ${
@@ -350,8 +547,8 @@ export const MemoryGame: React.FC = () => {
         {/* Game Board */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={`game-${currentDifficulty}`}
-            className={`grid ${getGridCols(currentDifficulty)} gap-4 mb-8 p-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10`}
+            key={`game-${currentTheme}`}
+            className={`grid ${getGridCols(currentTheme)} gap-4 mb-8 p-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 relative`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -359,7 +556,7 @@ export const MemoryGame: React.FC = () => {
           >
             {cards.map((card, index) => (
               <motion.div
-                key={`${card.id}-${currentDifficulty}-${index}`}
+                key={`${card.id}-${currentTheme}-${index}`}
                 initial={{ opacity: 0, scale: 0.8, rotateY: -90 }}
                 animate={{ opacity: 1, scale: 1, rotateY: 0 }}
                 transition={{
@@ -378,6 +575,27 @@ export const MemoryGame: React.FC = () => {
                 />
               </motion.div>
             ))}
+
+            {/* Particles */}
+            {particles.map((particle) => (
+              <motion.div
+                key={particle.id}
+                className="absolute pointer-events-none"
+                style={{
+                  left: `${particle.x}%`,
+                  top: `${particle.y}%`,
+                }}
+                initial={{ scale: 0, opacity: 1 }}
+                animate={{
+                  scale: [0, 1, 0],
+                  opacity: [1, 1, 0],
+                  y: [0, -50, -100]
+                }}
+                transition={{ duration: 2 }}
+              >
+                <Sparkles className="w-4 h-4" style={{ color: particle.color }} />
+              </motion.div>
+            ))}
           </motion.div>
         </AnimatePresence>
 
@@ -389,16 +607,22 @@ export const MemoryGame: React.FC = () => {
           transition={{ delay: 0.3 }}
         >
           <p className="text-blue-200 mb-4">
-            Matched {matchedPairs.length} of {getDifficultyInfo(currentDifficulty).pairs} pairs
+            Matched {matchedPairs.length} of {getCardsForTheme(currentTheme).length / 2} pairs
           </p>
-          <div className="w-full bg-white/20 rounded-full h-2 mb-4">
+          <div className="w-full bg-white/20 rounded-full h-3 mb-4">
             <motion.div
               className="bg-gradient-to-r from-green-400 to-blue-500 h-full rounded-full"
               initial={{ width: 0 }}
-              animate={{ width: `${(matchedPairs.length / getDifficultyInfo(currentDifficulty).pairs) * 100}%` }}
+              animate={{ width: `${(matchedPairs.length / (getCardsForTheme(currentTheme).length / 2)) * 100}%` }}
               transition={{ duration: 0.5 }}
             />
           </div>
+
+          {gameMode === 'time-trial' && (
+            <div className="text-yellow-300 font-semibold">
+              Time Remaining: {formatTime(Math.max(0, 120 - time))}
+            </div>
+          )}
         </motion.div>
       </div>
     </div>

@@ -13,7 +13,7 @@ export default function MemoryGamePage() {
             Scripture Memory Game
           </h1>
           <p className="text-lg text-blue-100 max-w-2xl">
-            Test your Bible knowledge by matching verses with their references! Choose your difficulty level and find all the matching pairs to complete each challenge.
+            Challenge your memory and deepen your biblical knowledge! Choose from multiple game modes and themes to match Bible verses with their references. Features combo systems, streak tracking, and beautiful 3D animations for an engaging learning experience.
           </p>
         </div>
 
