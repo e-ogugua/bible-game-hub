@@ -21,6 +21,11 @@ export const QuizGame: React.FC = () => {
   const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>([]);
   const [showDifficultySelection, setShowDifficultySelection] = useState(true);
   const [gameCompleted, setGameCompleted] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     if (gameState.gameStarted && !gameState.currentGame) {
@@ -72,6 +77,18 @@ export const QuizGame: React.FC = () => {
   const handleGoHome = () => {
     router.push('/');
   };
+
+  // Don't render during SSR
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p>Loading quiz game...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (showDifficultySelection) {
     return (
