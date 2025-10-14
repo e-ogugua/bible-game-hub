@@ -506,7 +506,7 @@ export const MemoryGame: React.FC = () => {
               <motion.div
                 className="flex items-center space-x-2 bg-orange-500/20 px-4 py-2 rounded-full border border-orange-400/30"
                 animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 0.5, repeat: Infinity }}
+                transition={{ duration: 0.5, repeat: 9999 }}
               >
                 <Zap className="w-5 h-5 text-orange-400" />
                 <span className="font-semibold">{combo}x Combo</span>
