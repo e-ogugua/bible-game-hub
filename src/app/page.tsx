@@ -20,7 +20,7 @@ import { dailyChallengesService, DailyChallenge } from '@/lib/dailyChallenges'
 export default function Home() {
   const { user, resetProgress, loading: authLoading } = useAuth()
   const [dailyChallenges, setDailyChallenges] = useState<DailyChallenge[]>([])
-  const [challengesLoading, setChallengesLoading] = useState(true)
+  const [challengesLoading, setChallengesLoading] = useState(false)
 
   // Update daily challenges when user changes
   useEffect(() => {
@@ -79,14 +79,6 @@ export default function Home() {
 
     loadChallenges()
   }, [user])
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      console.warn('Main page: Auth loading timeout reached, forcing render')
-      setChallengesLoading(false)
-    }, 5000) // 5 second timeout
-
-    return () => clearTimeout(timeout)
-  }, [])
 
   const games = [
     {
@@ -150,8 +142,20 @@ export default function Home() {
     }
   }
 
-  // Show loading state while auth is loading
-  if (authLoading) {
+  // Add safety check to prevent infinite loading
+  const [loadingTimeout, setLoadingTimeout] = useState(false)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      console.warn('Main page: Loading timeout reached, forcing render')
+      setLoadingTimeout(true)
+    }, 3000) // 3 second timeout
+
+    return () => clearTimeout(timeout)
+  }, [])
+
+  // Show loading state while auth is loading (with timeout fallback)
+  if (authLoading && !loadingTimeout) {
     return (
       <main className="min-h-screen bg-bible-primary text-white flex items-center justify-center">
         <div className="text-center">
@@ -160,8 +164,7 @@ export default function Home() {
         </div>
       </main>
     )
-  }
-
+  // Show main content (loading state should be false by now)
   return (
     <main className="min-h-screen bg-bible-primary text-white">
       <div className="container mx-auto p-responsive-lg">
@@ -180,11 +183,11 @@ export default function Home() {
                   <div className="flex items-center space-x-responsive-sm text-responsive-base">
                     <div className="flex items-center space-x-2">
                       <Star className="w-5 h-5 text-bible-accent" aria-hidden="true" />
-                      <span>Level {user.level}</span>
+                      <span>Level {user?.level || 1}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Trophy className="w-5 h-5 text-purple-400" aria-hidden="true" />
-                      <span>{user.xp} XP</span>
+                      <span>{user?.xp || 0} XP</span>
                     </div>
                   </div>
                   <button

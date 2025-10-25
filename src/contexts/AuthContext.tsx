@@ -35,12 +35,12 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false) // Start with false to avoid loading screen
 
   useEffect(() => {
     // Only run on client side to avoid SSR issues
     if (typeof window === 'undefined') {
-      console.log('AuthContext: Server-side rendering detected, skipping user load')
+      console.log('AuthContext: Server-side rendering detected, setting loading false')
       setLoading(false)
       return
     }
@@ -67,6 +67,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
           localStorage.removeItem('bible_game_user_profile')
           localStorage.removeItem('bible_game_user_profiles')
+          console.log('AuthContext: Cleared corrupted data')
         } catch (clearError) {
           console.error('AuthContext: Failed to clear corrupted data:', clearError)
         }
@@ -76,7 +77,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     }
 
+    // Add timeout to prevent infinite loading
+    const timeoutId = setTimeout(() => {
+      console.warn('AuthContext: Loading timeout reached, forcing completion')
+      setLoading(false)
+    }, 3000) // 3 second timeout
+
     loadUser()
+
+    return () => clearTimeout(timeoutId)
   }, [])
 
   const signUp = async (username: string, email?: string) => {
