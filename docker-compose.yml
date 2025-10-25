@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  # Main application service
+  bible-game-hub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=https://api.biblegamehub.com
+      - NEXT_PUBLIC_CDN_URL=https://cdn.biblegamehub.com
+      - NEXT_PUBLIC_APP_VERSION=1.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - bible-game-hub-network
+
+  # Redis for session storage and caching
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes --replica-read-only no
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - bible-game-hub-network
+
+  # PostgreSQL for user data and analytics
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=biblegamehub
+      - POSTGRES_USER=biblegamehub_user
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U biblegamehub_user -d biblegamehub"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bible-game-hub-network
+
+  # Nginx for load balancing and static asset serving
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - bible-game-hub
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - bible-game-hub-network
+
+  # CloudFlare for global CDN and DDoS protection
+  cloudflare:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN}
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
+    networks:
+      - bible-game-hub-network
+
+volumes:
+  redis-data:
+    driver: local
+  postgres-data:
+    driver: local
+
+networks:
+  bible-game-hub-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

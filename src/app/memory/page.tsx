@@ -1,8 +1,23 @@
 'use client'
 
-import React from 'react'
-import { MemoryGame } from '@/modules/memory/MemoryGame'
-import { HelpCircle } from 'lucide-react'
+import React, { Suspense } from 'react'
+
+// Dynamically import memory module only when user navigates to /memory
+// This reduces initial bundle size by ~35KB
+const MemoryGame = React.lazy(() =>
+  import('@/modules/memory/MemoryGame').then(module => ({ default: module.MemoryGame }))
+)
+
+// Loading component for memory module
+const MemoryLoading = () => (
+  <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white flex items-center justify-center">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+      <p className="text-lg">Loading Scripture Memory...</p>
+      <p className="text-sm text-gray-300 mt-2">Preparing verse cards and challenges</p>
+    </div>
+  </div>
+)
 
 export default function MemoryGamePage() {
   return (
@@ -13,24 +28,25 @@ export default function MemoryGamePage() {
             Scripture Memory Game
           </h1>
           <p className="text-lg text-blue-100 max-w-2xl">
-            Challenge your memory and deepen your biblical knowledge! Choose
+            Challenge your memory and deepen your biblical knowledge. Choose
             from multiple game modes and themes to match Bible verses with their
-            references. Features combo systems, streak tracking, and beautiful
-            3D animations for an engaging learning experience.
+            references. Features combo systems, streak tracking, and animations
+            for an engaging learning experience.
           </p>
         </div>
 
-        <MemoryGame />
+        <Suspense fallback={<MemoryLoading />}>
+          <MemoryGame />
+        </Suspense>
 
         {/* Coming Soon Features */}
         <div className="mt-16 bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
           <h2 className="text-2xl font-bold mb-6 text-center text-transparent bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text">
-            🚀 Coming Soon Features
+            Coming Soon Features
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-xl p-6 border border-blue-400/20">
-              <div className="text-3xl mb-3">📚</div>
               <h3 className="text-lg font-semibold mb-2">
                 Advanced Difficulty Levels
               </h3>
@@ -40,7 +56,6 @@ export default function MemoryGamePage() {
             </div>
 
             <div className="bg-gradient-to-br from-green-900/30 to-teal-900/30 rounded-xl p-6 border border-green-400/20">
-              <div className="text-3xl mb-3">🎯</div>
               <h3 className="text-lg font-semibold mb-2">
                 Daily Scripture Challenges
               </h3>
@@ -50,7 +65,6 @@ export default function MemoryGamePage() {
             </div>
 
             <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-xl p-6 border border-purple-400/20">
-              <div className="text-3xl mb-3">🏆</div>
               <h3 className="text-lg font-semibold mb-2">Achievement System</h3>
               <p className="text-sm text-blue-200 opacity-75">
                 Unlock badges and rewards for memorizing Scripture
@@ -58,7 +72,6 @@ export default function MemoryGamePage() {
             </div>
 
             <div className="bg-gradient-to-br from-yellow-900/30 to-orange-900/30 rounded-xl p-6 border border-yellow-400/20">
-              <div className="text-3xl mb-3">📖</div>
               <h3 className="text-lg font-semibold mb-2">
                 Bible Book Categories
               </h3>
@@ -70,7 +83,6 @@ export default function MemoryGamePage() {
             <div className="bg-gradient-to-br from-indigo-900/30 to-cyan-900/30 rounded-xl p-6 border border-indigo-400/20">
               <div className="mb-8">
                 <h3 className="text-xl font-semibold mb-4 flex items-center">
-                  <HelpCircle className="w-6 h-6 mr-2 text-yellow-400" />
                   How to Play
                 </h3>
                 <div className="space-y-3 text-blue-100">
@@ -105,7 +117,6 @@ export default function MemoryGamePage() {
             </div>
 
             <div className="bg-gradient-to-br from-red-900/30 to-pink-900/30 rounded-xl p-6 border border-red-400/20">
-              <div className="text-3xl mb-3">⚡</div>
               <h3 className="text-lg font-semibold mb-2">Speed Challenges</h3>
               <p className="text-sm text-blue-200 opacity-75">
                 Race against time to match verses before they disappear
@@ -115,7 +126,7 @@ export default function MemoryGamePage() {
 
           <div className="mt-8 text-center">
             <p className="text-blue-200">
-              ✨ These features are in development and will be available in
+              These features are in development and will be available in
               future updates.
               <br />
               <span className="text-yellow-400 font-semibold">

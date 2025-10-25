@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: '%s | Bible Game Hub',
   },
   description:
-    'Immerse yourself in faith-based gaming with Bible quizzes, scripture memory challenges, character stories, and biblical adventures. Strengthen your spiritual journey through interactive play.',
+    'Interactive faith-based gaming platform featuring Bible quizzes, scripture memory challenges, character stories, and biblical adventures.',
   keywords: [
     'Bible games',
     'scripture quiz',
@@ -24,8 +24,8 @@ export const metadata: Metadata = {
     'scripture memory',
     'biblical stories',
   ],
-  authors: [{ name: 'Emmanuel Chukwuka Ogugua' }],
-  creator: 'Emmanuel Chukwuka Ogugua',
+  authors: [{ name: 'CEO – Chukwuka Emmanuel Ogugua (EmmanuelOS)' }],
+  creator: 'CEO – Chukwuka Emmanuel Ogugua (EmmanuelOS)',
   publisher: 'Bible Game Hub',
   formatDetection: {
     email: false,
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     siteName: 'Bible Game Hub',
     title: 'Bible Game Hub - Interactive Scripture Games',
     description:
-      'Immerse yourself in faith-based gaming with Bible quizzes, scripture memory challenges, character stories, and biblical adventures.',
+      'Interactive faith-based gaming platform featuring Bible quizzes, scripture memory challenges, character stories, and biblical adventures.',
     images: [
       {
         url: '/icon-512x512.svg',

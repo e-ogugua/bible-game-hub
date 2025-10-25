@@ -1,8 +1,8 @@
 {
   "name": "bible-game-hub-next",
   "version": "4.0.0",
-  "description": "Interactive Bible Games Hub - Scripture quiz games, biblical knowledge challenges, and faith-based learning platform (Next.js)",
-  "author": "Emmanuel Chukwuka Ogugua <emmachuka@gmail.com>",
+  "description": "Interactive Bible Games Hub - Faith-based learning platform (Next.js)",
+  "author": "CEO – Chukwuka Emmanuel Ogugua (EmmanuelOS) <ceo@emmanuelos.dev>",
   "license": "MIT",
   "private": true,
   "scripts": {
