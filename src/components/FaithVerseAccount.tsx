@@ -7,13 +7,14 @@ import { ProfileService } from '@/lib/profileService'
 import { FaithVerseProfile } from '@/types/faithverse'
 
 export const FaithVerseAccount: React.FC = () => {
-  const [currentProfile, setCurrentProfile] = useState<FaithVerseProfile | null>(null)
+  const [currentProfile, setCurrentProfile] =
+    useState<FaithVerseProfile | null>(null)
   const [allProfiles, setAllProfiles] = useState<FaithVerseProfile[]>([])
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [newProfile, setNewProfile] = useState({
     username: '',
     displayName: '',
-    avatar: ''
+    avatar: '',
   })
 
   useEffect(() => {
@@ -45,15 +46,15 @@ export const FaithVerseAccount: React.FC = () => {
         theme: 'divine',
         soundEnabled: true,
         musicVolume: 0.5,
-        sfxVolume: 0.7
+        sfxVolume: 0.7,
       },
       stats: {
         versesMemorized: 0,
         quizzesCompleted: 0,
         storiesFinished: 0,
         perfectScores: 0,
-        streakDays: 0
-      }
+        streakDays: 0,
+      },
     })
 
     setCurrentProfile(profile)
@@ -96,28 +97,43 @@ export const FaithVerseAccount: React.FC = () => {
             </h1>
 
             <p className="text-xl text-blue-100 mb-8">
-              Create your FaithVerse identity to track your spiritual journey, earn achievements, and connect with fellow believers.
+              Create your FaithVerse identity to track your spiritual journey,
+              earn achievements, and connect with fellow believers.
             </p>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
               <div className="space-y-6">
                 <div>
-                  <label className="block text-left text-sm font-medium mb-2">Username</label>
+                  <label className="block text-left text-sm font-medium mb-2">
+                    Username
+                  </label>
                   <input
                     type="text"
                     value={newProfile.username}
-                    onChange={(e) => setNewProfile(prev => ({ ...prev, username: e.target.value }))}
+                    onChange={(e) =>
+                      setNewProfile((prev) => ({
+                        ...prev,
+                        username: e.target.value,
+                      }))
+                    }
                     className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                     placeholder="Choose a unique username"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-left text-sm font-medium mb-2">Display Name</label>
+                  <label className="block text-left text-sm font-medium mb-2">
+                    Display Name
+                  </label>
                   <input
                     type="text"
                     value={newProfile.displayName}
-                    onChange={(e) => setNewProfile(prev => ({ ...prev, displayName: e.target.value }))}
+                    onChange={(e) =>
+                      setNewProfile((prev) => ({
+                        ...prev,
+                        displayName: e.target.value,
+                      }))
+                    }
                     className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                     placeholder="Your display name"
                   />
@@ -166,7 +182,9 @@ export const FaithVerseAccount: React.FC = () => {
           <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-white to-purple-400 bg-clip-text text-transparent">
             FaithVerse Account
           </h1>
-          <p className="text-blue-100">Manage your spiritual journey and achievements</p>
+          <p className="text-blue-100">
+            Manage your spiritual journey and achievements
+          </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -186,15 +204,21 @@ export const FaithVerseAccount: React.FC = () => {
               <div className="space-y-4">
                 <div>
                   <label className="text-sm text-blue-200">Display Name</label>
-                  <p className="text-xl font-semibold text-white">{currentProfile.displayName}</p>
+                  <p className="text-xl font-semibold text-white">
+                    {currentProfile.displayName}
+                  </p>
                 </div>
                 <div>
                   <label className="text-sm text-blue-200">Username</label>
-                  <p className="text-lg text-blue-100">@{currentProfile.username}</p>
+                  <p className="text-lg text-blue-100">
+                    @{currentProfile.username}
+                  </p>
                 </div>
                 <div>
                   <label className="text-sm text-blue-200">Level</label>
-                  <p className="text-xl font-semibold text-yellow-400">{currentProfile.level}</p>
+                  <p className="text-xl font-semibold text-yellow-400">
+                    {currentProfile.level}
+                  </p>
                 </div>
               </div>
 
@@ -202,15 +226,21 @@ export const FaithVerseAccount: React.FC = () => {
               <div className="space-y-4">
                 <div>
                   <label className="text-sm text-blue-200">Total XP</label>
-                  <p className="text-xl font-semibold text-purple-400">{currentProfile.xp.toLocaleString()}</p>
+                  <p className="text-xl font-semibold text-purple-400">
+                    {currentProfile.xp.toLocaleString()}
+                  </p>
                 </div>
                 <div>
                   <label className="text-sm text-blue-200">Best Score</label>
-                  <p className="text-xl font-semibold text-green-400">{currentProfile.totalScore.toLocaleString()}</p>
+                  <p className="text-xl font-semibold text-green-400">
+                    {currentProfile.totalScore.toLocaleString()}
+                  </p>
                 </div>
                 <div>
                   <label className="text-sm text-blue-200">Member Since</label>
-                  <p className="text-sm text-blue-100">{new Date(currentProfile.joinedAt).toLocaleDateString()}</p>
+                  <p className="text-sm text-blue-100">
+                    {new Date(currentProfile.joinedAt).toLocaleDateString()}
+                  </p>
                 </div>
               </div>
             </div>
@@ -220,19 +250,27 @@ export const FaithVerseAccount: React.FC = () => {
               <h3 className="text-lg font-semibold mb-4">Game Progress</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-purple-900/30 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-blue-400">{currentProfile.gamesPlayed.quiz}</div>
+                  <div className="text-2xl font-bold text-blue-400">
+                    {currentProfile.gamesPlayed.quiz}
+                  </div>
                   <div className="text-sm text-blue-200">Quizzes</div>
                 </div>
                 <div className="bg-blue-900/30 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-green-400">{currentProfile.gamesPlayed.memory}</div>
+                  <div className="text-2xl font-bold text-green-400">
+                    {currentProfile.gamesPlayed.memory}
+                  </div>
                   <div className="text-sm text-blue-200">Memory Games</div>
                 </div>
                 <div className="bg-green-900/30 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-yellow-400">{currentProfile.gamesPlayed.story}</div>
+                  <div className="text-2xl font-bold text-yellow-400">
+                    {currentProfile.gamesPlayed.story}
+                  </div>
                   <div className="text-sm text-blue-200">Stories</div>
                 </div>
                 <div className="bg-yellow-900/30 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-purple-400">{currentProfile.gamesPlayed.adventure}</div>
+                  <div className="text-2xl font-bold text-purple-400">
+                    {currentProfile.gamesPlayed.adventure}
+                  </div>
                   <div className="text-sm text-blue-200">Adventures</div>
                 </div>
               </div>
@@ -262,7 +300,9 @@ export const FaithVerseAccount: React.FC = () => {
                       if (file) {
                         const reader = new FileReader()
                         reader.onload = (e) => {
-                          const result = ProfileService.importProfileData(e.target?.result as string)
+                          const result = ProfileService.importProfileData(
+                            e.target?.result as string
+                          )
                           alert(result.message)
                           if (result.success) {
                             window.location.reload()
@@ -311,7 +351,9 @@ export const FaithVerseAccount: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="font-semibold">{profile.displayName}</div>
-                      <div className="text-sm text-blue-200">@{profile.username} • Level {profile.level}</div>
+                      <div className="text-sm text-blue-200">
+                        @{profile.username} • Level {profile.level}
+                      </div>
                     </div>
                     {profile.id === currentProfile.id && (
                       <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse" />

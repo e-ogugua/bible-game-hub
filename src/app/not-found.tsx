@@ -6,8 +6,18 @@ export default function NotFound() {
       <div className="text-center max-w-md mx-auto p-8">
         <div className="mb-8">
           <div className="w-16 h-16 bg-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m6 8.5A9 9 0 1112 3.5 9 9 0 0121 12z" />
+            <svg
+              className="w-8 h-8 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m6 8.5A9 9 0 1112 3.5 9 9 0 0121 12z"
+              />
             </svg>
           </div>
           <h2 className="text-2xl font-bold mb-2">Page Not Found</h2>

@@ -8,7 +8,8 @@ import { LeaderboardEntry, FaithVerseProfile } from '@/types/faithverse'
 
 export const Leaderboard: React.FC = () => {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
-  const [currentUser, setCurrentUser] = React.useState<FaithVerseProfile | null>(null)
+  const [currentUser, setCurrentUser] =
+    React.useState<FaithVerseProfile | null>(null)
   const [sortBy, setSortBy] = useState<'xp' | 'score' | 'level'>('xp')
 
   useEffect(() => {
@@ -88,7 +89,7 @@ export const Leaderboard: React.FC = () => {
               {[
                 { key: 'xp', label: 'XP', icon: Star },
                 { key: 'score', label: 'Score', icon: Trophy },
-                { key: 'level', label: 'Level', icon: TrendingUp }
+                { key: 'level', label: 'Level', icon: TrendingUp },
               ].map(({ key, label, icon: Icon }) => (
                 <motion.button
                   key={key}
@@ -134,7 +135,9 @@ export const Leaderboard: React.FC = () => {
                 <motion.div
                   key={entry.id}
                   className={`px-6 py-4 transition-all duration-300 ${
-                    entry.isCurrentUser ? 'bg-yellow-500/10 border-l-4 border-yellow-400' : 'hover:bg-white/5'
+                    entry.isCurrentUser
+                      ? 'bg-yellow-500/10 border-l-4 border-yellow-400'
+                      : 'hover:bg-white/5'
                   }`}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -147,28 +150,40 @@ export const Leaderboard: React.FC = () => {
 
                     <div className="col-span-5">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${getRankGradient(entry.rank)} flex items-center justify-center`}>
+                        <div
+                          className={`w-10 h-10 rounded-full bg-gradient-to-br ${getRankGradient(entry.rank)} flex items-center justify-center`}
+                        >
                           <span className="text-white font-bold text-sm">
                             {entry.displayName.charAt(0).toUpperCase()}
                           </span>
                         </div>
                         <div>
-                          <div className="font-semibold text-white">{entry.displayName}</div>
-                          <div className="text-sm text-blue-300">@{entry.username}</div>
+                          <div className="font-semibold text-white">
+                            {entry.displayName}
+                          </div>
+                          <div className="text-sm text-blue-300">
+                            @{entry.username}
+                          </div>
                         </div>
                       </div>
                     </div>
 
                     <div className="col-span-2 text-center">
-                      <div className="text-lg font-bold text-purple-400">{entry.level}</div>
+                      <div className="text-lg font-bold text-purple-400">
+                        {entry.level}
+                      </div>
                     </div>
 
                     <div className="col-span-2 text-center">
-                      <div className="text-lg font-bold text-blue-400">{entry.xp.toLocaleString()}</div>
+                      <div className="text-lg font-bold text-blue-400">
+                        {entry.xp.toLocaleString()}
+                      </div>
                     </div>
 
                     <div className="col-span-2 text-center">
-                      <div className="text-lg font-bold text-green-400">{entry.totalScore.toLocaleString()}</div>
+                      <div className="text-lg font-bold text-green-400">
+                        {entry.totalScore.toLocaleString()}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -176,48 +191,59 @@ export const Leaderboard: React.FC = () => {
             </div>
 
             {/* Current User Section (if not in top ranks) */}
-            {currentUser && !sortedLeaderboard.some(entry => entry.isCurrentUser) && (
-              <motion.div
-                className="px-6 py-4 bg-yellow-500/10 border-t border-yellow-400/30"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-              >
-                <div className="grid grid-cols-12 gap-4 items-center">
-                  <div className="col-span-1 flex items-center justify-center">
-                    <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
-                      <span className="text-xs font-bold text-black">★</span>
-                    </div>
-                  </div>
-
-                  <div className="col-span-5">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">
-                          {currentUser.displayName.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
-                      <div>
-                        <div className="font-semibold text-white">{currentUser.displayName} (You)</div>
-                        <div className="text-sm text-blue-300">@{currentUser.username}</div>
+            {currentUser &&
+              !sortedLeaderboard.some((entry) => entry.isCurrentUser) && (
+                <motion.div
+                  className="px-6 py-4 bg-yellow-500/10 border-t border-yellow-400/30"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                >
+                  <div className="grid grid-cols-12 gap-4 items-center">
+                    <div className="col-span-1 flex items-center justify-center">
+                      <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-bold text-black">★</span>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="col-span-2 text-center">
-                    <div className="text-lg font-bold text-purple-400">{currentUser.level}</div>
-                  </div>
+                    <div className="col-span-5">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+                          <span className="text-white font-bold text-sm">
+                            {currentUser.displayName.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="font-semibold text-white">
+                            {currentUser.displayName} (You)
+                          </div>
+                          <div className="text-sm text-blue-300">
+                            @{currentUser.username}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-                  <div className="col-span-2 text-center">
-                    <div className="text-lg font-bold text-blue-400">{currentUser.xp.toLocaleString()}</div>
-                  </div>
+                    <div className="col-span-2 text-center">
+                      <div className="text-lg font-bold text-purple-400">
+                        {currentUser.level}
+                      </div>
+                    </div>
 
-                  <div className="col-span-2 text-center">
-                    <div className="text-lg font-bold text-green-400">{currentUser.totalScore.toLocaleString()}</div>
+                    <div className="col-span-2 text-center">
+                      <div className="text-lg font-bold text-blue-400">
+                        {currentUser.xp.toLocaleString()}
+                      </div>
+                    </div>
+
+                    <div className="col-span-2 text-center">
+                      <div className="text-lg font-bold text-green-400">
+                        {currentUser.totalScore.toLocaleString()}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            )}
+                </motion.div>
+              )}
           </div>
 
           {/* Footer Message */}
@@ -228,8 +254,10 @@ export const Leaderboard: React.FC = () => {
             transition={{ delay: 1 }}
           >
             <p className="text-blue-100">
-              🌟 <strong>Global Leaderboard Coming Soon!</strong><br />
-              Connect with believers worldwide and compete in faith challenges across the FaithVerse.
+              🌟 <strong>Global Leaderboard Coming Soon!</strong>
+              <br />
+              Connect with believers worldwide and compete in faith challenges
+              across the FaithVerse.
             </p>
           </motion.div>
         </motion.div>

@@ -1,44 +1,50 @@
-import { useState, useEffect, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Box, Sphere, Cylinder, Plane } from '@react-three/drei';
-import * as THREE from 'three';
+import { useState, useEffect, useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { Box, Sphere, Cylinder, Plane } from '@react-three/drei'
+import * as THREE from 'three'
 
 export const GoliathScene: React.FC = () => {
-  const [isClient, setIsClient] = useState(false);
-  const davidRef = useRef<THREE.Group>(null);
-  const goliathRef = useRef<THREE.Group>(null);
-  const stoneRef = useRef<THREE.Mesh>(null);
+  const [isClient, setIsClient] = useState(false)
+  const davidRef = useRef<THREE.Group>(null)
+  const goliathRef = useRef<THREE.Group>(null)
+  const stoneRef = useRef<THREE.Mesh>(null)
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    setIsClient(true)
+  }, [])
 
   useFrame((state) => {
-    if (!isClient) return;
+    if (!isClient) return
 
     if (davidRef.current) {
-      davidRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+      davidRef.current.rotation.y =
+        Math.sin(state.clock.elapsedTime * 0.5) * 0.1
     }
     if (goliathRef.current) {
-      goliathRef.current.position.y = 3 + Math.sin(state.clock.elapsedTime * 2) * 0.1;
+      goliathRef.current.position.y =
+        3 + Math.sin(state.clock.elapsedTime * 2) * 0.1
     }
     if (stoneRef.current) {
-      const time = state.clock.elapsedTime;
-      stoneRef.current.position.x = Math.sin(time * 3) * 2;
-      stoneRef.current.position.y = 2 + Math.sin(time * 2) * 0.5;
-      stoneRef.current.position.z = Math.cos(time * 3) * 2;
+      const time = state.clock.elapsedTime
+      stoneRef.current.position.x = Math.sin(time * 3) * 2
+      stoneRef.current.position.y = 2 + Math.sin(time * 2) * 0.5
+      stoneRef.current.position.z = Math.cos(time * 3) * 2
     }
-  });
+  })
 
   // Don't render during SSR
   if (!isClient) {
-    return null;
+    return null
   }
 
   return (
     <group>
       {/* Battlefield ground */}
-      <Plane args={[15, 15]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
+      <Plane
+        args={[15, 15]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.5, 0]}
+      >
         <meshStandardMaterial color="#8B7355" />
       </Plane>
 
@@ -86,7 +92,11 @@ export const GoliathScene: React.FC = () => {
           <meshStandardMaterial color="#B87333" />
         </Box>
         {/* Spear */}
-        <Cylinder args={[0.02, 0.02, 2]} position={[0.5, 2.5, 0]} rotation={[0, 0, -0.3]}>
+        <Cylinder
+          args={[0.02, 0.02, 2]}
+          position={[0.5, 2.5, 0]}
+          rotation={[0, 0, -0.3]}
+        >
           <meshStandardMaterial color="#8B4513" />
         </Cylinder>
         <Sphere args={[0.05]} position={[0.7, 3.2, 0]}>
@@ -104,5 +114,5 @@ export const GoliathScene: React.FC = () => {
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 10, 5]} intensity={1} />
     </group>
-  );
-};
+  )
+}

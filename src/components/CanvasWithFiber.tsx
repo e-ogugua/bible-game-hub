@@ -1,30 +1,34 @@
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, Html, AdaptiveDpr, AdaptiveEvents } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber'
+import {
+  OrbitControls,
+  Environment,
+  Html,
+  AdaptiveDpr,
+  AdaptiveEvents,
+} from '@react-three/drei'
 
 interface CanvasWithFiberProps {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
-export const CanvasWithFiber: React.FC<CanvasWithFiberProps> = ({ children }) => {
+export const CanvasWithFiber: React.FC<CanvasWithFiberProps> = ({
+  children,
+}) => {
   return (
     <Canvas
       camera={{ position: [0, 0, 5], fov: 50 }}
       gl={{
         antialias: true,
         alpha: true,
-        powerPreference: "high-performance",
+        powerPreference: 'high-performance',
         stencil: false,
-        depth: true
+        depth: true,
       }}
       dpr={[1, 2]} // Adaptive pixel ratio for better performance on mobile
     >
       <AdaptiveDpr pixelated />
       <AdaptiveEvents />
-      {children && (
-        <Html center>
-          {children}
-        </Html>
-      )}
+      {children && <Html center>{children}</Html>}
       <OrbitControls
         enablePan={false}
         enableZoom={true}
@@ -35,5 +39,5 @@ export const CanvasWithFiber: React.FC<CanvasWithFiberProps> = ({ children }) =>
       />
       <Environment preset="sunset" />
     </Canvas>
-  );
-};
+  )
+}

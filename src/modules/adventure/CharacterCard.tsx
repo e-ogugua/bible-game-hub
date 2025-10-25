@@ -1,17 +1,21 @@
 // src/modules/adventure/CharacterCard.tsx
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { StoryStage } from './data';
+import { motion } from 'framer-motion'
+import Image from 'next/image'
+import { StoryStage } from './data'
 
 interface CharacterCardProps {
-  stage: StoryStage;
-  onChoice: (choiceIndex: number) => void;
-  disabled: boolean;
+  stage: StoryStage
+  onChoice: (choiceIndex: number) => void
+  disabled: boolean
 }
 
-export const CharacterCard: React.FC<CharacterCardProps> = ({ stage, onChoice, disabled }) => {
+export const CharacterCard: React.FC<CharacterCardProps> = ({
+  stage,
+  onChoice,
+  disabled,
+}) => {
   return (
     <motion.div
       className="relative w-full max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-xl overflow-hidden"
@@ -22,7 +26,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({ stage, onChoice, d
       {/* Background Image Placeholder */}
       <div
         className="absolute inset-0 bg-cover bg-center opacity-30"
-        style={{ backgroundImage: `url(${stage.backgroundImage || '/images/default-bg.jpg'})` }}
+        style={{
+          backgroundImage: `url(${stage.backgroundImage || '/images/default-bg.jpg'})`,
+        }}
       />
 
       {/* Content Overlay */}
@@ -46,7 +52,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({ stage, onChoice, d
         )}
 
         {/* Story Title */}
-        <h2 className="text-2xl font-bold text-center mb-4 text-white">{stage.title}</h2>
+        <h2 className="text-2xl font-bold text-center mb-4 text-white">
+          {stage.title}
+        </h2>
 
         {/* Narrative Text */}
         <motion.p
@@ -79,5 +87,5 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({ stage, onChoice, d
         </div>
       </div>
     </motion.div>
-  );
-};
+  )
+}

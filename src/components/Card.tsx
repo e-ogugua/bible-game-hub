@@ -16,9 +16,12 @@ export const Card: React.FC<CardProps> = ({
   hover = false,
   onClick,
 }) => {
-  const baseClasses = 'bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20'
+  const baseClasses =
+    'bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20'
 
-  const hoverClasses = hover ? 'cursor-pointer hover:bg-white/20 transition-all duration-300' : ''
+  const hoverClasses = hover
+    ? 'cursor-pointer hover:bg-white/20 transition-all duration-300'
+    : ''
 
   return (
     <motion.div

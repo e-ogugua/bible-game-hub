@@ -1,38 +1,51 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { BookOpen, Users, Trophy, Zap, Star, Heart, Shield, Crown } from 'lucide-react';
+import React from 'react'
+import { motion } from 'framer-motion'
+import {
+  BookOpen,
+  Users,
+  Trophy,
+  Zap,
+  Star,
+  Heart,
+  Shield,
+  Crown,
+} from 'lucide-react'
 
 export const FaithVerse: React.FC = () => {
   const features = [
     {
       icon: BookOpen,
       title: '3D Bible Stories',
-      description: 'Immerse yourself in interactive biblical narratives with stunning 3D visuals',
+      description:
+        'Immerse yourself in interactive biblical narratives with stunning 3D visuals',
       status: 'Coming Soon',
-      color: 'from-purple-500 to-indigo-600'
+      color: 'from-purple-500 to-indigo-600',
     },
     {
       icon: Users,
       title: 'Character Collections',
-      description: 'Collect and upgrade biblical heroes with unique abilities and stories',
+      description:
+        'Collect and upgrade biblical heroes with unique abilities and stories',
       status: 'Coming Soon',
-      color: 'from-blue-500 to-cyan-600'
+      color: 'from-blue-500 to-cyan-600',
     },
     {
       icon: Trophy,
       title: 'Achievement System',
-      description: 'Unlock rewards, badges, and milestones as you progress through your faith journey',
+      description:
+        'Unlock rewards, badges, and milestones as you progress through your faith journey',
       status: 'Coming Soon',
-      color: 'from-yellow-500 to-orange-600'
+      color: 'from-yellow-500 to-orange-600',
     },
     {
       icon: Zap,
       title: 'Divine Powers',
-      description: 'Master spiritual abilities and use them to overcome challenges in epic adventures',
+      description:
+        'Master spiritual abilities and use them to overcome challenges in epic adventures',
       status: 'Coming Soon',
-      color: 'from-green-500 to-emerald-600'
-    }
-  ];
+      color: 'from-green-500 to-emerald-600',
+    },
+  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white">
@@ -50,8 +63,9 @@ export const FaithVerse: React.FC = () => {
             FaithVerse
           </h1>
           <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            The ultimate biblical metaverse where faith comes alive through immersive 3D experiences,
-            character collections, and epic spiritual adventures.
+            The ultimate biblical metaverse where faith comes alive through
+            immersive 3D experiences, character collections, and epic spiritual
+            adventures.
           </p>
         </motion.div>
 
@@ -67,10 +81,14 @@ export const FaithVerse: React.FC = () => {
               whileHover={{ scale: 1.05, y: -5 }}
             >
               {/* Background gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`} />
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
+              />
 
               {/* Icon */}
-              <div className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br ${feature.color} rounded-full mb-6 shadow-lg`}>
+              <div
+                className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br ${feature.color} rounded-full mb-6 shadow-lg`}
+              >
                 <feature.icon className="w-8 h-8 text-white" />
               </div>
 
@@ -108,7 +126,7 @@ export const FaithVerse: React.FC = () => {
             <motion.div
               className="relative bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 overflow-hidden group"
               whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              transition={{ type: 'spring', stiffness: 300 }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -120,7 +138,8 @@ export const FaithVerse: React.FC = () => {
                   Global Missions
                 </h3>
                 <p className="text-blue-100 text-sm mb-4 text-center">
-                  Join worldwide faith challenges and compete with believers across the globe.
+                  Join worldwide faith challenges and compete with believers
+                  across the globe.
                 </p>
                 <div className="text-center">
                   <span className="inline-block bg-green-900/30 text-green-300 px-3 py-1 rounded-full text-xs">
@@ -133,7 +152,7 @@ export const FaithVerse: React.FC = () => {
             <motion.div
               className="relative bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 overflow-hidden group"
               whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              transition={{ type: 'spring', stiffness: 300 }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -145,7 +164,8 @@ export const FaithVerse: React.FC = () => {
                   Faith Challenges
                 </h3>
                 <p className="text-blue-100 text-sm mb-4 text-center">
-                  Weekly spiritual challenges to grow your faith and earn exclusive rewards.
+                  Weekly spiritual challenges to grow your faith and earn
+                  exclusive rewards.
                 </p>
                 <div className="text-center">
                   <span className="inline-block bg-purple-900/30 text-purple-300 px-3 py-1 rounded-full text-xs">
@@ -158,7 +178,7 @@ export const FaithVerse: React.FC = () => {
             <motion.div
               className="relative bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 overflow-hidden group"
               whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              transition={{ type: 'spring', stiffness: 300 }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -170,7 +190,8 @@ export const FaithVerse: React.FC = () => {
                   Bible Study Circles
                 </h3>
                 <p className="text-blue-100 text-sm mb-4 text-center">
-                  Join virtual study groups and share insights with fellow Scripture enthusiasts.
+                  Join virtual study groups and share insights with fellow
+                  Scripture enthusiasts.
                 </p>
                 <div className="text-center">
                   <span className="inline-block bg-blue-900/30 text-blue-300 px-3 py-1 rounded-full text-xs">
@@ -199,7 +220,7 @@ export const FaithVerse: React.FC = () => {
                 <span>Join Early Access</span>
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
                 >
                   ✨
                 </motion.div>
@@ -222,8 +243,9 @@ export const FaithVerse: React.FC = () => {
           <Star className="w-16 h-16 text-yellow-400 mx-auto mb-6" />
           <h2 className="text-4xl font-bold mb-6">The Journey Begins Soon</h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            FaithVerse is evolving from our current Bible Game Hub into a comprehensive biblical metaverse.
-            Stay tuned for updates as we build the future of faith-based gaming.
+            FaithVerse is evolving from our current Bible Game Hub into a
+            comprehensive biblical metaverse. Stay tuned for updates as we build
+            the future of faith-based gaming.
           </p>
 
           {/* Progress indicators */}
@@ -257,7 +279,8 @@ export const FaithVerse: React.FC = () => {
           {/* Call to action */}
           <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-6">
             <p className="text-white text-lg">
-              🚀 <strong>Ready to explore?</strong> Try our enhanced Bible stories with 3D visuals and audio now!
+              🚀 <strong>Ready to explore?</strong> Try our enhanced Bible
+              stories with 3D visuals and audio now!
             </p>
           </div>
 
@@ -278,7 +301,8 @@ export const FaithVerse: React.FC = () => {
 
             <p className="text-blue-100 mb-6 max-w-md mx-auto">
               Be among the first to experience the future of biblical gaming.
-              Get early access to new features and help shape the FaithVerse community.
+              Get early access to new features and help shape the FaithVerse
+              community.
             </p>
 
             <motion.button
@@ -291,7 +315,7 @@ export const FaithVerse: React.FC = () => {
                 <span>Coming Soon</span>
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                 >
                   ⏳
                 </motion.div>
@@ -299,11 +323,12 @@ export const FaithVerse: React.FC = () => {
             </motion.button>
 
             <p className="text-xs text-blue-200 mt-3">
-              Sign up for our newsletter to be notified when FaithVerse launches!
+              Sign up for our newsletter to be notified when FaithVerse
+              launches!
             </p>
           </motion.div>
         </motion.div>
       </div>
     </div>
-  );
-};
+  )
+}

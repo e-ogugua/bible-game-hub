@@ -1,19 +1,19 @@
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
 
 interface LoadingSpinnerProps {
-  message?: string;
-  size?: 'sm' | 'md' | 'lg';
+  message?: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  message = "Loading...",
-  size = 'md'
+  message = 'Loading...',
+  size = 'md',
 }) => {
   const sizeClasses = {
     sm: 'w-4 h-4',
     md: 'w-8 h-8',
-    lg: 'w-12 h-12'
-  };
+    lg: 'w-12 h-12',
+  }
 
   return (
     <motion.div
@@ -24,7 +24,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     >
       <motion.div
         animate={{ rotate: 360 }}
-        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
         className={`${sizeClasses[size]} border-4 border-blue-200 border-t-purple-600 rounded-full`}
       />
       <motion.p
@@ -35,11 +35,11 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
         {message}
       </motion.p>
     </motion.div>
-  );
-};
+  )
+}
 
 interface PageTransitionProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
@@ -48,25 +48,28 @@ export const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      transition={{ duration: 0.5, ease: 'easeInOut' }}
     >
       {children}
     </motion.div>
-  );
-};
-
-interface GameCardHoverProps {
-  children: React.ReactNode;
-  className?: string;
+  )
 }
 
-export const GameCardHover: React.FC<GameCardHoverProps> = ({ children, className = "" }) => {
+interface GameCardHoverProps {
+  children: React.ReactNode
+  className?: string
+}
+
+export const GameCardHover: React.FC<GameCardHoverProps> = ({
+  children,
+  className = '',
+}) => {
   return (
     <motion.div
       className={`relative overflow-hidden rounded-xl ${className}`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
     >
       {children}
       <motion.div
@@ -75,5 +78,5 @@ export const GameCardHover: React.FC<GameCardHoverProps> = ({ children, classNam
         whileHover={{ opacity: 1 }}
       />
     </motion.div>
-  );
-};
+  )
+}

@@ -13,7 +13,10 @@ export default function MemoryGamePage() {
             Scripture Memory Game
           </h1>
           <p className="text-lg text-blue-100 max-w-2xl">
-            Challenge your memory and deepen your biblical knowledge! Choose from multiple game modes and themes to match Bible verses with their references. Features combo systems, streak tracking, and beautiful 3D animations for an engaging learning experience.
+            Challenge your memory and deepen your biblical knowledge! Choose
+            from multiple game modes and themes to match Bible verses with their
+            references. Features combo systems, streak tracking, and beautiful
+            3D animations for an engaging learning experience.
           </p>
         </div>
 
@@ -28,26 +31,40 @@ export default function MemoryGamePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-xl p-6 border border-blue-400/20">
               <div className="text-3xl mb-3">📚</div>
-              <h3 className="text-lg font-semibold mb-2">Advanced Difficulty Levels</h3>
-              <p className="text-sm text-blue-200 opacity-75">More challenging verse pairs and longer passages</p>
+              <h3 className="text-lg font-semibold mb-2">
+                Advanced Difficulty Levels
+              </h3>
+              <p className="text-sm text-blue-200 opacity-75">
+                More challenging verse pairs and longer passages
+              </p>
             </div>
 
             <div className="bg-gradient-to-br from-green-900/30 to-teal-900/30 rounded-xl p-6 border border-green-400/20">
               <div className="text-3xl mb-3">🎯</div>
-              <h3 className="text-lg font-semibold mb-2">Daily Scripture Challenges</h3>
-              <p className="text-sm text-blue-200 opacity-75">New verses to memorize every day with progress tracking</p>
+              <h3 className="text-lg font-semibold mb-2">
+                Daily Scripture Challenges
+              </h3>
+              <p className="text-sm text-blue-200 opacity-75">
+                New verses to memorize every day with progress tracking
+              </p>
             </div>
 
             <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-xl p-6 border border-purple-400/20">
               <div className="text-3xl mb-3">🏆</div>
               <h3 className="text-lg font-semibold mb-2">Achievement System</h3>
-              <p className="text-sm text-blue-200 opacity-75">Unlock badges and rewards for memorizing Scripture</p>
+              <p className="text-sm text-blue-200 opacity-75">
+                Unlock badges and rewards for memorizing Scripture
+              </p>
             </div>
 
             <div className="bg-gradient-to-br from-yellow-900/30 to-orange-900/30 rounded-xl p-6 border border-yellow-400/20">
               <div className="text-3xl mb-3">📖</div>
-              <h3 className="text-lg font-semibold mb-2">Bible Book Categories</h3>
-              <p className="text-sm text-blue-200 opacity-75">Practice verses organized by Bible books and themes</p>
+              <h3 className="text-lg font-semibold mb-2">
+                Bible Book Categories
+              </h3>
+              <p className="text-sm text-blue-200 opacity-75">
+                Practice verses organized by Bible books and themes
+              </p>
             </div>
 
             <div className="bg-gradient-to-br from-indigo-900/30 to-cyan-900/30 rounded-xl p-6 border border-indigo-400/20">
@@ -58,16 +75,30 @@ export default function MemoryGamePage() {
                 </h3>
                 <div className="space-y-3 text-blue-100">
                   <div className="flex items-start space-x-3">
-                    <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">1</span>
-                    <p>Click on cards to flip them and reveal Bible verses or references</p>
+                    <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">
+                      1
+                    </span>
+                    <p>
+                      Click on cards to flip them and reveal Bible verses or
+                      references
+                    </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">2</span>
-                    <p>Find matching pairs - each verse matches with its Bible reference</p>
+                    <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">
+                      2
+                    </span>
+                    <p>
+                      Find matching pairs - each verse matches with its Bible
+                      reference
+                    </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">3</span>
-                    <p>Match all pairs to complete the level and earn points!</p>
+                    <span className="bg-blue-500/20 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">
+                      3
+                    </span>
+                    <p>
+                      Match all pairs to complete the level and earn points!
+                    </p>
                   </div>
                 </div>
               </div>
@@ -76,15 +107,20 @@ export default function MemoryGamePage() {
             <div className="bg-gradient-to-br from-red-900/30 to-pink-900/30 rounded-xl p-6 border border-red-400/20">
               <div className="text-3xl mb-3">⚡</div>
               <h3 className="text-lg font-semibold mb-2">Speed Challenges</h3>
-              <p className="text-sm text-blue-200 opacity-75">Race against time to match verses before they disappear</p>
+              <p className="text-sm text-blue-200 opacity-75">
+                Race against time to match verses before they disappear
+              </p>
             </div>
           </div>
 
           <div className="mt-8 text-center">
             <p className="text-blue-200">
-              ✨ These features are in development and will be available in future updates.
+              ✨ These features are in development and will be available in
+              future updates.
               <br />
-              <span className="text-yellow-400 font-semibold">Stay tuned for more ways to grow in your faith!</span>
+              <span className="text-yellow-400 font-semibold">
+                Stay tuned for more ways to grow in your faith!
+              </span>
             </p>
           </div>
         </div>

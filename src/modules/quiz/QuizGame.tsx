@@ -1,55 +1,55 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Home, RotateCcw, Star } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { QuizQuestion, getQuestionsByDifficulty } from './data';
-import { useGameContext } from '@/contexts/GameContext';
-import { useAuth } from '@/contexts/AuthContext';
-import { localStorageService } from '@/lib/localStorage';
-import { dailyChallengesService } from '@/lib/dailyChallenges';
-import { ScoreDisplay } from './ScoreDisplay';
-import { QuestionCard } from './QuestionCard';
-import { ProgressBar } from './ProgressBar';
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { Home, RotateCcw, Star } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { QuizQuestion, getQuestionsByDifficulty } from './data'
+import { useGameContext } from '@/contexts/GameContext'
+import { useAuth } from '@/contexts/AuthContext'
+import { localStorageService } from '@/lib/localStorage'
+import { dailyChallengesService } from '@/lib/dailyChallenges'
+import { ScoreDisplay } from './ScoreDisplay'
+import { QuestionCard } from './QuestionCard'
+import { ProgressBar } from './ProgressBar'
 
-type Difficulty = 'easy' | 'medium' | 'hard';
+type Difficulty = 'easy' | 'medium' | 'hard'
 
 export const QuizGame: React.FC = () => {
-  const { gameState, startGame, updateScore, nextQuestion } = useGameContext();
-  const { user } = useAuth();
-  const router = useRouter();
-  const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>([]);
-  const [showDifficultySelection, setShowDifficultySelection] = useState(true);
-  const [gameCompleted, setGameCompleted] = useState(false);
-  const [isClient, setIsClient] = useState(false);
+  const { gameState, startGame, updateScore, nextQuestion } = useGameContext()
+  const { user } = useAuth()
+  const router = useRouter()
+  const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>([])
+  const [showDifficultySelection, setShowDifficultySelection] = useState(true)
+  const [gameCompleted, setGameCompleted] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
     if (gameState.gameStarted && !gameState.currentGame) {
-      startGame('quiz');
+      startGame('quiz')
     }
-  }, [gameState.gameStarted, gameState.currentGame, startGame]);
+  }, [gameState.gameStarted, gameState.currentGame, startGame])
 
   const handleDifficultySelect = (difficulty: Difficulty) => {
-    const questions = getQuestionsByDifficulty(difficulty);
-    setCurrentQuestions(questions);
-    setShowDifficultySelection(false);
-    startGame('quiz');
-  };
+    const questions = getQuestionsByDifficulty(difficulty)
+    setCurrentQuestions(questions)
+    setShowDifficultySelection(false)
+    startGame('quiz')
+  }
 
   const handleAnswer = (isCorrect: boolean) => {
     if (isCorrect) {
-      updateScore(gameState.score + 1);
+      updateScore(gameState.score + 1)
     }
 
     setTimeout(() => {
       if (gameState.currentQuestion >= 9) {
         // Game completed
-        setGameCompleted(true);
+        setGameCompleted(true)
 
         // Save score to localStorage if user is logged in
         if (user) {
@@ -58,27 +58,30 @@ export const QuizGame: React.FC = () => {
             gameType: 'quiz',
             score: gameState.score + (isCorrect ? 1 : 0),
             xpGained: Math.floor((gameState.score + (isCorrect ? 1 : 0)) * 10), // 10 XP per correct answer
-            difficulty: 'medium' // Default difficulty
-          });
+            difficulty: 'medium', // Default difficulty
+          })
 
           // Update quiz streak in daily challenges
-          dailyChallengesService.updateQuizStreak(user.id, gameState.score + (isCorrect ? 1 : 0) >= 7); // Consider 70%+ as completion
+          dailyChallengesService.updateQuizStreak(
+            user.id,
+            gameState.score + (isCorrect ? 1 : 0) >= 7
+          ) // Consider 70%+ as completion
         }
       } else {
-        nextQuestion();
+        nextQuestion()
       }
-    }, 2000); // Delay to show feedback
-  };
+    }, 2000) // Delay to show feedback
+  }
 
   const handleReplay = () => {
-    setShowDifficultySelection(true);
-    setCurrentQuestions([]);
-    setGameCompleted(false);
-  };
+    setShowDifficultySelection(true)
+    setCurrentQuestions([])
+    setGameCompleted(false)
+  }
 
   const handleGoHome = () => {
-    router.push('/');
-  };
+    router.push('/')
+  }
 
   // Don't render during SSR
   if (!isClient) {
@@ -89,7 +92,7 @@ export const QuizGame: React.FC = () => {
           <p>Loading quiz game...</p>
         </div>
       </div>
-    );
+    )
   }
 
   if (showDifficultySelection) {
@@ -106,45 +109,58 @@ export const QuizGame: React.FC = () => {
               <span className="text-2xl">📚</span>
             </div>
             <h2 className="text-3xl font-bold mb-2">Choose Your Challenge</h2>
-            <p className="text-blue-200">Select difficulty level to begin your Bible knowledge journey</p>
+            <p className="text-blue-200">
+              Select difficulty level to begin your Bible knowledge journey
+            </p>
           </div>
 
           <div className="space-y-4">
-            {(['easy', 'medium', 'hard'] as Difficulty[]).map((difficulty, index) => (
-              <motion.button
-                key={difficulty}
-                className={`w-full p-4 rounded-lg font-semibold capitalize transition-all duration-300 relative overflow-hidden ${
-                  difficulty === 'easy' ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700' :
-                  difficulty === 'medium' ? 'bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700' :
-                  'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700'
-                }`}
-                onClick={() => handleDifficultySelect(difficulty)}
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <div className="flex items-center justify-center space-x-3">
-                  <span className="text-lg">
-                    {difficulty === 'easy' ? '🌱' : difficulty === 'medium' ? '⚡' : '🔥'}
-                  </span>
-                  <span className="text-xl">{difficulty}</span>
-                </div>
-              </motion.button>
-            ))}
+            {(['easy', 'medium', 'hard'] as Difficulty[]).map(
+              (difficulty, index) => (
+                <motion.button
+                  key={difficulty}
+                  className={`w-full p-4 rounded-lg font-semibold capitalize transition-all duration-300 relative overflow-hidden ${
+                    difficulty === 'easy'
+                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700'
+                      : difficulty === 'medium'
+                        ? 'bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700'
+                        : 'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700'
+                  }`}
+                  onClick={() => handleDifficultySelect(difficulty)}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <div className="flex items-center justify-center space-x-3">
+                    <span className="text-lg">
+                      {difficulty === 'easy'
+                        ? '🌱'
+                        : difficulty === 'medium'
+                          ? '⚡'
+                          : '🔥'}
+                    </span>
+                    <span className="text-xl">{difficulty}</span>
+                  </div>
+                </motion.button>
+              )
+            )}
           </div>
 
           <div className="mt-6 text-center text-sm text-blue-200">
-            <p>Easy: Basic Bible knowledge • Medium: Intermediate questions • Hard: Advanced study</p>
+            <p>
+              Easy: Basic Bible knowledge • Medium: Intermediate questions •
+              Hard: Advanced study
+            </p>
           </div>
         </motion.div>
       </div>
-    );
+    )
   }
 
   if (gameCompleted) {
-    const percentage = Math.round((gameState.score / 10) * 100);
+    const percentage = Math.round((gameState.score / 10) * 100)
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white flex items-center justify-center p-6">
         <motion.div
@@ -179,10 +195,10 @@ export const QuizGame: React.FC = () => {
           </div>
         </motion.div>
       </div>
-    );
+    )
   }
 
-  const currentQuestion = currentQuestions[gameState.currentQuestion];
+  const currentQuestion = currentQuestions[gameState.currentQuestion]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white p-6">
@@ -216,5 +232,5 @@ export const QuizGame: React.FC = () => {
         </motion.div>
       </div>
     </div>
-  );
-};
+  )
+}

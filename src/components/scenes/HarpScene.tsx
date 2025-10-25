@@ -1,40 +1,46 @@
-import { useRef, useState, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Box, Cylinder, Plane, Sphere } from '@react-three/drei';
-import * as THREE from 'three';
+import { useRef, useState, useEffect } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { Box, Cylinder, Plane, Sphere } from '@react-three/drei'
+import * as THREE from 'three'
 
 export const HarpScene: React.FC = () => {
-  const [isClient, setIsClient] = useState(false);
-  const harpRef = useRef<THREE.Group>(null);
-  const stringsRef = useRef<THREE.Group>(null);
+  const [isClient, setIsClient] = useState(false)
+  const harpRef = useRef<THREE.Group>(null)
+  const stringsRef = useRef<THREE.Group>(null)
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    setIsClient(true)
+  }, [])
 
   useFrame((state) => {
-    if (!isClient) return;
+    if (!isClient) return
 
     if (harpRef.current) {
-      harpRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.05;
+      harpRef.current.rotation.y =
+        Math.sin(state.clock.elapsedTime * 0.3) * 0.05
     }
     if (stringsRef.current) {
       stringsRef.current.children.forEach((string, index) => {
-        const mesh = string as THREE.Mesh;
-        mesh.scale.y = 1 + Math.sin(state.clock.elapsedTime * 2 + index * 0.5) * 0.1;
-      });
+        const mesh = string as THREE.Mesh
+        mesh.scale.y =
+          1 + Math.sin(state.clock.elapsedTime * 2 + index * 0.5) * 0.1
+      })
     }
-  });
+  })
 
   // Don't render during SSR
   if (!isClient) {
-    return null;
+    return null
   }
 
   return (
     <group>
       {/* Stone floor */}
-      <Plane args={[8, 8]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
+      <Plane
+        args={[8, 8]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.5, 0]}
+      >
         <meshStandardMaterial color="#D2B48C" />
       </Plane>
 
@@ -46,7 +52,11 @@ export const HarpScene: React.FC = () => {
         </Box>
 
         {/* Top curve */}
-        <Box args={[1.5, 0.2, 0.1]} position={[0, 2.8, 0]} rotation={[0, 0, Math.PI / 6]}>
+        <Box
+          args={[1.5, 0.2, 0.1]}
+          position={[0, 2.8, 0]}
+          rotation={[0, 0, Math.PI / 6]}
+        >
           <meshStandardMaterial color="#8B4513" />
         </Box>
 
@@ -61,11 +71,7 @@ export const HarpScene: React.FC = () => {
             <Cylinder
               key={i}
               args={[0.01, 0.01, 2.5]}
-              position={[
-                (i - 4.5) * 0.12,
-                1.5,
-                0.05
-              ]}
+              position={[(i - 4.5) * 0.12, 1.5, 0.05]}
               rotation={[0, 0, Math.PI / 2]}
             >
               <meshStandardMaterial color="#FFD700" />
@@ -106,5 +112,5 @@ export const HarpScene: React.FC = () => {
       <ambientLight intensity={0.6} />
       <directionalLight position={[2, 2, 1]} intensity={0.5} />
     </group>
-  );
-};
+  )
+}

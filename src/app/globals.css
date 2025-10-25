@@ -1,13 +1,135 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 @layer base {
   * {
-    @apply border-gray-200;
+    border-color: rgb(75 85 99);
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-white text-gray-900;
+    background: linear-gradient(to bottom right, rgb(88 28 135), rgb(30 64 175), rgb(79 70 229));
+    color: white;
+    min-height: 100vh;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(88, 28, 135, 0.2);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgb(147 51 234);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(126 34 206);
+  }
+
+  /* Selection styling */
+  ::selection {
+    background: rgba(251, 191, 36, 0.3);
+    color: white;
+  }
+
+  /* Focus styling */
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(251, 191, 36), 0 0 0 4px rgb(88, 28, 135);
+  }
+}
+
+@layer components {
+  /* Custom gradient backgrounds */
+  .bg-bible-primary {
+    background: linear-gradient(to bottom right, rgb(88 28 135), rgb(30 64 175), rgb(79 70 229));
+  }
+
+  .bg-bible-secondary {
+    background: linear-gradient(to bottom right, rgba(88 28 135, 0.5), rgba(30 64 175, 0.5), rgba(79 70 229, 0.5));
+  }
+
+  /* Card styling */
+  .bible-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .bible-card-hover {
+    transition: all 0.3s ease;
+  }
+
+  .bible-card-hover:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Button styling */
+  .bible-button {
+    background: rgb(147 51 234);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .bible-button:hover {
+    background: rgb(126 34 206);
+  }
+
+  .bible-button-secondary {
+    background: rgb(59 130 246);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .bible-button-secondary:hover {
+    background: rgb(37 99 235);
+  }
+
+  /* Text styling */
+  .text-bible-primary {
+    background: linear-gradient(to right, rgb(147 197 253), rgb(196 181 253));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-bible-secondary {
+    color: rgb(147 197 253);
+  }
+
+  .text-bible-accent {
+    color: rgb(253 224 71);
+  }
+
+  /* Animation utilities */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
   }
 }
 
@@ -22,5 +144,118 @@
 
   .perspective-1000 {
     perspective: 1000px;
+  }
+
+  /* Responsive text utilities */
+  .text-responsive-sm {
+    font-size: 0.875rem;
+  }
+
+  .text-responsive-base {
+    font-size: 1rem;
+  }
+
+  .text-responsive-lg {
+    font-size: 1.125rem;
+  }
+
+  .text-responsive-xl {
+    font-size: 1.25rem;
+  }
+
+  .text-responsive-2xl {
+    font-size: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .text-responsive-sm {
+      font-size: 1rem;
+    }
+    .text-responsive-base {
+      font-size: 1.125rem;
+    }
+    .text-responsive-lg {
+      font-size: 1.25rem;
+    }
+    .text-responsive-xl {
+      font-size: 1.5rem;
+    }
+    .text-responsive-2xl {
+      font-size: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .text-responsive-xl {
+      font-size: 1.875rem;
+    }
+    .text-responsive-2xl {
+      font-size: 2.25rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .text-responsive-2xl {
+      font-size: 3rem;
+    }
+  }
+
+  /* Spacing utilities */
+  .section-padding {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .container-padding {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .section-padding {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+    .container-padding {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .section-padding {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+    .container-padding {
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+  }
+  to {
+    text-shadow: 0 0 30px rgba(251, 191, 36, 0.8), 0 0 40px rgba(251, 191, 36, 0.3);
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none;
   }
 }

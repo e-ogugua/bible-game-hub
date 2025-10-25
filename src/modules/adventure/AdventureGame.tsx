@@ -1,82 +1,84 @@
 // src/modules/adventure/AdventureGame.tsx
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Home, RotateCcw, BookOpen } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useGameContext } from '@/contexts/GameContext';
-import { adventureData, getStartingStage } from './data';
-import { CharacterCard } from './CharacterCard';
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { Home, RotateCcw, BookOpen } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useGameContext } from '@/contexts/GameContext'
+import { adventureData, getStartingStage } from './data'
+import { CharacterCard } from './CharacterCard'
 
-type Character = 'moses' | 'david' | 'jesus';
+type Character = 'moses' | 'david' | 'jesus'
 
 export const AdventureGame: React.FC = () => {
-  const { gameState, startGame, updateScore } = useGameContext();
-  const router = useRouter();
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
-  const [currentStage, setCurrentStage] = useState<string | null>(null);
-  const [playerChoices, setPlayerChoices] = useState<string[]>([]);
-  const [gameCompleted, setGameCompleted] = useState(false);
-  const [finalScore, setFinalScore] = useState(0);
+  const { gameState, startGame, updateScore } = useGameContext()
+  const router = useRouter()
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
+    null
+  )
+  const [currentStage, setCurrentStage] = useState<string | null>(null)
+  const [playerChoices, setPlayerChoices] = useState<string[]>([])
+  const [gameCompleted, setGameCompleted] = useState(false)
+  const [finalScore, setFinalScore] = useState(0)
 
   useEffect(() => {
     if (gameState.gameStarted && !gameState.currentGame) {
-      startGame('adventure');
+      startGame('adventure')
     }
-  }, [gameState.gameStarted, gameState.currentGame, startGame]);
+  }, [gameState.gameStarted, gameState.currentGame, startGame])
 
   const startAdventure = (character: Character) => {
-    setSelectedCharacter(character);
-    setCurrentStage(getStartingStage(character));
-    setPlayerChoices([]);
-    setGameCompleted(false);
-    setFinalScore(0);
-    startGame('adventure');
-  };
+    setSelectedCharacter(character)
+    setCurrentStage(getStartingStage(character))
+    setPlayerChoices([])
+    setGameCompleted(false)
+    setFinalScore(0)
+    startGame('adventure')
+  }
 
   const handleChoice = (choiceIndex: number) => {
-    if (!currentStage) return;
+    if (!currentStage) return
 
-    const stage = adventureData[currentStage];
-    const choice = stage.choices[choiceIndex];
+    const stage = adventureData[currentStage]
+    const choice = stage.choices[choiceIndex]
 
     // Update score
-    updateScore(gameState.score + choice.scoreImpact);
-    setFinalScore(prev => prev + choice.scoreImpact);
+    updateScore(gameState.score + choice.scoreImpact)
+    setFinalScore((prev) => prev + choice.scoreImpact)
 
     // Track choice for summary
-    setPlayerChoices(prev => [...prev, choice.text]);
+    setPlayerChoices((prev) => [...prev, choice.text])
 
     if (choice.endGame) {
-      setGameCompleted(true);
+      setGameCompleted(true)
     } else if (choice.nextStage) {
-      setCurrentStage(choice.nextStage);
+      setCurrentStage(choice.nextStage)
     }
-  };
+  }
 
   const handleReplay = () => {
     if (selectedCharacter) {
-      startAdventure(selectedCharacter);
+      startAdventure(selectedCharacter)
     }
-  };
+  }
 
   const handleGoHome = () => {
-    router.push('/');
-  };
+    router.push('/')
+  }
 
   const getCharacterReflection = (character: Character): string => {
     switch (character) {
       case 'moses':
-        return 'Like Moses, you were called to lead and trust in God\'s plan. Remember, "The Lord is my strength and my defense; he has become my salvation." (Exodus 15:2)';
+        return 'Like Moses, you were called to lead and trust in God\'s plan. Remember, "The Lord is my strength and my defense; he has become my salvation." (Exodus 15:2)'
       case 'david':
-        return 'David\'s faith in God\'s power over human strength teaches us that "The Lord who delivered me from the paw of the lion and the paw of the bear will deliver me from the hand of this Philistine." (1 Samuel 17:37)';
+        return 'David\'s faith in God\'s power over human strength teaches us that "The Lord who delivered me from the paw of the lion and the paw of the bear will deliver me from the hand of this Philistine." (1 Samuel 17:37)'
       case 'jesus':
-        return 'Jesus\' resistance to temptation shows us that "Man shall not live by bread alone, but by every word that comes from the mouth of God." (Matthew 4:4)';
+        return 'Jesus\' resistance to temptation shows us that "Man shall not live by bread alone, but by every word that comes from the mouth of God." (Matthew 4:4)'
       default:
-        return 'Your journey through these stories reminds us of God\'s faithfulness throughout history.';
+        return "Your journey through these stories reminds us of God's faithfulness throughout history."
     }
-  };
+  }
 
   if (!selectedCharacter) {
     return (
@@ -86,7 +88,9 @@ export const AdventureGame: React.FC = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
         >
-          <h1 className="text-4xl font-bold text-center mb-8">Choose Your Biblical Adventure</h1>
+          <h1 className="text-4xl font-bold text-center mb-8">
+            Choose Your Biblical Adventure
+          </h1>
           <div className="grid md:grid-cols-3 gap-6">
             {(['moses', 'david', 'jesus'] as Character[]).map((character) => (
               <motion.button
@@ -100,7 +104,9 @@ export const AdventureGame: React.FC = () => {
                   <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
                     <BookOpen className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold capitalize mb-2">{character}</h3>
+                  <h3 className="text-xl font-semibold capitalize mb-2">
+                    {character}
+                  </h3>
                   <p className="text-sm text-blue-100">
                     {character === 'moses' && 'From Egypt to the Burning Bush'}
                     {character === 'david' && 'The Battle with Goliath'}
@@ -112,7 +118,7 @@ export const AdventureGame: React.FC = () => {
           </div>
         </motion.div>
       </div>
-    );
+    )
   }
 
   if (gameCompleted) {
@@ -126,21 +132,27 @@ export const AdventureGame: React.FC = () => {
           <BookOpen className="w-16 h-16 text-yellow-400 mx-auto mb-6" />
           <h2 className="text-3xl font-bold mb-4">Adventure Complete!</h2>
           <p className="text-xl mb-6">Final Score: {finalScore}</p>
-          
+
           <div className="bg-white/5 rounded-lg p-6 mb-6 text-left">
-            <h3 className="text-lg font-semibold mb-4">Your Journey Summary:</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              Your Journey Summary:
+            </h3>
             <ul className="space-y-2">
               {playerChoices.map((choice, index) => (
-                <li key={index} className="text-blue-100">• {choice}</li>
+                <li key={index} className="text-blue-100">
+                  • {choice}
+                </li>
               ))}
             </ul>
           </div>
-          
+
           <div className="bg-purple-500/20 border border-purple-500 rounded-lg p-6 mb-6">
             <h3 className="text-lg font-semibold mb-2">Biblical Reflection:</h3>
-            <p className="text-purple-100">{getCharacterReflection(selectedCharacter)}</p>
+            <p className="text-purple-100">
+              {getCharacterReflection(selectedCharacter)}
+            </p>
           </div>
-          
+
           <div className="flex justify-center space-x-4">
             <motion.button
               className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold flex items-center space-x-2"
@@ -163,10 +175,10 @@ export const AdventureGame: React.FC = () => {
           </div>
         </motion.div>
       </div>
-    );
+    )
   }
 
-  const stage = currentStage ? adventureData[currentStage] : null;
+  const stage = currentStage ? adventureData[currentStage] : null
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white p-6">
@@ -177,7 +189,9 @@ export const AdventureGame: React.FC = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="text-4xl font-bold mb-2 capitalize">{selectedCharacter} Adventure</h1>
+          <h1 className="text-4xl font-bold mb-2 capitalize">
+            {selectedCharacter} Adventure
+          </h1>
           <p className="text-blue-200">Current Score: {gameState.score}</p>
         </motion.div>
 
@@ -191,5 +205,5 @@ export const AdventureGame: React.FC = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

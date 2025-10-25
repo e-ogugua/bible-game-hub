@@ -1,0 +1,68 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7C3AED;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#1E40AF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E3A8A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="book-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1F2937;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="page-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F9FAFB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FCD34D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background circle with shadow -->
+  <circle cx="256" cy="256" r="240" fill="url(#bg-gradient)" stroke="url(#gold-gradient)" stroke-width="16" filter="url(#shadow)"/>
+
+  <!-- Inner decorative ring -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="url(#gold-gradient)" stroke-width="2" opacity="0.5"/>
+
+  <!-- Open book pages -->
+  <path d="M160 192 C160 160, 180 128, 256 128 C332 128, 352 160, 352 192 L352 320 C352 352, 332 384, 256 384 C180 384, 160 352, 160 320 Z" fill="url(#book-gradient)"/>
+  <path d="M164 196 C164 164, 184 132, 256 132 C328 132, 348 164, 348 196 L348 316 C348 348, 328 380, 256 380 C184 380, 164 348, 164 316 Z" fill="url(#page-gradient)"/>
+
+  <!-- Book spine -->
+  <rect x="255.2" y="128" width="1.6" height="256" fill="#4B5563"/>
+
+  <!-- Enhanced cross symbol -->
+  <rect x="251.2" y="176" width="9.6" height="64" fill="url(#gold-gradient)" filter="url(#glow)"/>
+  <rect x="232" y="204" width="48" height="9.6" fill="url(#gold-gradient)" filter="url(#glow)"/>
+
+  <!-- Decorative elements -->
+  <circle cx="128" cy="128" r="12" fill="url(#gold-gradient)" opacity="0.9"/>
+  <circle cx="384" cy="128" r="12" fill="url(#gold-gradient)" opacity="0.9"/>
+  <circle cx="128" cy="384" r="12" fill="url(#gold-gradient)" opacity="0.9"/>
+  <circle cx="384" cy="384" r="12" fill="url(#gold-gradient)" opacity="0.9"/>
+
+  <!-- Additional decorative stars -->
+  <polygon points="96,96 100,108 112,108 102,116 106,128 96,120 86,128 90,116 80,108 92,108" fill="url(#gold-gradient)" opacity="0.8"/>
+  <polygon points="416,96 420,108 432,108 422,116 426,128 416,120 406,128 410,116 400,108 412,108" fill="url(#gold-gradient)" opacity="0.8"/>
+  <polygon points="96,416 100,428 112,428 102,436 106,448 96,440 86,448 90,436 80,428 92,428" fill="url(#gold-gradient)" opacity="0.8"/>
+  <polygon points="416,416 420,428 432,428 422,436 426,448 416,440 406,448 410,436 400,428 412,428" fill="url(#gold-gradient)" opacity="0.8"/>
+
+  <!-- Text elements -->
+  <text x="256" y="80" text-anchor="middle" fill="url(#gold-gradient)" font-family="serif" font-size="32" font-weight="bold" filter="url(#glow)">BIBLE</text>
+  <text x="256" y="450" text-anchor="middle" fill="url(#gold-gradient)" font-family="serif" font-size="32" font-weight="bold" filter="url(#glow)">GAMES</text>
+
+  <!-- Version text -->
+  <text x="256" y="480" text-anchor="middle" fill="#FBBF24" font-family="sans-serif" font-size="16" opacity="0.8">v4.0</text>
+</svg>

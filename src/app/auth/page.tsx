@@ -13,7 +13,7 @@ export default function AuthPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    username: ''
+    username: '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -28,7 +28,10 @@ export default function AuthPage() {
 
     try {
       if (isSignUp) {
-        const { success, error } = await signUp(formData.username, formData.email)
+        const { success, error } = await signUp(
+          formData.username,
+          formData.email
+        )
         if (!success) {
           setError(error || 'Failed to create account')
         } else {
@@ -52,9 +55,9 @@ export default function AuthPage() {
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }))
   }
 
@@ -74,8 +77,7 @@ export default function AuthPage() {
           <p className="text-blue-200">
             {isSignUp
               ? 'Create your account to start your biblical journey'
-              : 'Sign in to continue your faith adventure'
-            }
+              : 'Sign in to continue your faith adventure'}
           </p>
         </div>
 
@@ -133,7 +135,11 @@ export default function AuthPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400 hover:text-white"
               >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
               </button>
             </div>
           </div>
@@ -151,7 +157,11 @@ export default function AuthPage() {
             whileHover={{ scale: loading ? 1 : 1.02 }}
             whileTap={{ scale: loading ? 1 : 0.98 }}
           >
-            {loading ? 'Please wait...' : (isSignUp ? 'Create Account' : 'Sign In')}
+            {loading
+              ? 'Please wait...'
+              : isSignUp
+                ? 'Create Account'
+                : 'Sign In'}
           </motion.button>
         </form>
 
@@ -163,8 +173,7 @@ export default function AuthPage() {
           >
             {isSignUp
               ? 'Already have an account? Sign in'
-              : 'Need an account? Sign up'
-            }
+              : 'Need an account? Sign up'}
           </button>
         </div>
 

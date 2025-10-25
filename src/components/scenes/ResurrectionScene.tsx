@@ -1,44 +1,50 @@
-import { useRef, useState, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Box, Sphere, Plane } from '@react-three/drei';
-import * as THREE from 'three';
+import { useRef, useState, useEffect } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { Box, Sphere, Plane } from '@react-three/drei'
+import * as THREE from 'three'
 
 export const ResurrectionScene: React.FC = () => {
-  const [isClient, setIsClient] = useState(false);
-  const lightRaysRef = useRef<THREE.Group>(null);
-  const crossRef = useRef<THREE.Group>(null);
-  const stoneRef = useRef<THREE.Mesh>(null);
+  const [isClient, setIsClient] = useState(false)
+  const lightRaysRef = useRef<THREE.Group>(null)
+  const crossRef = useRef<THREE.Group>(null)
+  const stoneRef = useRef<THREE.Mesh>(null)
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    setIsClient(true)
+  }, [])
 
   useFrame((state) => {
-    if (!isClient) return;
+    if (!isClient) return
 
     if (lightRaysRef.current) {
-      lightRaysRef.current.rotation.y = state.clock.elapsedTime * 0.2;
+      lightRaysRef.current.rotation.y = state.clock.elapsedTime * 0.2
       lightRaysRef.current.children.forEach((ray, index) => {
-        ray.scale.y = 1 + Math.sin(state.clock.elapsedTime * 2 + index) * 0.3;
-      });
+        ray.scale.y = 1 + Math.sin(state.clock.elapsedTime * 2 + index) * 0.3
+      })
     }
     if (crossRef.current) {
-      crossRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+      crossRef.current.rotation.y =
+        Math.sin(state.clock.elapsedTime * 0.5) * 0.1
     }
     if (stoneRef.current) {
-      stoneRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.3) * 0.2;
+      stoneRef.current.rotation.z =
+        Math.sin(state.clock.elapsedTime * 0.3) * 0.2
     }
-  });
+  })
 
   // Don't render during SSR
   if (!isClient) {
-    return null;
+    return null
   }
 
   return (
     <group>
       {/* Ground with grass */}
-      <Plane args={[12, 12]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
+      <Plane
+        args={[12, 12]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.5, 0]}
+      >
         <meshStandardMaterial color="#90EE90" />
       </Plane>
 
@@ -66,13 +72,9 @@ export const ResurrectionScene: React.FC = () => {
             position={[
               Math.sin((i / 8) * Math.PI * 2) * 3,
               2,
-              Math.cos((i / 8) * Math.PI * 2) * 3
+              Math.cos((i / 8) * Math.PI * 2) * 3,
             ]}
-            rotation={[
-              0,
-              (i / 8) * Math.PI * 2,
-              Math.PI / 2
-            ]}
+            rotation={[0, (i / 8) * Math.PI * 2, Math.PI / 2]}
           >
             <meshStandardMaterial
               color="#FFD700"
@@ -97,15 +99,17 @@ export const ResurrectionScene: React.FC = () => {
       {/* Additional light particles */}
       <group position={[0, 2, 0]}>
         {Array.from({ length: 12 }, (_, i) => {
-          const time = Date.now() * 0.001; // Use a simple time for animation
+          const time = Date.now() * 0.001 // Use a simple time for animation
           return (
             <Sphere
               key={i}
               args={[0.05]}
               position={[
-                Math.sin((i / 12) * Math.PI * 2) * (2 + Math.sin(time * 3 + i) * 0.5),
+                Math.sin((i / 12) * Math.PI * 2) *
+                  (2 + Math.sin(time * 3 + i) * 0.5),
                 2 + Math.sin(time * 2 + i * 0.5) * 0.3,
-                Math.cos((i / 12) * Math.PI * 2) * (2 + Math.cos(time * 3 + i) * 0.5)
+                Math.cos((i / 12) * Math.PI * 2) *
+                  (2 + Math.cos(time * 3 + i) * 0.5),
               ]}
             >
               <meshStandardMaterial
@@ -114,7 +118,7 @@ export const ResurrectionScene: React.FC = () => {
                 emissiveIntensity={0.8}
               />
             </Sphere>
-          );
+          )
         })}
       </group>
 
@@ -123,5 +127,5 @@ export const ResurrectionScene: React.FC = () => {
       <directionalLight position={[5, 5, 5]} intensity={0.5} />
       <ambientLight intensity={0.6} />
     </group>
-  );
-};
+  )
+}

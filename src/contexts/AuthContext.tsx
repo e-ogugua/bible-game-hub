@@ -6,10 +6,16 @@ import { UserProfile } from '@/lib/localStorage'
 interface AuthContextType {
   user: UserProfile | null
   loading: boolean
-  signUp: (username: string, email?: string) => Promise<{ success: boolean; error?: string }>
+  signUp: (
+    username: string,
+    email?: string
+  ) => Promise<{ success: boolean; error?: string }>
   signIn: (username: string) => Promise<{ success: boolean; error?: string }>
   signOut: () => Promise<void>
-  updateProfile: (updates: { username?: string; avatar?: string }) => Promise<{ success: boolean; error?: string }>
+  updateProfile: (updates: {
+    username?: string
+    avatar?: string
+  }) => Promise<{ success: boolean; error?: string }>
   resetProgress: () => Promise<void>
 }
 
@@ -56,13 +62,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signUp = async (username: string, email?: string) => {
     // Ensure we're on client side
     if (typeof window === 'undefined') {
-      return { success: false, error: 'Cannot sign up during server-side rendering' }
+      return {
+        success: false,
+        error: 'Cannot sign up during server-side rendering',
+      }
     }
 
     try {
       // Check if username already exists
-      const existingUsers = JSON.parse(localStorage.getItem('bible_game_user_profiles') || '[]')
-      if (existingUsers.some((u: UserProfile) => u.username.toLowerCase() === username.toLowerCase())) {
+      const existingUsers = JSON.parse(
+        localStorage.getItem('bible_game_user_profiles') || '[]'
+      )
+      if (
+        existingUsers.some(
+          (u: UserProfile) =>
+            u.username.toLowerCase() === username.toLowerCase()
+        )
+      ) {
         return { success: false, error: 'Username already taken' }
       }
 
@@ -75,7 +91,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         level: 1,
         badges: [],
         createdAt: new Date().toISOString(),
-        lastLogin: new Date().toISOString()
+        lastLogin: new Date().toISOString(),
       }
 
       // Save user profile
@@ -83,7 +99,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Add to users list
       const updatedUsers = [...existingUsers, newUser]
-      localStorage.setItem('bible_game_user_profiles', JSON.stringify(updatedUsers))
+      localStorage.setItem(
+        'bible_game_user_profiles',
+        JSON.stringify(updatedUsers)
+      )
 
       setUser(newUser)
       return { success: true }
@@ -95,14 +114,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signIn = async (username: string) => {
     // Ensure we're on client side
     if (typeof window === 'undefined') {
-      return { success: false, error: 'Cannot sign in during server-side rendering' }
+      return {
+        success: false,
+        error: 'Cannot sign in during server-side rendering',
+      }
     }
 
     try {
       // Find user by username
-      const users = JSON.parse(localStorage.getItem('bible_game_user_profiles') || '[]')
-      const foundUser = users.find((u: UserProfile) =>
-        u.username.toLowerCase() === username.toLowerCase()
+      const users = JSON.parse(
+        localStorage.getItem('bible_game_user_profiles') || '[]'
+      )
+      const foundUser = users.find(
+        (u: UserProfile) => u.username.toLowerCase() === username.toLowerCase()
       )
 
       if (!foundUser) {
@@ -112,16 +136,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Update last login
       const updatedUser = {
         ...foundUser,
-        lastLogin: new Date().toISOString()
+        lastLogin: new Date().toISOString(),
       }
 
-      localStorage.setItem('bible_game_user_profile', JSON.stringify(updatedUser))
+      localStorage.setItem(
+        'bible_game_user_profile',
+        JSON.stringify(updatedUser)
+      )
 
       // Update in users list
       const updatedUsers = users.map((u: UserProfile) =>
         u.id === foundUser.id ? updatedUser : u
       )
-      localStorage.setItem('bible_game_user_profiles', JSON.stringify(updatedUsers))
+      localStorage.setItem(
+        'bible_game_user_profiles',
+        JSON.stringify(updatedUsers)
+      )
 
       setUser(updatedUser)
       return { success: true }
@@ -142,29 +172,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }
 
-  const updateProfile = async (updates: { username?: string; avatar?: string }) => {
+  const updateProfile = async (updates: {
+    username?: string
+    avatar?: string
+  }) => {
     if (!user) return { success: false, error: 'No user logged in' }
 
     // Ensure we're on client side
     if (typeof window === 'undefined') {
-      return { success: false, error: 'Cannot update profile during server-side rendering' }
+      return {
+        success: false,
+        error: 'Cannot update profile during server-side rendering',
+      }
     }
 
     try {
       const updatedUser = {
         ...user,
         ...updates,
-        lastLogin: new Date().toISOString()
+        lastLogin: new Date().toISOString(),
       }
 
-      localStorage.setItem('bible_game_user_profile', JSON.stringify(updatedUser))
+      localStorage.setItem(
+        'bible_game_user_profile',
+        JSON.stringify(updatedUser)
+      )
 
       // Update in users list
-      const users = JSON.parse(localStorage.getItem('bible_game_user_profiles') || '[]')
+      const users = JSON.parse(
+        localStorage.getItem('bible_game_user_profiles') || '[]'
+      )
       const updatedUsers = users.map((u: UserProfile) =>
         u.id === user.id ? updatedUser : u
       )
-      localStorage.setItem('bible_game_user_profiles', JSON.stringify(updatedUsers))
+      localStorage.setItem(
+        'bible_game_user_profiles',
+        JSON.stringify(updatedUsers)
+      )
 
       setUser(updatedUser)
       return { success: true }
@@ -184,15 +228,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const keysToRemove = [
         'bible_game_scores',
         'bible_game_story_progress',
-        'bible_game_daily_challenges'
+        'bible_game_daily_challenges',
       ]
 
-      keysToRemove.forEach(key => {
+      keysToRemove.forEach((key) => {
         const data = localStorage.getItem(key)
         if (data) {
           const parsed = JSON.parse(data)
           const filtered = Array.isArray(parsed)
-            ? parsed.filter((item: { userId: string }) => item.userId !== user.id)
+            ? parsed.filter(
+                (item: { userId: string }) => item.userId !== user.id
+              )
             : parsed
           localStorage.setItem(key, JSON.stringify(filtered))
         }
@@ -204,17 +250,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         xp: 0,
         level: 1,
         badges: [],
-        lastLogin: new Date().toISOString()
+        lastLogin: new Date().toISOString(),
       }
 
       localStorage.setItem('bible_game_user_profile', JSON.stringify(resetUser))
 
       // Update in users list
-      const users = JSON.parse(localStorage.getItem('bible_game_user_profiles') || '[]')
+      const users = JSON.parse(
+        localStorage.getItem('bible_game_user_profiles') || '[]'
+      )
       const updatedUsers = users.map((u: UserProfile) =>
         u.id === user.id ? resetUser : u
       )
-      localStorage.setItem('bible_game_user_profiles', JSON.stringify(updatedUsers))
+      localStorage.setItem(
+        'bible_game_user_profiles',
+        JSON.stringify(updatedUsers)
+      )
 
       setUser(resetUser)
     } catch (error) {

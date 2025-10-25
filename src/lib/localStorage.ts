@@ -53,7 +53,7 @@ class LocalStorageService {
     GAME_SCORES: 'bible_game_scores',
     STORY_PROGRESS: 'bible_game_story_progress',
     DAILY_CHALLENGES: 'bible_game_daily_challenges',
-    SETTINGS: 'bible_game_settings'
+    SETTINGS: 'bible_game_settings',
   }
 
   // User Profile Management
@@ -68,7 +68,10 @@ class LocalStorageService {
 
   saveUserProfile(profile: UserProfile): void {
     try {
-      localStorage.setItem(this.STORAGE_KEYS.USER_PROFILE, JSON.stringify(profile))
+      localStorage.setItem(
+        this.STORAGE_KEYS.USER_PROFILE,
+        JSON.stringify(profile)
+      )
     } catch (error) {
       console.error('Failed to save user profile:', error)
     }
@@ -81,7 +84,7 @@ class LocalStorageService {
     const updatedProfile = {
       ...currentProfile,
       ...updates,
-      lastLogin: new Date().toISOString()
+      lastLogin: new Date().toISOString(),
     }
 
     this.saveUserProfile(updatedProfile)
@@ -97,7 +100,7 @@ class LocalStorageService {
       level: 1,
       badges: [],
       createdAt: new Date().toISOString(),
-      lastLogin: new Date().toISOString()
+      lastLogin: new Date().toISOString(),
     }
 
     this.saveUserProfile(newProfile)
@@ -109,7 +112,9 @@ class LocalStorageService {
     try {
       const data = localStorage.getItem(this.STORAGE_KEYS.GAME_SCORES)
       const allScores: GameScore[] = data ? JSON.parse(data) : []
-      return userId ? allScores.filter(score => score.userId === userId) : allScores
+      return userId
+        ? allScores.filter((score) => score.userId === userId)
+        : allScores
     } catch {
       return []
     }
@@ -119,13 +124,16 @@ class LocalStorageService {
     const newScore: GameScore = {
       ...score,
       id: `score_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      completedAt: new Date().toISOString()
+      completedAt: new Date().toISOString(),
     }
 
     try {
       const existingScores = this.getGameScores()
       const updatedScores = [...existingScores, newScore]
-      localStorage.setItem(this.STORAGE_KEYS.GAME_SCORES, JSON.stringify(updatedScores))
+      localStorage.setItem(
+        this.STORAGE_KEYS.GAME_SCORES,
+        JSON.stringify(updatedScores)
+      )
 
       // Update user XP
       const userProfile = this.getUserProfile()
@@ -134,7 +142,7 @@ class LocalStorageService {
         const newLevel = Math.floor(newXP / 100) + 1
         this.updateUserProfile({
           xp: newXP,
-          level: newLevel
+          level: newLevel,
         })
       }
     } catch (error) {
@@ -146,10 +154,12 @@ class LocalStorageService {
 
   getBestScore(gameType: string, userId?: string): GameScore | null {
     const scores = this.getGameScores(userId)
-    const gameScores = scores.filter(score => score.gameType === gameType)
-    return gameScores.length > 0 ? gameScores.reduce((best, current) =>
-      current.score > best.score ? current : best
-    ) : null
+    const gameScores = scores.filter((score) => score.gameType === gameType)
+    return gameScores.length > 0
+      ? gameScores.reduce((best, current) =>
+          current.score > best.score ? current : best
+        )
+      : null
   }
 
   // Story Progress Management
@@ -157,28 +167,39 @@ class LocalStorageService {
     try {
       const data = localStorage.getItem(this.STORAGE_KEYS.STORY_PROGRESS)
       const allProgress: StoryProgress[] = data ? JSON.parse(data) : []
-      return allProgress.find(p => p.userId === userId && p.character === character) || null
+      return (
+        allProgress.find(
+          (p) => p.userId === userId && p.character === character
+        ) || null
+      )
     } catch {
       return null
     }
   }
 
-  saveStoryProgress(progress: Omit<StoryProgress, 'id' | 'lastPlayed'>): StoryProgress {
+  saveStoryProgress(
+    progress: Omit<StoryProgress, 'id' | 'lastPlayed'>
+  ): StoryProgress {
     const newProgress: StoryProgress = {
       ...progress,
       id: `progress_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      lastPlayed: new Date().toISOString()
+      lastPlayed: new Date().toISOString(),
     }
 
     try {
-      const existingProgress = this.getStoryProgress(progress.userId, progress.character)
+      const existingProgress = this.getStoryProgress(
+        progress.userId,
+        progress.character
+      )
       let updatedProgress: StoryProgress[]
 
       if (existingProgress) {
         // Update existing progress
         updatedProgress = [
-          ...this.getAllStoryProgress(progress.userId).filter(p => p.id !== existingProgress.id),
-          newProgress
+          ...this.getAllStoryProgress(progress.userId).filter(
+            (p) => p.id !== existingProgress.id
+          ),
+          newProgress,
         ]
       } else {
         // Add new progress
@@ -186,7 +207,10 @@ class LocalStorageService {
         updatedProgress = [...allProgress, newProgress]
       }
 
-      localStorage.setItem(this.STORAGE_KEYS.STORY_PROGRESS, JSON.stringify(updatedProgress))
+      localStorage.setItem(
+        this.STORAGE_KEYS.STORY_PROGRESS,
+        JSON.stringify(updatedProgress)
+      )
     } catch (error) {
       console.error('Failed to save story progress:', error)
     }
@@ -198,7 +222,9 @@ class LocalStorageService {
     try {
       const data = localStorage.getItem(this.STORAGE_KEYS.STORY_PROGRESS)
       const allProgress: StoryProgress[] = data ? JSON.parse(data) : []
-      return userId ? allProgress.filter(p => p.userId === userId) : allProgress
+      return userId
+        ? allProgress.filter((p) => p.userId === userId)
+        : allProgress
     } catch {
       return []
     }
@@ -209,20 +235,23 @@ class LocalStorageService {
     try {
       const data = localStorage.getItem(this.STORAGE_KEYS.DAILY_CHALLENGES)
       const allChallenges: DailyChallenge[] = data ? JSON.parse(data) : []
-      return allChallenges.filter(c => c.userId === userId)
+      return allChallenges.filter((c) => c.userId === userId)
     } catch {
       return []
     }
   }
 
-  completeDailyChallenge(userId: string, challengeType: 'verse' | 'quiz' | 'memory'): void {
+  completeDailyChallenge(
+    userId: string,
+    challengeType: 'verse' | 'quiz' | 'memory'
+  ): void {
     const today = new Date().toISOString().split('T')[0]
     const challengeId = `${userId}_${challengeType}_${today}`
 
     try {
       const existingChallenges = this.getDailyChallenges(userId)
       const updatedChallenges = [
-        ...existingChallenges.filter(c => c.id !== challengeId),
+        ...existingChallenges.filter((c) => c.id !== challengeId),
         {
           id: challengeId,
           userId,
@@ -230,11 +259,14 @@ class LocalStorageService {
           challengeType,
           completed: true,
           completedAt: new Date().toISOString(),
-          rewardClaimed: false
-        }
+          rewardClaimed: false,
+        },
       ]
 
-      localStorage.setItem(this.STORAGE_KEYS.DAILY_CHALLENGES, JSON.stringify(updatedChallenges))
+      localStorage.setItem(
+        this.STORAGE_KEYS.DAILY_CHALLENGES,
+        JSON.stringify(updatedChallenges)
+      )
     } catch (error) {
       console.error('Failed to complete daily challenge:', error)
     }
@@ -243,7 +275,7 @@ class LocalStorageService {
   // Utility Functions
   clearAllData(): void {
     try {
-      Object.values(this.STORAGE_KEYS).forEach(key => {
+      Object.values(this.STORAGE_KEYS).forEach((key) => {
         localStorage.removeItem(key)
       })
     } catch (error) {
@@ -257,7 +289,9 @@ class LocalStorageService {
         userProfile: this.getUserProfile(),
         gameScores: this.getGameScores(),
         storyProgress: this.getAllStoryProgress(),
-        dailyChallenges: this.getDailyChallenges(this.getUserProfile()?.id || '')
+        dailyChallenges: this.getDailyChallenges(
+          this.getUserProfile()?.id || ''
+        ),
       }
       return JSON.stringify(data, null, 2)
     } catch (error) {
@@ -275,15 +309,24 @@ class LocalStorageService {
       }
 
       if (data.gameScores && Array.isArray(data.gameScores)) {
-        localStorage.setItem(this.STORAGE_KEYS.GAME_SCORES, JSON.stringify(data.gameScores))
+        localStorage.setItem(
+          this.STORAGE_KEYS.GAME_SCORES,
+          JSON.stringify(data.gameScores)
+        )
       }
 
       if (data.storyProgress && Array.isArray(data.storyProgress)) {
-        localStorage.setItem(this.STORAGE_KEYS.STORY_PROGRESS, JSON.stringify(data.storyProgress))
+        localStorage.setItem(
+          this.STORAGE_KEYS.STORY_PROGRESS,
+          JSON.stringify(data.storyProgress)
+        )
       }
 
       if (data.dailyChallenges && Array.isArray(data.dailyChallenges)) {
-        localStorage.setItem(this.STORAGE_KEYS.DAILY_CHALLENGES, JSON.stringify(data.dailyChallenges))
+        localStorage.setItem(
+          this.STORAGE_KEYS.DAILY_CHALLENGES,
+          JSON.stringify(data.dailyChallenges)
+        )
       }
 
       return true

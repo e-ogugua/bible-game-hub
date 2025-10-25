@@ -1,9 +1,15 @@
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, Html, AdaptiveDpr, AdaptiveEvents } from '@react-three/drei';
-import { Suspense } from 'react';
+import { Canvas } from '@react-three/fiber'
+import {
+  OrbitControls,
+  Environment,
+  Html,
+  AdaptiveDpr,
+  AdaptiveEvents,
+} from '@react-three/drei'
+import { Suspense } from 'react'
 
 interface DynamicCanvasProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const DynamicCanvas: React.FC<DynamicCanvasProps> = ({ children }) => {
@@ -13,9 +19,9 @@ export const DynamicCanvas: React.FC<DynamicCanvasProps> = ({ children }) => {
       gl={{
         antialias: true,
         alpha: true,
-        powerPreference: "high-performance",
+        powerPreference: 'high-performance',
         stencil: false,
-        depth: true
+        depth: true,
       }}
       dpr={[1, 2]} // Adaptive pixel ratio for better performance on mobile
     >
@@ -23,14 +29,16 @@ export const DynamicCanvas: React.FC<DynamicCanvasProps> = ({ children }) => {
       <AdaptiveDpr pixelated />
       <AdaptiveEvents />
 
-      <Suspense fallback={
-        <Html center>
-          <div className="text-white text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
-            <p className="text-sm">Loading scene...</p>
-          </div>
-        </Html>
-      }>
+      <Suspense
+        fallback={
+          <Html center>
+            <div className="text-white text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
+              <p className="text-sm">Loading scene...</p>
+            </div>
+          </Html>
+        }
+      >
         <Environment preset="sunset" />
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
@@ -49,5 +57,5 @@ export const DynamicCanvas: React.FC<DynamicCanvasProps> = ({ children }) => {
         />
       </Suspense>
     </Canvas>
-  );
-};
+  )
+}

@@ -1,41 +1,41 @@
 // src/modules/quiz/QuestionCard.tsx
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { CheckCircle, XCircle } from 'lucide-react';
-import { QuizQuestion } from './data';
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { CheckCircle, XCircle } from 'lucide-react'
+import { QuizQuestion } from './data'
 
 interface QuestionCardProps {
-  question: QuizQuestion;
-  onAnswer: (isCorrect: boolean) => void;
-  disabled?: boolean;
-  questionKey?: string; // Add key to reset state when question changes
+  question: QuizQuestion
+  onAnswer: (isCorrect: boolean) => void
+  disabled?: boolean
+  questionKey?: string // Add key to reset state when question changes
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
   question,
   onAnswer,
   disabled = false,
-  questionKey = ''
+  questionKey = '',
 }) => {
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [showResult, setShowResult] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null)
+  const [showResult, setShowResult] = useState(false)
 
   // Reset state when question changes
   useEffect(() => {
-    setSelectedOption(null);
-    setShowResult(false);
-  }, [questionKey]);
+    setSelectedOption(null)
+    setShowResult(false)
+  }, [questionKey])
 
   const handleOptionClick = (optionIndex: number) => {
-    if (disabled || showResult) return;
+    if (disabled || showResult) return
 
-    setSelectedOption(optionIndex);
-    setShowResult(true);
-    const isCorrect = optionIndex === question.correct;
-    onAnswer(isCorrect);
-  };
+    setSelectedOption(optionIndex)
+    setShowResult(true)
+    const isCorrect = optionIndex === question.correct
+    onAnswer(isCorrect)
+  }
 
   return (
     <motion.div
@@ -44,10 +44,12 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -20, scale: 0.95 }}
-      transition={{ duration: 0.4, ease: "easeInOut" }}
+      transition={{ duration: 0.4, ease: 'easeInOut' }}
     >
       <div className="mb-6">
-        <h3 className="text-2xl font-semibold mb-4 text-center">{question.question}</h3>
+        <h3 className="text-2xl font-semibold mb-4 text-center">
+          {question.question}
+        </h3>
         <div className="text-sm text-blue-200 text-center mb-6">
           Reference: {question.reference}
         </div>
@@ -55,24 +57,28 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         {question.options.map((option, index) => {
-          const isSelected = selectedOption === index;
-          const isCorrect = index === question.correct;
-          const isWrong = isSelected && !isCorrect;
+          const isSelected = selectedOption === index
+          const isCorrect = index === question.correct
+          const isWrong = isSelected && !isCorrect
 
-          let optionClasses = "p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer relative overflow-hidden";
+          let optionClasses =
+            'p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer relative overflow-hidden'
 
           if (showResult) {
             if (isCorrect) {
-              optionClasses += " bg-green-500/20 border-green-500 text-green-100 shadow-lg shadow-green-500/30";
+              optionClasses +=
+                ' bg-green-500/20 border-green-500 text-green-100 shadow-lg shadow-green-500/30'
             } else if (isWrong) {
-              optionClasses += " bg-red-500/20 border-red-500 text-red-100 shadow-lg shadow-red-500/30";
+              optionClasses +=
+                ' bg-red-500/20 border-red-500 text-red-100 shadow-lg shadow-red-500/30'
             } else {
-              optionClasses += " bg-gray-500/20 border-gray-500 text-gray-100 opacity-60";
+              optionClasses +=
+                ' bg-gray-500/20 border-gray-500 text-gray-100 opacity-60'
             }
           } else {
             optionClasses += isSelected
-              ? " bg-blue-500/20 border-blue-500 text-blue-100 shadow-lg shadow-blue-500/30"
-              : " bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/40";
+              ? ' bg-blue-500/20 border-blue-500 text-blue-100 shadow-lg shadow-blue-500/30'
+              : ' bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/40'
           }
 
           return (
@@ -81,7 +87,9 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               className={optionClasses}
               onClick={() => handleOptionClick(index)}
               disabled={disabled}
-              whileHover={!disabled && !showResult ? { scale: 1.02, y: -2 } : {}}
+              whileHover={
+                !disabled && !showResult ? { scale: 1.02, y: -2 } : {}
+              }
               whileTap={!disabled && !showResult ? { scale: 0.98 } : {}}
               transition={{ duration: 0.2 }}
             >
@@ -94,7 +102,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: "spring", stiffness: 500 }}
+                    transition={{ delay: 0.2, type: 'spring', stiffness: 500 }}
                   >
                     <CheckCircle className="w-5 h-5 text-green-400" />
                   </motion.div>
@@ -103,7 +111,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: "spring", stiffness: 500 }}
+                    transition={{ delay: 0.2, type: 'spring', stiffness: 500 }}
                   >
                     <XCircle className="w-5 h-5 text-red-400" />
                   </motion.div>
@@ -120,7 +128,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 />
               )}
             </motion.button>
-          );
+          )
         })}
       </div>
 
@@ -135,5 +143,5 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         </motion.div>
       )}
     </motion.div>
-  );
-};
+  )
+}

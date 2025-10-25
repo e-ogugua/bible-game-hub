@@ -53,7 +53,7 @@ class DailyChallengesService {
     const today = this.getTodayDate()
 
     // Reset daily challenges if it's a new day
-    const needsReset = challenges.every(c => c.lastUpdated !== today)
+    const needsReset = challenges.every((c) => c.lastUpdated !== today)
 
     if (needsReset) {
       return this.resetDailyChallenges(userId)
@@ -73,12 +73,12 @@ class DailyChallengesService {
       {
         id: 'daily_verse',
         title: 'Daily Bible Verse',
-        description: 'Memorize today\'s featured verse',
+        description: "Memorize today's featured verse",
         icon: null, // Will be set by component
         completed: false,
         type: 'daily_verse',
         lastUpdated: today,
-        expiresAt: tomorrow.toISOString()
+        expiresAt: tomorrow.toISOString(),
       },
       {
         id: 'quiz_streak',
@@ -90,8 +90,8 @@ class DailyChallengesService {
         target: 3,
         current: 0,
         lastUpdated: today,
-        expiresAt: tomorrow.toISOString()
-      }
+        expiresAt: tomorrow.toISOString(),
+      },
     ]
 
     this.saveChallenges(userId, challenges)
@@ -99,9 +99,14 @@ class DailyChallengesService {
   }
 
   // Update daily challenge progress
-  updateChallenge(userId: string, challengeId: string, completed: boolean, current?: number): DailyChallenge[] {
+  updateChallenge(
+    userId: string,
+    challengeId: string,
+    completed: boolean,
+    current?: number
+  ): DailyChallenge[] {
     const challenges = this.getDailyChallenges(userId)
-    const challenge = challenges.find(c => c.id === challengeId)
+    const challenge = challenges.find((c) => c.id === challengeId)
 
     if (challenge) {
       challenge.completed = completed
@@ -120,7 +125,7 @@ class DailyChallengesService {
     const verses = this.getStoredVerses()
     const today = this.getTodayDate()
 
-    let todayVerse = verses.find(v => v.date === today)
+    let todayVerse = verses.find((v) => v.date === today)
 
     if (!todayVerse) {
       // Generate a new verse for today
@@ -135,11 +140,29 @@ class DailyChallengesService {
   // Generate a new daily verse
   private generateTodayVerse(date: string): DailyBibleVerse {
     const verses = [
-      { verse: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", reference: "John 3:16" },
-      { verse: "Trust in the Lord with all your heart and lean not on your own understanding.", reference: "Proverbs 3:5" },
-      { verse: "I can do all things through Christ who strengthens me.", reference: "Philippians 4:13" },
-      { verse: "The Lord is my shepherd, I lack nothing.", reference: "Psalm 23:1" },
-      { verse: "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.", reference: "Joshua 1:9" }
+      {
+        verse:
+          'For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.',
+        reference: 'John 3:16',
+      },
+      {
+        verse:
+          'Trust in the Lord with all your heart and lean not on your own understanding.',
+        reference: 'Proverbs 3:5',
+      },
+      {
+        verse: 'I can do all things through Christ who strengthens me.',
+        reference: 'Philippians 4:13',
+      },
+      {
+        verse: 'The Lord is my shepherd, I lack nothing.',
+        reference: 'Psalm 23:1',
+      },
+      {
+        verse:
+          'Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.',
+        reference: 'Joshua 1:9',
+      },
     ]
 
     const randomVerse = verses[Math.floor(Math.random() * verses.length)]
@@ -150,18 +173,22 @@ class DailyChallengesService {
       reference: randomVerse.reference,
       date,
       completed: false,
-      memorized: false
+      memorized: false,
     }
   }
 
   // Mark verse as completed/memorized
-  markVerseCompleted(userId: string, completed: boolean, memorized: boolean = false): DailyBibleVerse {
+  markVerseCompleted(
+    userId: string,
+    completed: boolean,
+    memorized: boolean = false
+  ): DailyBibleVerse {
     const verse = this.getTodayVerse()
     verse.completed = completed
     verse.memorized = memorized
 
     const verses = this.getStoredVerses()
-    const index = verses.findIndex(v => v.id === verse.id)
+    const index = verses.findIndex((v) => v.id === verse.id)
     if (index >= 0) {
       verses[index] = verse
       this.saveVerses(verses)
@@ -184,7 +211,7 @@ class DailyChallengesService {
       current: 0,
       longest: 0,
       lastQuizDate: null,
-      completed: false
+      completed: false,
     }
   }
 
@@ -209,13 +236,16 @@ class DailyChallengesService {
 
     // Check if streak challenge is completed (3 in a row)
     const challenges = this.getDailyChallenges(userId)
-    const streakChallenge = challenges.find(c => c.type === 'quiz_streak')
+    const streakChallenge = challenges.find((c) => c.type === 'quiz_streak')
     if (streakChallenge && streak.current >= (streakChallenge.target || 3)) {
       streakChallenge.completed = true
       this.saveChallenges(userId, challenges)
     }
 
-    localStorage.setItem(`${this.STREAK_STORAGE_KEY}_${userId}`, JSON.stringify(streak))
+    localStorage.setItem(
+      `${this.STREAK_STORAGE_KEY}_${userId}`,
+      JSON.stringify(streak)
+    )
     return streak
   }
 
@@ -226,7 +256,10 @@ class DailyChallengesService {
   }
 
   private saveChallenges(userId: string, challenges: DailyChallenge[]): void {
-    localStorage.setItem(`${this.STORAGE_KEY}_${userId}`, JSON.stringify(challenges))
+    localStorage.setItem(
+      `${this.STORAGE_KEY}_${userId}`,
+      JSON.stringify(challenges)
+    )
   }
 
   private getStoredVerses(): DailyBibleVerse[] {

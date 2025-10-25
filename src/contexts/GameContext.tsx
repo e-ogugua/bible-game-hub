@@ -53,7 +53,10 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const nextQuestion = () => {
     setGameState((prev: GameState) => ({
       ...prev,
-      currentQuestion: Math.min(prev.currentQuestion + 1, prev.totalQuestions - 1)
+      currentQuestion: Math.min(
+        prev.currentQuestion + 1,
+        prev.totalQuestions - 1
+      ),
     }))
   }
 
@@ -63,13 +66,15 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   }
 
   return (
-    <GameContext.Provider value={{
-      gameState,
-      startGame,
-      resetGame,
-      updateScore,
-      nextQuestion,
-    }}>
+    <GameContext.Provider
+      value={{
+        gameState,
+        startGame,
+        resetGame,
+        updateScore,
+        nextQuestion,
+      }}
+    >
       {children}
     </GameContext.Provider>
   )

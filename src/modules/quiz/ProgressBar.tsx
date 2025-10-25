@@ -1,16 +1,20 @@
 // src/modules/quiz/ProgressBar.tsx
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
 
 interface ProgressBarProps {
-  current: number;
-  total: number;
-  className?: string;
+  current: number
+  total: number
+  className?: string
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({ current, total, className = '' }) => {
-  const percentage = Math.round((current / total) * 100);
+export const ProgressBar: React.FC<ProgressBarProps> = ({
+  current,
+  total,
+  className = '',
+}) => {
+  const percentage = Math.round((current / total) * 100)
 
   return (
     <div className={`w-full ${className}`}>
@@ -23,9 +27,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ current, total, classN
         />
       </div>
       <div className="flex justify-between text-sm text-blue-200">
-        <span>Question {current} of {total}</span>
+        <span>
+          Question {current} of {total}
+        </span>
         <span>{percentage}% Complete</span>
       </div>
     </div>
-  );
-};
+  )
+}

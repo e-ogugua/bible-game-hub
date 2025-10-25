@@ -1,43 +1,49 @@
-import { useRef, useState, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Sphere, Box, Plane, Cylinder } from '@react-three/drei';
-import * as THREE from 'three';
+import { useRef, useState, useEffect } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { Sphere, Box, Plane, Cylinder } from '@react-three/drei'
+import * as THREE from 'three'
 
 export const HealingScene: React.FC = () => {
-  const [isClient, setIsClient] = useState(false);
-  const jesusRef = useRef<THREE.Group>(null);
-  const healingLightRef = useRef<THREE.Mesh>(null);
-  const personRef = useRef<THREE.Group>(null);
+  const [isClient, setIsClient] = useState(false)
+  const jesusRef = useRef<THREE.Group>(null)
+  const healingLightRef = useRef<THREE.Mesh>(null)
+  const personRef = useRef<THREE.Group>(null)
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    setIsClient(true)
+  }, [])
 
   useFrame((state) => {
-    if (!isClient) return;
+    if (!isClient) return
 
     if (jesusRef.current) {
-      jesusRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
+      jesusRef.current.rotation.y =
+        Math.sin(state.clock.elapsedTime * 0.2) * 0.1
     }
     if (healingLightRef.current) {
-      const time = state.clock.elapsedTime;
-      healingLightRef.current.scale.setScalar(1 + Math.sin(time * 2) * 0.3);
-      healingLightRef.current.rotation.y = time * 0.5;
+      const time = state.clock.elapsedTime
+      healingLightRef.current.scale.setScalar(1 + Math.sin(time * 2) * 0.3)
+      healingLightRef.current.rotation.y = time * 0.5
     }
     if (personRef.current) {
-      personRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.05;
+      personRef.current.position.y =
+        Math.sin(state.clock.elapsedTime * 0.3) * 0.05
     }
-  });
+  })
 
   // Don't render during SSR
   if (!isClient) {
-    return null;
+    return null
   }
 
   return (
     <group>
       {/* Stone floor */}
-      <Plane args={[10, 10]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
+      <Plane
+        args={[10, 10]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.5, 0]}
+      >
         <meshStandardMaterial color="#D2B48C" />
       </Plane>
 
@@ -85,7 +91,7 @@ export const HealingScene: React.FC = () => {
             position={[
               Math.sin(i * Math.PI * 0.4) * 1.5,
               Math.cos(i * Math.PI * 0.4) * 1.5,
-              0
+              0,
             ]}
           >
             <meshStandardMaterial
@@ -108,5 +114,5 @@ export const HealingScene: React.FC = () => {
       />
       <ambientLight intensity={0.5} />
     </group>
-  );
-};
+  )
+}

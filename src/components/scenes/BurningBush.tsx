@@ -1,75 +1,80 @@
-import { useRef, useMemo, useState, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Sphere, Plane, Float } from '@react-three/drei';
-import * as THREE from 'three';
+import { useRef, useMemo, useState, useEffect } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { Sphere, Plane, Float } from '@react-three/drei'
+import * as THREE from 'three'
 
 export const BurningBush: React.FC = () => {
-  const [isClient, setIsClient] = useState(false);
-  const bushRef = useRef<THREE.Group>(null);
-  const fireRef = useRef<THREE.Group>(null);
-  const particlesRef = useRef<THREE.Group>(null);
+  const [isClient, setIsClient] = useState(false)
+  const bushRef = useRef<THREE.Group>(null)
+  const fireRef = useRef<THREE.Group>(null)
+  const particlesRef = useRef<THREE.Group>(null)
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    setIsClient(true)
+  }, [])
 
   // Create particle positions
   const particlePositions = useMemo(() => {
-    const positions = new Float32Array(50 * 3);
+    const positions = new Float32Array(50 * 3)
     for (let i = 0; i < 50; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 4;
-      positions[i * 3 + 1] = Math.random() * 3;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 4;
+      positions[i * 3] = (Math.random() - 0.5) * 4
+      positions[i * 3 + 1] = Math.random() * 3
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 4
     }
-    return positions;
-  }, []);
+    return positions
+  }, [])
 
   useFrame((state) => {
-    if (!isClient) return;
+    if (!isClient) return
 
     if (bushRef.current) {
-      bushRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
-      bushRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.05;
+      bushRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1
+      bushRef.current.position.y =
+        Math.sin(state.clock.elapsedTime * 0.3) * 0.05
     }
 
     if (fireRef.current) {
-      fireRef.current.scale.y = 1 + Math.sin(state.clock.elapsedTime * 3) * 0.3;
-      fireRef.current.position.y = Math.sin(state.clock.elapsedTime * 2) * 0.1;
+      fireRef.current.scale.y = 1 + Math.sin(state.clock.elapsedTime * 3) * 0.3
+      fireRef.current.position.y = Math.sin(state.clock.elapsedTime * 2) * 0.1
 
       // Animate individual fire spheres
       fireRef.current.children.forEach((child, index) => {
-        const mesh = child as THREE.Mesh;
-        mesh.scale.setScalar(1 + Math.sin(state.clock.elapsedTime * 4 + index) * 0.2);
-      });
+        const mesh = child as THREE.Mesh
+        mesh.scale.setScalar(
+          1 + Math.sin(state.clock.elapsedTime * 4 + index) * 0.2
+        )
+      })
     }
 
     if (particlesRef.current) {
-      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.2;
+      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.2
       particlesRef.current.children.forEach((particle, index) => {
-        const mesh = particle as THREE.Mesh;
-        const material = mesh.material as THREE.MeshStandardMaterial;
+        const mesh = particle as THREE.Mesh
+        const material = mesh.material as THREE.MeshStandardMaterial
         if (material && !Array.isArray(material)) {
-          mesh.position.y += Math.sin(state.clock.elapsedTime * 2 + index) * 0.01;
-          material.opacity = 0.3 + Math.sin(state.clock.elapsedTime * 3 + index) * 0.2;
+          mesh.position.y +=
+            Math.sin(state.clock.elapsedTime * 2 + index) * 0.01
+          material.opacity =
+            0.3 + Math.sin(state.clock.elapsedTime * 3 + index) * 0.2
         }
-      });
+      })
     }
-  });
+  })
 
   // Don't render during SSR
   if (!isClient) {
-    return null;
+    return null
   }
 
   return (
     <group>
       {/* Enhanced ground with texture-like appearance */}
-      <Plane args={[12, 12]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.2, 0]}>
-        <meshStandardMaterial
-          color="#8B4513"
-          roughness={0.8}
-          metalness={0.1}
-        />
+      <Plane
+        args={[12, 12]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1.2, 0]}
+      >
+        <meshStandardMaterial color="#8B4513" roughness={0.8} metalness={0.1} />
       </Plane>
 
       {/* Rocks and terrain */}
@@ -166,7 +171,7 @@ export const BurningBush: React.FC = () => {
             position={[
               particlePositions[i * 3],
               particlePositions[i * 3 + 1],
-              particlePositions[i * 3 + 2]
+              particlePositions[i * 3 + 2],
             ]}
           >
             <meshStandardMaterial
@@ -214,5 +219,5 @@ export const BurningBush: React.FC = () => {
         color="#8B4513"
       />
     </group>
-  );
-};
+  )
+}

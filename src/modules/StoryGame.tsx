@@ -8,7 +8,7 @@ import { useGameContext } from '@/contexts/GameContext'
 import { characterStories, CharacterStory } from '@/data/characterStories'
 import { localStorageService, StoryProgress } from '@/lib/localStorage'
 import { audioManager } from '@/lib/audioManager'
-import { StoryScene } from '@/components/StoryScene';
+import { StoryScene } from '@/components/StoryScene'
 
 interface StoryGameState {
   currentCharacter: string | null
@@ -33,7 +33,7 @@ const StoryGameContent: React.FC = () => {
     faith: 0,
     courage: 0,
     obedience: 0,
-    gameCompleted: false
+    gameCompleted: false,
   })
 
   const [currentStory, setCurrentStory] = useState<CharacterStory | null>(null)
@@ -59,12 +59,15 @@ const StoryGameContent: React.FC = () => {
         const story = characterStories['moses']
 
         // Start ambient music for the character
-        audioManager.playAmbientMusic('moses');
+        audioManager.playAmbientMusic('moses')
 
         // Load existing progress if user is logged in
         let existingProgress: StoryProgress | null = null
         if (user) {
-          existingProgress = localStorageService.getStoryProgress(user.id, 'moses')
+          existingProgress = localStorageService.getStoryProgress(
+            user.id,
+            'moses'
+          )
         }
 
         if (existingProgress) {
@@ -77,7 +80,7 @@ const StoryGameContent: React.FC = () => {
             faith: existingProgress.faith,
             courage: existingProgress.courage,
             obedience: existingProgress.obedience,
-            gameCompleted: existingProgress.completed
+            gameCompleted: existingProgress.completed,
           })
         } else {
           // Start fresh
@@ -89,7 +92,7 @@ const StoryGameContent: React.FC = () => {
             faith: 0,
             courage: 0,
             obedience: 0,
-            gameCompleted: false
+            gameCompleted: false,
           })
         }
 
@@ -105,12 +108,15 @@ const StoryGameContent: React.FC = () => {
     const story = characterStories[characterId as keyof typeof characterStories]
 
     // Start ambient music for the character
-    audioManager.playAmbientMusic(characterId);
+    audioManager.playAmbientMusic(characterId)
 
     // Load existing progress if user is logged in
     let existingProgress: StoryProgress | null = null
     if (user) {
-      existingProgress = localStorageService.getStoryProgress(user.id, characterId)
+      existingProgress = localStorageService.getStoryProgress(
+        user.id,
+        characterId
+      )
     }
 
     if (existingProgress) {
@@ -123,7 +129,7 @@ const StoryGameContent: React.FC = () => {
         faith: existingProgress.faith,
         courage: existingProgress.courage,
         obedience: existingProgress.obedience,
-        gameCompleted: existingProgress.completed
+        gameCompleted: existingProgress.completed,
       })
     } else {
       // Start fresh
@@ -135,7 +141,7 @@ const StoryGameContent: React.FC = () => {
         faith: 0,
         courage: 0,
         obedience: 0,
-        gameCompleted: false
+        gameCompleted: false,
       })
     }
 
@@ -143,16 +149,23 @@ const StoryGameContent: React.FC = () => {
     setShowCharacterSelect(false)
   }
 
-  const handleChoice = async (choice: { id: string; score?: number; faith?: number; courage?: number; obedience?: number; nextChapter?: number | null }) => {
+  const handleChoice = async (choice: {
+    id: string
+    score?: number
+    faith?: number
+    courage?: number
+    obedience?: number
+    nextChapter?: number | null
+  }) => {
     // Play choice selection sound
-    audioManager.playSoundEffect('choice');
+    audioManager.playSoundEffect('choice')
 
     const newScore = storyState.totalScore + (choice.score || 0)
     const newFaith = storyState.faith + (choice.faith || 0)
     const newCourage = storyState.courage + (choice.courage || 0)
     const newObedience = storyState.obedience + (choice.obedience || 0)
 
-    setStoryState(prev => ({
+    setStoryState((prev) => ({
       ...prev,
       totalScore: newScore,
       faith: newFaith,
@@ -160,14 +173,14 @@ const StoryGameContent: React.FC = () => {
       obedience: newObedience,
       completedChapters: [...prev.completedChapters, prev.currentChapter],
       currentChapter: choice.nextChapter || prev.currentChapter + 1,
-      gameCompleted: choice.nextChapter === null
+      gameCompleted: choice.nextChapter === null,
     }))
 
     // Play victory sound if game is completed
     if (choice.nextChapter === null) {
       setTimeout(() => {
-        audioManager.playSoundEffect('victory');
-      }, 500);
+        audioManager.playSoundEffect('victory')
+      }, 500)
     }
 
     // Save progress to localStorage if user is logged in
@@ -176,12 +189,15 @@ const StoryGameContent: React.FC = () => {
         userId: user.id,
         character: storyState.currentCharacter as 'moses' | 'david' | 'jesus',
         currentChapter: choice.nextChapter || storyState.currentChapter + 1,
-        completedChapters: [...storyState.completedChapters, storyState.currentChapter],
+        completedChapters: [
+          ...storyState.completedChapters,
+          storyState.currentChapter,
+        ],
         totalScore: newScore,
         faith: newFaith,
         courage: newCourage,
         obedience: newObedience,
-        completed: choice.nextChapter === null
+        completed: choice.nextChapter === null,
       }
       localStorageService.saveStoryProgress(progress)
     }
@@ -191,7 +207,7 @@ const StoryGameContent: React.FC = () => {
   }
 
   const handleRestart = () => {
-    setStoryState(prev => ({
+    setStoryState((prev) => ({
       ...prev,
       currentChapter: 1,
       completedChapters: [],
@@ -199,13 +215,13 @@ const StoryGameContent: React.FC = () => {
       faith: 0,
       courage: 0,
       obedience: 0,
-      gameCompleted: false
+      gameCompleted: false,
     }))
   }
 
   const handleBackToSelection = () => {
     setCurrentStory(null)
-    setStoryState(prev => ({
+    setStoryState((prev) => ({
       ...prev,
       currentCharacter: null,
       currentChapter: 1,
@@ -214,7 +230,7 @@ const StoryGameContent: React.FC = () => {
       faith: 0,
       courage: 0,
       obedience: 0,
-      gameCompleted: false
+      gameCompleted: false,
     }))
     setShowCharacterSelect(true)
   }
@@ -239,9 +255,12 @@ const StoryGameContent: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="text-5xl font-bold font-serif mb-6">Bible Character Stories</h1>
+            <h1 className="text-5xl font-bold font-serif mb-6">
+              Bible Character Stories
+            </h1>
             <p className="text-xl text-blue-100">
-              Walk in the footsteps of great biblical figures and learn their lessons
+              Walk in the footsteps of great biblical figures and learn their
+              lessons
             </p>
           </motion.div>
 
@@ -255,8 +274,8 @@ const StoryGameContent: React.FC = () => {
                 onClick={() => selectCharacter(id)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    selectCharacter(id);
+                    e.preventDefault()
+                    selectCharacter(id)
                   }
                 }}
                 tabIndex={0}
@@ -303,11 +322,16 @@ const StoryGameContent: React.FC = () => {
                         className="h-full bg-gradient-to-r from-red-400 to-red-500 rounded-full shadow-sm"
                         initial={{ width: 0 }}
                         animate={{ width: '60%' }}
-                        transition={{ delay: parseInt(id) * 0.1 + 0.5, duration: 0.8 }}
+                        transition={{
+                          delay: parseInt(id) * 0.1 + 0.5,
+                          duration: 0.8,
+                        }}
                       />
                       <div className="absolute inset-0 bg-white/20 animate-pulse" />
                     </div>
-                    <span className="text-xs text-red-300 font-medium">Faith</span>
+                    <span className="text-xs text-red-300 font-medium">
+                      Faith
+                    </span>
                   </div>
                   <div className="text-center">
                     <div className="w-8 h-2 bg-blue-900/50 rounded-full overflow-hidden mb-1 relative">
@@ -315,11 +339,16 @@ const StoryGameContent: React.FC = () => {
                         className="h-full bg-gradient-to-r from-blue-400 to-blue-500 rounded-full shadow-sm"
                         initial={{ width: 0 }}
                         animate={{ width: '75%' }}
-                        transition={{ delay: parseInt(id) * 0.1 + 0.7, duration: 0.8 }}
+                        transition={{
+                          delay: parseInt(id) * 0.1 + 0.7,
+                          duration: 0.8,
+                        }}
                       />
                       <div className="absolute inset-0 bg-white/20 animate-pulse" />
                     </div>
-                    <span className="text-xs text-blue-300 font-medium">Courage</span>
+                    <span className="text-xs text-blue-300 font-medium">
+                      Courage
+                    </span>
                   </div>
                   <div className="text-center">
                     <div className="w-8 h-2 bg-green-900/50 rounded-full overflow-hidden mb-1 relative">
@@ -327,11 +356,16 @@ const StoryGameContent: React.FC = () => {
                         className="h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full shadow-sm"
                         initial={{ width: 0 }}
                         animate={{ width: '80%' }}
-                        transition={{ delay: parseInt(id) * 0.1 + 0.9, duration: 0.8 }}
+                        transition={{
+                          delay: parseInt(id) * 0.1 + 0.9,
+                          duration: 0.8,
+                        }}
                       />
                       <div className="absolute inset-0 bg-white/20 animate-pulse" />
                     </div>
-                    <span className="text-xs text-green-300 font-medium">Obedience</span>
+                    <span className="text-xs text-green-300 font-medium">
+                      Obedience
+                    </span>
                   </div>
                 </div>
 
@@ -341,7 +375,8 @@ const StoryGameContent: React.FC = () => {
                     {story.chapters.length} Chapters • Interactive Adventure
                   </div>
                   <div className="text-xs text-purple-300 bg-purple-900/30 px-3 py-1 rounded-full inline-block border border-purple-400/30">
-                    Based on {story.chapters[0]?.bibleReference || 'Biblical Stories'}
+                    Based on{' '}
+                    {story.chapters[0]?.bibleReference || 'Biblical Stories'}
                   </div>
                 </div>
 
@@ -352,7 +387,7 @@ const StoryGameContent: React.FC = () => {
                       key={i}
                       className="absolute w-1 h-1 bg-yellow-400 rounded-full"
                       style={{
-                        left: `${20 + (i * 10)}%`,
+                        left: `${20 + i * 10}%`,
                         top: `${30 + (i % 3) * 20}%`,
                       }}
                       animate={{
@@ -435,7 +470,9 @@ const StoryGameContent: React.FC = () => {
 
   if (!currentStory) return null
 
-  const currentChapter = currentStory.chapters.find(c => c.id === storyState.currentChapter)
+  const currentChapter = currentStory.chapters.find(
+    (c) => c.id === storyState.currentChapter
+  )
 
   if (!currentChapter) return null
 
@@ -457,10 +494,15 @@ const StoryGameContent: React.FC = () => {
           </button>
           <div className="text-center">
             <h1 className="text-2xl font-bold">{currentStory.name}</h1>
-            <p className="text-blue-200">Chapter {storyState.currentChapter} of {currentStory.chapters.length}</p>
+            <p className="text-blue-200">
+              Chapter {storyState.currentChapter} of{' '}
+              {currentStory.chapters.length}
+            </p>
           </div>
           <div className="text-right">
-            <div className="text-sm text-blue-200">Score: {storyState.totalScore}</div>
+            <div className="text-sm text-blue-200">
+              Score: {storyState.totalScore}
+            </div>
           </div>
         </motion.div>
 
@@ -471,7 +513,10 @@ const StoryGameContent: React.FC = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <StoryScene character={storyState.currentCharacter || ''} chapter={storyState.currentChapter} />
+          <StoryScene
+            character={storyState.currentCharacter || ''}
+            chapter={storyState.currentChapter}
+          />
         </motion.div>
 
         {/* Chapter Content */}
@@ -481,7 +526,9 @@ const StoryGameContent: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
         >
           <h2 className="text-3xl font-bold mb-4">{currentChapter.title}</h2>
-          <p className="text-lg mb-6 leading-relaxed">{currentChapter.description}</p>
+          <p className="text-lg mb-6 leading-relaxed">
+            {currentChapter.description}
+          </p>
           <div className="text-sm text-blue-200 mb-6">
             <BookOpen className="w-4 h-4 inline mr-2" />
             {currentChapter.bibleReference}

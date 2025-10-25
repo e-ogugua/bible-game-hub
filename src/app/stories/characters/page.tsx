@@ -30,7 +30,7 @@ export default function StoriesPage() {
     faith: 0,
     courage: 0,
     obedience: 0,
-    gameCompleted: false
+    gameCompleted: false,
   })
   const [currentStory, setCurrentStory] = useState<CharacterStory | null>(null)
   const [showCharacterSelect, setShowCharacterSelect] = useState(true)
@@ -52,7 +52,10 @@ export default function StoriesPage() {
     // Load existing progress if user is logged in
     let existingProgress: StoryProgress | null = null
     if (user) {
-      existingProgress = localStorageService.getStoryProgress(user.id, characterId)
+      existingProgress = localStorageService.getStoryProgress(
+        user.id,
+        characterId
+      )
     }
 
     if (existingProgress) {
@@ -65,7 +68,7 @@ export default function StoriesPage() {
         faith: existingProgress.faith,
         courage: existingProgress.courage,
         obedience: existingProgress.obedience,
-        gameCompleted: existingProgress.completed
+        gameCompleted: existingProgress.completed,
       })
     } else {
       // Start fresh
@@ -77,7 +80,7 @@ export default function StoriesPage() {
         faith: 0,
         courage: 0,
         obedience: 0,
-        gameCompleted: false
+        gameCompleted: false,
       })
     }
 
@@ -85,13 +88,20 @@ export default function StoriesPage() {
     setShowCharacterSelect(false)
   }
 
-  const handleChoice = async (choice: { id: string; score?: number; faith?: number; courage?: number; obedience?: number; nextChapter?: number | null }) => {
+  const handleChoice = async (choice: {
+    id: string
+    score?: number
+    faith?: number
+    courage?: number
+    obedience?: number
+    nextChapter?: number | null
+  }) => {
     const newScore = storyState.totalScore + (choice.score || 0)
     const newFaith = storyState.faith + (choice.faith || 0)
     const newCourage = storyState.courage + (choice.courage || 0)
     const newObedience = storyState.obedience + (choice.obedience || 0)
 
-    setStoryState(prev => ({
+    setStoryState((prev) => ({
       ...prev,
       totalScore: newScore,
       faith: newFaith,
@@ -99,7 +109,7 @@ export default function StoriesPage() {
       obedience: newObedience,
       completedChapters: [...prev.completedChapters, prev.currentChapter],
       currentChapter: choice.nextChapter || prev.currentChapter + 1,
-      gameCompleted: choice.nextChapter === null
+      gameCompleted: choice.nextChapter === null,
     }))
 
     // Save progress to localStorage if user is logged in
@@ -108,12 +118,15 @@ export default function StoriesPage() {
         userId: user.id,
         character: storyState.currentCharacter as 'moses' | 'david' | 'jesus',
         currentChapter: choice.nextChapter || storyState.currentChapter + 1,
-        completedChapters: [...storyState.completedChapters, storyState.currentChapter],
+        completedChapters: [
+          ...storyState.completedChapters,
+          storyState.currentChapter,
+        ],
         totalScore: newScore,
         faith: newFaith,
         courage: newCourage,
         obedience: newObedience,
-        completed: choice.nextChapter === null
+        completed: choice.nextChapter === null,
       }
       localStorageService.saveStoryProgress(progress)
     }
@@ -139,9 +152,12 @@ export default function StoriesPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="text-5xl font-bold font-serif mb-6">Bible Character Stories</h1>
+            <h1 className="text-5xl font-bold font-serif mb-6">
+              Bible Character Stories
+            </h1>
             <p className="text-xl text-blue-100">
-              Walk in the footsteps of great biblical figures and learn their lessons
+              Walk in the footsteps of great biblical figures and learn their
+              lessons
             </p>
           </motion.div>
 
@@ -155,8 +171,8 @@ export default function StoriesPage() {
                 onClick={() => selectCharacter(id)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    selectCharacter(id);
+                    e.preventDefault()
+                    selectCharacter(id)
                   }
                 }}
                 tabIndex={0}
@@ -213,7 +229,9 @@ export default function StoriesPage() {
     )
   }
 
-  const currentChapter = currentStory.chapters.find(c => c.id === storyState.currentChapter)
+  const currentChapter = currentStory.chapters.find(
+    (c) => c.id === storyState.currentChapter
+  )
 
   if (!currentChapter) {
     return (
@@ -249,10 +267,15 @@ export default function StoriesPage() {
           </button>
           <div className="text-center">
             <h1 className="text-2xl font-bold">{currentStory.name}</h1>
-            <p className="text-blue-200">Chapter {storyState.currentChapter} of {currentStory.chapters.length}</p>
+            <p className="text-blue-200">
+              Chapter {storyState.currentChapter} of{' '}
+              {currentStory.chapters.length}
+            </p>
           </div>
           <div className="text-right">
-            <div className="text-sm text-blue-200">Score: {storyState.totalScore}</div>
+            <div className="text-sm text-blue-200">
+              Score: {storyState.totalScore}
+            </div>
           </div>
         </motion.div>
 
@@ -263,7 +286,9 @@ export default function StoriesPage() {
           animate={{ opacity: 1, y: 0 }}
         >
           <h2 className="text-3xl font-bold mb-4">{currentChapter.title}</h2>
-          <p className="text-lg mb-6 leading-relaxed">{currentChapter.description}</p>
+          <p className="text-lg mb-6 leading-relaxed">
+            {currentChapter.description}
+          </p>
           <div className="text-sm text-blue-200 mb-6">
             <BookOpen className="w-4 h-4 inline mr-2" />
             {currentChapter.bibleReference}

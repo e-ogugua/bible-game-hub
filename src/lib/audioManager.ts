@@ -1,18 +1,18 @@
-import { Howl, Howler } from 'howler';
+import { Howl, Howler } from 'howler'
 
 export interface AudioManager {
-  playAmbientMusic(character: string): void;
-  stopAmbientMusic(): void;
-  playSoundEffect(sound: 'choice' | 'victory' | 'verse' | 'button'): void;
-  setVolume(volume: number): void;
-  mute(): void;
-  unmute(): void;
+  playAmbientMusic(character: string): void
+  stopAmbientMusic(): void
+  playSoundEffect(sound: 'choice' | 'victory' | 'verse' | 'button'): void
+  setVolume(volume: number): void
+  mute(): void
+  unmute(): void
 }
 
 class AudioManagerImpl implements AudioManager {
-  private ambientMusic: Howl | null = null;
-  private soundEffects: Record<string, Howl> = {};
-  private currentCharacter: string | null = null;
+  private ambientMusic: Howl | null = null
+  private soundEffects: Record<string, Howl> = {}
+  private currentCharacter: string | null = null
 
   constructor() {
     // Initialize sound effects
@@ -33,74 +33,74 @@ class AudioManagerImpl implements AudioManager {
         src: ['/audio/button.mp3'],
         volume: 0.2,
       }),
-    };
+    }
   }
 
   playAmbientMusic(character: string): void {
     // Stop current music if playing
     if (this.ambientMusic) {
-      this.ambientMusic.stop();
+      this.ambientMusic.stop()
     }
 
     // Don't restart if same character
     if (this.currentCharacter === character) {
-      return;
+      return
     }
 
-    this.currentCharacter = character;
+    this.currentCharacter = character
 
     // Create ambient music based on character
-    const musicSrc = this.getMusicForCharacter(character);
+    const musicSrc = this.getMusicForCharacter(character)
 
     this.ambientMusic = new Howl({
       src: [musicSrc],
       volume: 0.2,
       loop: true,
       autoplay: true,
-    });
+    })
 
-    this.ambientMusic.play();
+    this.ambientMusic.play()
   }
 
   stopAmbientMusic(): void {
     if (this.ambientMusic) {
-      this.ambientMusic.stop();
-      this.ambientMusic = null;
-      this.currentCharacter = null;
+      this.ambientMusic.stop()
+      this.ambientMusic = null
+      this.currentCharacter = null
     }
   }
 
   playSoundEffect(sound: 'choice' | 'victory' | 'verse' | 'button'): void {
-    const soundEffect = this.soundEffects[sound];
+    const soundEffect = this.soundEffects[sound]
     if (soundEffect) {
-      soundEffect.play();
+      soundEffect.play()
     }
   }
 
   setVolume(volume: number): void {
-    Howler.volume(volume);
+    Howler.volume(volume)
   }
 
   mute(): void {
-    Howler.mute(true);
+    Howler.mute(true)
   }
 
   unmute(): void {
-    Howler.mute(false);
+    Howler.mute(false)
   }
 
   private getMusicForCharacter(character: string): string {
     switch (character) {
       case 'moses':
-        return '/audio/moses-ambient.mp3';
+        return '/audio/moses-ambient.mp3'
       case 'david':
-        return '/audio/david-ambient.mp3';
+        return '/audio/david-ambient.mp3'
       case 'jesus':
-        return '/audio/jesus-ambient.mp3';
+        return '/audio/jesus-ambient.mp3'
       default:
-        return '/audio/default-ambient.mp3';
+        return '/audio/default-ambient.mp3'
     }
   }
 }
 
-export const audioManager = new AudioManagerImpl();
+export const audioManager = new AudioManagerImpl()

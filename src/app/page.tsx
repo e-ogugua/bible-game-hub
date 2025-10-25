@@ -2,7 +2,18 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { BookOpen, Brain, Target, Trophy, Users, Calendar, Star, RotateCcw, Crown, type LucideIcon } from 'lucide-react'
+import {
+  BookOpen,
+  Brain,
+  Target,
+  Trophy,
+  Users,
+  Calendar,
+  Star,
+  RotateCcw,
+  Crown,
+  type LucideIcon,
+} from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '@/contexts/AuthContext'
 import { localStorageService } from '@/lib/localStorage'
@@ -23,10 +34,10 @@ export default function Home() {
         {
           id: 'daily_verse',
           title: 'Daily Bible Verse',
-          description: 'Memorize today\'s featured verse',
+          description: "Memorize today's featured verse",
           icon: BookOpen as LucideIcon,
           completed: false,
-          type: 'daily_verse'
+          type: 'daily_verse',
         },
         {
           id: 'quiz_streak',
@@ -36,8 +47,8 @@ export default function Home() {
           completed: false,
           type: 'quiz_streak',
           target: 3,
-          current: 0
-        }
+          current: 0,
+        },
       ])
     }
   }, [user])
@@ -49,7 +60,7 @@ export default function Home() {
       description: 'Test your knowledge of biblical stories and characters',
       icon: BookOpen,
       href: '/quiz',
-      color: 'from-blue-500 to-purple-600'
+      color: 'from-blue-500 to-purple-600',
     },
     {
       id: 'memory',
@@ -57,7 +68,7 @@ export default function Home() {
       description: 'Memorize and recall famous Bible verses',
       icon: Brain,
       href: '/memory',
-      color: 'from-green-500 to-teal-600'
+      color: 'from-green-500 to-teal-600',
     },
     {
       id: 'story',
@@ -65,7 +76,7 @@ export default function Home() {
       description: 'Walk through the lives of biblical heroes',
       icon: Users,
       href: '/stories/characters',
-      color: 'from-yellow-500 to-orange-600'
+      color: 'from-yellow-500 to-orange-600',
     },
     {
       id: 'adventure',
@@ -73,7 +84,7 @@ export default function Home() {
       description: 'Embark on epic journeys through biblical history',
       icon: Target,
       href: '/adventure',
-      color: 'from-purple-500 to-pink-600'
+      color: 'from-purple-500 to-pink-600',
     },
     {
       id: 'account',
@@ -81,7 +92,7 @@ export default function Home() {
       description: 'Manage your profile and track your spiritual journey',
       icon: Crown,
       href: '/account',
-      color: 'from-purple-500 to-indigo-600'
+      color: 'from-purple-500 to-indigo-600',
     },
     {
       id: 'leaderboard',
@@ -89,12 +100,17 @@ export default function Home() {
       description: 'See how you rank among fellow believers',
       icon: Trophy,
       href: '/leaderboard',
-      color: 'from-yellow-500 to-orange-600'
+      color: 'from-yellow-500 to-orange-600',
     },
   ]
 
   const handleResetProgress = async () => {
-    if (typeof window !== 'undefined' && window.confirm('Are you sure you want to reset all your progress? This cannot be undone.')) {
+    if (
+      typeof window !== 'undefined' &&
+      window.confirm(
+        'Are you sure you want to reset all your progress? This cannot be undone.'
+      )
+    ) {
       await resetProgress()
     }
   }
@@ -106,30 +122,31 @@ export default function Home() {
       quiz: localStorageService.getBestScore('quiz', user.id)?.score || 0,
       memory: localStorageService.getBestScore('memory', user.id)?.score || 0,
       story: localStorageService.getBestScore('story', user.id)?.score || 0,
-      adventure: localStorageService.getBestScore('adventure', user.id)?.score || 0
+      adventure:
+        localStorageService.getBestScore('adventure', user.id)?.score || 0,
     }
   }
 
   getBestScores()
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white">
-      <div className="container mx-auto px-6 py-20">
+    <main className="min-h-screen bg-bible-primary text-white">
+      <div className="container mx-auto container-padding section-padding">
         {/* Header with User Stats */}
         <div className="mb-16">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-            <div>
-              <h1 className="text-5xl md:text-7xl font-bold font-serif mb-6 bg-gradient-to-r from-purple-300 to-blue-200 bg-clip-text text-transparent">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6">
+            <div className="flex-1">
+              <h1 className="text-responsive-2xl font-bold font-serif mb-6 text-bible-primary">
                 Bible Game Hub
               </h1>
-              <p className="text-xl md:text-2xl text-blue-100 mb-4">
+              <p className="text-responsive-lg text-bible-secondary mb-4 max-w-2xl">
                 Interactive Scripture Games & Biblical Knowledge
               </p>
               {user && (
-                <div className="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-4 md:space-y-0">
-                  <div className="flex items-center space-x-6 text-lg">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                  <div className="flex items-center space-x-4 text-responsive-base">
                     <div className="flex items-center space-x-2">
-                      <Star className="w-5 h-5 text-yellow-400" />
+                      <Star className="w-5 h-5 text-bible-accent" />
                       <span>Level {user.level}</span>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -139,20 +156,20 @@ export default function Home() {
                   </div>
                   <button
                     onClick={handleResetProgress}
-                    className="flex items-center space-x-2 text-red-400 hover:text-red-300 transition-colors"
+                    className="flex items-center space-x-2 text-red-400 hover:text-red-300 transition-colors text-sm self-start"
                   >
                     <RotateCcw className="w-4 h-4" />
-                    <span className="text-sm">Reset Progress</span>
+                    <span>Reset Progress</span>
                   </button>
                 </div>
               )}
             </div>
 
             {!user && (
-              <div className="mt-8 md:mt-0">
+              <div className="mt-8 lg:mt-0 w-full sm:w-auto">
                 <Link
                   href="/auth"
-                  className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
+                  className="bible-button w-full sm:w-auto text-center block"
                 >
                   Sign In to Track Progress
                 </Link>
@@ -160,18 +177,18 @@ export default function Home() {
             )}
           </div>
 
-          <p className="text-lg text-blue-200 max-w-3xl">
+          <p className="text-responsive-base text-bible-secondary max-w-3xl leading-relaxed">
             Learn, play, and grow in your faith through engaging Bible games,
             quizzes, and interactive challenges for all ages
           </p>
         </div>
 
         {/* Game Cards Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 mb-16">
           {games.map((game, index) => (
             <Link key={game.id} href={game.href}>
               <motion.div
-                className="group relative bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-500 overflow-hidden cursor-pointer"
+                className="group relative bible-card bible-card-hover p-6 lg:p-8 overflow-hidden cursor-pointer h-full"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 + 0.6 }}
@@ -179,31 +196,33 @@ export default function Home() {
                 whileTap={{ scale: 0.98 }}
               >
                 {/* Animated background gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}
+                />
 
                 {/* Pulsing border effect */}
-                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-white/30 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-white/10" />
+                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-bible-accent/30 transition-all duration-300 group-hover:shadow-lg" />
 
                 {/* Icon with enhanced styling */}
                 <motion.div
-                  className={`inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br ${game.color} rounded-2xl mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
+                  className={`inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br ${game.color} rounded-2xl mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
                   whileHover={{ rotate: 5, scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 400 }}
+                  transition={{ type: 'spring', stiffness: 400 }}
                 >
-                  <game.icon className="w-10 h-10 text-white" />
+                  <game.icon className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
                 </motion.div>
 
                 {/* Content with improved typography */}
-                <h3 className="text-2xl font-bold mb-3 group-hover:text-yellow-300 transition-colors duration-300">
+                <h3 className="text-responsive-lg font-bold mb-3 group-hover:text-bible-accent transition-colors duration-300">
                   {game.title}
                 </h3>
 
-                <p className="text-blue-100 leading-relaxed mb-6">
+                <p className="text-bible-secondary leading-relaxed mb-6 text-sm lg:text-base">
                   {game.description}
                 </p>
 
                 {/* Enhanced call-to-action */}
-                <div className="flex items-center text-sm font-medium text-purple-300 group-hover:text-yellow-300 transition-colors duration-300">
+                <div className="flex items-center text-sm font-medium text-purple-300 group-hover:text-bible-accent transition-colors duration-300">
                   <span>Start Journey</span>
                   <motion.div
                     className="ml-2"
@@ -219,7 +238,7 @@ export default function Home() {
                   {Array.from({ length: 6 }).map((_, i) => (
                     <motion.div
                       key={i}
-                      className="absolute w-2 h-2 bg-yellow-400 rounded-full"
+                      className="absolute w-2 h-2 bg-bible-accent rounded-full"
                       style={{
                         left: `${20 + (i * 12)}%`,
                         top: `${30 + (i % 2) * 40}%`,
@@ -245,24 +264,36 @@ export default function Home() {
         {/* Daily Challenges */}
         <div className="mb-16">
           <div className="flex items-center mb-6">
-            <Calendar className="w-6 h-6 text-yellow-400 mr-3" />
-            <h2 className="text-2xl font-bold">Daily Challenges</h2>
+            <Calendar className="w-6 h-6 text-bible-accent mr-3" />
+            <h2 className="text-responsive-xl font-bold">Daily Challenges</h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
             {dailyChallenges.map((challenge) => (
               <div
                 key={challenge.id}
-                className={`bg-white/10 backdrop-blur-sm rounded-xl p-4 border ${
-                  challenge.completed ? 'border-green-400 bg-green-900/20' : 'border-white/20'
+                className={`bible-card p-4 lg:p-6 ${
+                  challenge.completed
+                    ? 'border-green-400 bg-green-900/20'
+                    : 'border-white/20'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    {challenge.icon && <challenge.icon className={`w-6 h-6 ${challenge.completed ? 'text-green-400' : 'text-blue-400'}`} />}
-                    <div>
-                      <h3 className="font-semibold">{challenge.title}</h3>
-                      <p className="text-sm text-blue-200">{challenge.description}</p>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3 flex-1">
+                    {challenge.icon && (
+                      <challenge.icon
+                        className={`w-6 h-6 ${
+                          challenge.completed ? 'text-green-400' : 'text-blue-400'
+                        }`}
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-responsive-base truncate">
+                        {challenge.title}
+                      </h3>
+                      <p className="text-sm text-bible-secondary truncate">
+                        {challenge.description}
+                      </p>
                       {challenge.target && (
                         <p className="text-xs text-purple-300 mt-1">
                           {challenge.current || 0} / {challenge.target}
@@ -273,7 +304,7 @@ export default function Home() {
                 </div>
                 <Link
                   href="/stories/characters"
-                  className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold transition-colors"
+                  className="bible-button w-full text-center text-sm"
                 >
                   Continue
                 </Link>
@@ -284,31 +315,45 @@ export default function Home() {
 
         {/* Enhanced footer section */}
         <motion.div
-          className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
+          className="text-center bible-card p-6 lg:p-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2 }}
         >
-          <div className="flex justify-center items-center space-x-2 mb-4">
-            <Star className="w-6 h-6 text-yellow-400" />
-            <Star className="w-5 h-5 text-yellow-400" />
-            <Star className="w-6 h-6 text-yellow-400" />
+          <div className="flex justify-center items-center space-x-2 mb-6">
+            <Star className="w-6 h-6 text-bible-accent animate-pulse-slow" />
+            <Star
+              className="w-5 h-5 text-bible-accent animate-pulse-slow"
+              style={{ animationDelay: '0.5s' }}
+            />
+            <Star
+              className="w-6 h-6 text-bible-accent animate-pulse-slow"
+              style={{ animationDelay: '1s' }}
+            />
           </div>
 
-          <h2 className="text-3xl font-bold mb-4 text-transparent bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text">
+          <h2 className="text-responsive-xl font-bold mb-4 text-bible-primary">
             Ready to Begin Your Journey?
           </h2>
 
-          <p className="text-lg text-blue-100 mb-6 max-w-2xl mx-auto">
+          <p className="text-responsive-base text-bible-secondary mb-6 max-w-2xl mx-auto leading-relaxed">
             Choose your path and discover the beauty, wisdom, and power of God&apos;s Word
             through immersive, interactive experiences that will strengthen your faith.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-blue-200">
-            <span className="bg-blue-900/30 px-4 py-2 rounded-full">✨ 3D Visualizations</span>
-            <span className="bg-purple-900/30 px-4 py-2 rounded-full">🎵 Immersive Audio</span>
-            <span className="bg-indigo-900/30 px-4 py-2 rounded-full">📚 Bible-Based Stories</span>
-            <span className="bg-cyan-900/30 px-4 py-2 rounded-full">🎮 Interactive Gameplay</span>
+          <div className="flex flex-wrap justify-center gap-3 text-sm text-bible-secondary">
+            <span className="bg-bible-secondary px-4 py-2 rounded-full">
+              ✨ 3D Visualizations
+            </span>
+            <span className="bg-purple-900/30 px-4 py-2 rounded-full">
+              🎵 Immersive Audio
+            </span>
+            <span className="bg-indigo-900/30 px-4 py-2 rounded-full">
+              📚 Bible-Based Stories
+            </span>
+            <span className="bg-cyan-900/30 px-4 py-2 rounded-full">
+              🎮 Interactive Gameplay
+            </span>
           </div>
         </motion.div>
       </div>
