@@ -20,14 +20,14 @@ export default function NotFound() {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold mb-2">Page Not Found</h2>
-          <p className="text-blue-200">
+          <h2 className="text-2xl font-bold mb-2 text-white">Page Not Found</h2>
+          <p className="text-gray-300">
             The page you are looking for doesn&apos;t exist or has been moved.
           </p>
         </div>
         <Link
           href="/"
-          className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-6 py-3 rounded-lg font-semibold transition-all duration-300 inline-block transform hover:scale-105"
         >
           Go Home
         </Link>

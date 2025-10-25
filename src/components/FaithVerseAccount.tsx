@@ -92,11 +92,11 @@ export const FaithVerseAccount: React.FC = () => {
               <Crown className="w-10 h-10 text-white" />
             </div>
 
-            <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-white to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold mb-6 text-white">
               Welcome to FaithVerse
             </h1>
 
-            <p className="text-xl text-blue-100 mb-8">
+            <p className="text-xl text-gray-300 mb-8">
               Create your FaithVerse identity to track your spiritual journey,
               earn achievements, and connect with fellow believers.
             </p>
@@ -161,7 +161,7 @@ export const FaithVerseAccount: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p>Loading your FaithVerse profile...</p>
+          <p className="text-gray-300">Loading your FaithVerse profile...</p>
         </div>
       </div>
     )
@@ -179,10 +179,10 @@ export const FaithVerseAccount: React.FC = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mb-6 shadow-2xl">
             <User className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-white to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-4 text-white">
             FaithVerse Account
           </h1>
-          <p className="text-blue-100">
+          <p className="text-gray-300">
             Manage your spiritual journey and achievements
           </p>
         </motion.div>
@@ -203,20 +203,20 @@ export const FaithVerseAccount: React.FC = () => {
               {/* Basic Info */}
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm text-blue-200">Display Name</label>
+                  <label className="text-sm text-gray-300">Display Name</label>
                   <p className="text-xl font-semibold text-white">
                     {currentProfile.displayName}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm text-blue-200">Username</label>
-                  <p className="text-lg text-blue-100">
+                  <label className="text-sm text-gray-300">Username</label>
+                  <p className="text-lg text-gray-200">
                     @{currentProfile.username}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm text-blue-200">Level</label>
-                  <p className="text-xl font-semibold text-yellow-400">
+                  <label className="text-sm text-gray-300">Level</label>
+                  <p className="text-xl font-semibold text-bible-accent">
                     {currentProfile.level}
                   </p>
                 </div>
@@ -225,20 +225,20 @@ export const FaithVerseAccount: React.FC = () => {
               {/* Stats */}
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm text-blue-200">Total XP</label>
-                  <p className="text-xl font-semibold text-purple-400">
+                  <label className="text-sm text-gray-300">Total XP</label>
+                  <p className="text-xl font-semibold text-bible-accent">
                     {currentProfile.xp.toLocaleString()}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm text-blue-200">Best Score</label>
+                  <label className="text-sm text-gray-300">Best Score</label>
                   <p className="text-xl font-semibold text-green-400">
                     {currentProfile.totalScore.toLocaleString()}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm text-blue-200">Member Since</label>
-                  <p className="text-sm text-blue-100">
+                  <label className="text-sm text-gray-300">Member Since</label>
+                  <p className="text-sm text-gray-200">
                     {new Date(currentProfile.joinedAt).toLocaleDateString()}
                   </p>
                 </div>
@@ -247,38 +247,38 @@ export const FaithVerseAccount: React.FC = () => {
 
             {/* Game Stats */}
             <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-4">Game Progress</h3>
+              <h3 className="text-lg font-semibold mb-4 text-white">Game Progress</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-purple-900/30 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-blue-400">
                     {currentProfile.gamesPlayed.quiz}
                   </div>
-                  <div className="text-sm text-blue-200">Quizzes</div>
+                  <div className="text-sm text-gray-200">Quizzes</div>
                 </div>
                 <div className="bg-blue-900/30 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-green-400">
                     {currentProfile.gamesPlayed.memory}
                   </div>
-                  <div className="text-sm text-blue-200">Memory Games</div>
+                  <div className="text-sm text-gray-200">Memory Games</div>
                 </div>
                 <div className="bg-green-900/30 rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-yellow-400">
+                  <div className="text-2xl font-bold text-bible-accent">
                     {currentProfile.gamesPlayed.story}
                   </div>
-                  <div className="text-sm text-blue-200">Stories</div>
+                  <div className="text-sm text-gray-200">Stories</div>
                 </div>
                 <div className="bg-yellow-900/30 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-purple-400">
                     {currentProfile.gamesPlayed.adventure}
                   </div>
-                  <div className="text-sm text-blue-200">Adventures</div>
+                  <div className="text-sm text-gray-200">Adventures</div>
                 </div>
               </div>
             </div>
 
             {/* Export/Import */}
             <div className="mt-8 pt-6 border-t border-white/20">
-              <h3 className="text-lg font-semibold mb-4">Data Management</h3>
+              <h3 className="text-lg font-semibold mb-4 text-white">Data Management</h3>
               <div className="flex flex-wrap gap-4">
                 <motion.button
                   onClick={exportProfile}
@@ -343,7 +343,7 @@ export const FaithVerseAccount: React.FC = () => {
                   className={`w-full text-left p-4 rounded-lg border transition-all duration-300 ${
                     profile.id === currentProfile.id
                       ? 'bg-yellow-500/20 border-yellow-400 text-white'
-                      : 'bg-white/5 border-white/20 text-blue-100 hover:bg-white/10'
+                      : 'bg-white/5 border-white/20 text-gray-200 hover:bg-white/10'
                   }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -351,7 +351,7 @@ export const FaithVerseAccount: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="font-semibold">{profile.displayName}</div>
-                      <div className="text-sm text-blue-200">
+                      <div className="text-sm text-gray-300">
                         @{profile.username} • Level {profile.level}
                       </div>
                     </div>

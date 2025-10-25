@@ -69,10 +69,10 @@ export const Leaderboard: React.FC = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mb-6 shadow-2xl">
             <Trophy className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-white to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-bold mb-6 text-white">
             FaithVerse Leaderboard
           </h1>
-          <p className="text-xl text-blue-100">
+          <p className="text-xl text-gray-300">
             See how you rank among fellow believers in your spiritual journey
           </p>
         </motion.div>
@@ -97,7 +97,7 @@ export const Leaderboard: React.FC = () => {
                   className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
                     sortBy === key
                       ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-400/50'
-                      : 'text-blue-200 hover:text-white hover:bg-white/10'
+                      : 'text-gray-200 hover:text-white hover:bg-white/10'
                   }`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -120,7 +120,7 @@ export const Leaderboard: React.FC = () => {
           <div className="bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 overflow-hidden">
             {/* Header */}
             <div className="bg-gradient-to-r from-purple-900/50 to-blue-900/50 px-6 py-4 border-b border-white/20">
-              <div className="grid grid-cols-12 gap-4 text-sm font-semibold text-blue-200">
+              <div className="grid grid-cols-12 gap-4 text-sm font-semibold text-gray-200">
                 <div className="col-span-1">Rank</div>
                 <div className="col-span-5">Player</div>
                 <div className="col-span-2">Level</div>
@@ -161,7 +161,7 @@ export const Leaderboard: React.FC = () => {
                           <div className="font-semibold text-white">
                             {entry.displayName}
                           </div>
-                          <div className="text-sm text-blue-300">
+                          <div className="text-sm text-gray-300">
                             @{entry.username}
                           </div>
                         </div>
@@ -217,7 +217,7 @@ export const Leaderboard: React.FC = () => {
                           <div className="font-semibold text-white">
                             {currentUser.displayName} (You)
                           </div>
-                          <div className="text-sm text-blue-300">
+                          <div className="text-sm text-gray-300">
                             @{currentUser.username}
                           </div>
                         </div>
@@ -253,8 +253,8 @@ export const Leaderboard: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
           >
-            <p className="text-blue-100">
-              🌟 <strong>Global Leaderboard Coming Soon!</strong>
+            <p className="text-gray-300">
+              <strong>Global Leaderboard Coming Soon!</strong>
               <br />
               Connect with believers worldwide and compete in faith challenges
               across the FaithVerse.

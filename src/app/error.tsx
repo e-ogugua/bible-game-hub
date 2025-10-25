@@ -33,15 +33,15 @@ export default function Error({
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold mb-2">Something went wrong!</h2>
-          <p className="text-blue-200">
+          <h2 className="text-2xl font-bold mb-2 text-white">Something went wrong!</h2>
+          <p className="text-gray-300">
             We are having trouble loading this page. Please try refreshing or
             contact support if the problem persists.
           </p>
         </div>
         <button
           onClick={() => reset()}
-          className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-colors"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
         >
           Try again
         </button>

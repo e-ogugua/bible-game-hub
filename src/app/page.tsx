@@ -160,7 +160,7 @@ export default function Home() {
       <main className="min-h-screen bg-bible-primary text-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-bible-accent mx-auto mb-4"></div>
-          <p className="text-bible-secondary">Loading your faith journey...</p>
+          <p className="text-gray-300">Loading your faith journey...</p>
         </div>
       </main>
     )
