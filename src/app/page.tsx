@@ -295,14 +295,14 @@ export default function Home() {
                     <div className="flex items-center space-x-3 flex-1">
                       {challenge.icon && <challenge.icon className={`w-6 h-6 ${challenge.completed ? 'text-green-400' : 'text-blue-400'}`} aria-hidden="true" />}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-responsive-base truncate">
+                        <h3 className="font-bold text-responsive-base text-bible-primary truncate">
                           {challenge.title}
                         </h3>
-                        <p className="text-sm text-bible-secondary truncate">
+                        <p className="text-responsive-sm text-bible-secondary truncate">
                           {challenge.description}
                         </p>
                         {challenge.target && (
-                          <p className="text-xs text-purple-300 mt-1">
+                          <p className="text-responsive-xs text-bible-accent mt-1 font-medium">
                             {challenge.current || 0} / {challenge.target}
                           </p>
                         )}
@@ -311,7 +311,7 @@ export default function Home() {
                   </div>
                   <Link
                     href="/stories/characters"
-                    className="bible-button w-full text-center text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                    className="bible-button bible-button-secondary w-full text-center focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                     aria-label={`Continue with ${challenge.title} challenge`}
                   >
                     Continue
@@ -339,17 +339,17 @@ export default function Home() {
             through immersive, interactive experiences that will strengthen your faith.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-3 text-sm text-bible-secondary">
-            <span className="bg-bible-secondary px-4 py-2 rounded-full">
+          <div className="flex flex-wrap justify-center gap-3">
+            <span className="bible-pill bible-pill-primary">
               3D Visualizations
             </span>
-            <span className="bg-purple-900/30 px-4 py-2 rounded-full">
+            <span className="bible-pill bible-pill-secondary">
               Immersive Audio
             </span>
-            <span className="bg-indigo-900/30 px-4 py-2 rounded-full">
+            <span className="bible-pill">
               Bible-Based Stories
             </span>
-            <span className="bg-cyan-900/30 px-4 py-2 rounded-full">
+            <span className="bible-pill">
               Interactive Gameplay
             </span>
           </div>

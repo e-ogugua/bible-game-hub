@@ -108,7 +108,7 @@ export const QuizGame: React.FC = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4 shadow-lg">
               <span className="text-2xl">📚</span>
             </div>
-            <h2 className="text-3xl font-bold mb-2">Choose Your Challenge</h2>
+            <h2 className="text-responsive-3xl font-bold mb-2 text-white">Choose Your Challenge</h2>
             <p className="text-blue-200">
               Select difficulty level to begin your Bible knowledge journey
             </p>
@@ -119,12 +119,12 @@ export const QuizGame: React.FC = () => {
               (difficulty, index) => (
                 <motion.button
                   key={difficulty}
-                  className={`w-full p-4 rounded-lg font-semibold capitalize transition-all duration-300 relative overflow-hidden ${
+                  className={`w-full bible-card p-4 rounded-lg font-semibold text-lg border border-white/20 hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 ${
                     difficulty === 'easy'
-                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700'
+                      ? 'hover:border-green-400/50'
                       : difficulty === 'medium'
-                        ? 'bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700'
-                        : 'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700'
+                        ? 'hover:border-yellow-400/50'
+                        : 'hover:border-red-400/50'
                   }`}
                   onClick={() => handleDifficultySelect(difficulty)}
                   whileHover={{ scale: 1.02, y: -2 }}
@@ -141,7 +141,7 @@ export const QuizGame: React.FC = () => {
                           ? '⚡'
                           : '🔥'}
                     </span>
-                    <span className="text-xl">{difficulty}</span>
+                    <span className="text-xl text-white">{difficulty}</span>
                   </div>
                 </motion.button>
               )
@@ -169,13 +169,13 @@ export const QuizGame: React.FC = () => {
           animate={{ opacity: 1, scale: 1 }}
         >
           <Star className="w-16 h-16 text-yellow-400 mx-auto mb-6" />
-          <h2 className="text-3xl font-bold mb-4">Quiz Complete!</h2>
-          <p className="text-xl mb-6">
+          <h2 className="text-responsive-3xl font-bold mb-4 text-white">Quiz Complete!</h2>
+          <p className="text-xl mb-6 text-blue-200">
             You scored {gameState.score} out of 10 ({percentage}%)
           </p>
           <div className="flex justify-center space-x-4">
             <motion.button
-              className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold flex items-center space-x-2"
+              className="bible-button bible-button-secondary"
               onClick={handleReplay}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -184,7 +184,7 @@ export const QuizGame: React.FC = () => {
               <span>Play Again</span>
             </motion.button>
             <motion.button
-              className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold flex items-center space-x-2"
+              className="bible-button"
               onClick={handleGoHome}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

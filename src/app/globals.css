@@ -42,10 +42,32 @@
     color: white;
   }
 
-  /* Focus styling */
+  /* Enhanced focus styling for accessibility */
   :focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px rgb(251, 191, 36), 0 0 0 4px rgb(88, 28, 135);
+    box-shadow: 0 0 0 3px rgb(253 224 71), 0 0 0 6px rgba(253, 224, 71, 0.2);
+  }
+
+  /* Better button focus */
+  button:focus-visible,
+  .bible-button:focus-visible,
+  .bible-button-secondary:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(253 224 71), 0 0 0 6px rgba(253, 224, 71, 0.2);
+    transform: translateY(-2px);
+  }
+
+  /* Link focus */
+  a:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(253 224 71);
+    border-radius: 0.25rem;
+  }
+
+  /* Improved selection styling */
+  ::selection {
+    background: rgba(253, 224, 71, 0.4);
+    color: rgb(31 41 55);
   }
 }
 
@@ -59,64 +81,165 @@
     background: linear-gradient(to bottom right, rgba(88 28 135, 0.5), rgba(30 64 175, 0.5), rgba(79 70 229, 0.5));
   }
 
-  /* Card styling */
+  /* Card styling with better contrast */
   .bible-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
     border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
   }
 
   .bible-card-hover {
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .bible-card-hover:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
   }
 
-  /* Button styling */
+  .bible-card-hover:focus-within {
+    border-color: rgb(253 224 71);
+    box-shadow: 0 0 0 3px rgba(253, 224, 71, 0.2);
+  }
+
+  /* Button styling with better contrast and accessibility */
   .bible-button {
     background: rgb(147 51 234);
-    color: white;
+    color: rgb(255 255 255);
     font-weight: 600;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    transition: all 0.2s ease;
+    font-size: 1rem;
+    padding: 0.875rem 2rem;
+    border-radius: 0.75rem;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px 0 rgba(147, 51, 234, 0.3);
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
   }
 
   .bible-button:hover {
     background: rgb(126 34 206);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px 0 rgba(147, 51, 234, 0.4);
+  }
+
+  .bible-button:active {
+    transform: translateY(0);
+  }
+
+  .bible-button:focus {
+    outline: none;
+    border-color: rgb(253 224 71);
+    box-shadow: 0 0 0 3px rgba(253, 224, 71, 0.3);
+  }
+
+  .bible-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
   }
 
   .bible-button-secondary {
     background: rgb(59 130 246);
-    color: white;
+    color: rgb(255 255 255);
     font-weight: 600;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    transition: all 0.2s ease;
+    font-size: 1rem;
+    padding: 0.875rem 2rem;
+    border-radius: 0.75rem;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
   }
 
   .bible-button-secondary:hover {
     background: rgb(37 99 235);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px 0 rgba(59, 130, 246, 0.4);
   }
 
-  /* Text styling */
+  .bible-button-secondary:focus {
+    outline: none;
+    border-color: rgb(253 224 71);
+    box-shadow: 0 0 0 3px rgba(253, 224, 71, 0.3);
+  }
+
+  /* Pill/Badge styling */
+  .bible-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    color: rgb(255 255 255);
+    transition: all 0.2s ease;
+  }
+
+  .bible-pill:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .bible-pill-primary {
+    background: rgb(147 51 234);
+    border-color: rgb(147 51 234);
+    color: rgb(255 255 255);
+  }
+
+  .bible-pill-secondary {
+    background: rgb(59 130 246);
+    border-color: rgb(59 130 246);
+    color: rgb(255 255 255);
+  }
+
+  .bible-pill-success {
+    background: rgb(34 197 94);
+    border-color: rgb(34 197 94);
+    color: rgb(255 255 255);
+  }
+
+  .bible-pill-warning {
+    background: rgb(251 191 36);
+    border-color: rgb(251 191 36);
+    color: rgb(31 41 55);
+  }
+
+  /* Text styling with better contrast */
   .text-bible-primary {
-    background: linear-gradient(to right, rgb(147 197 253), rgb(196 181 253));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: rgb(255 255 255);
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   .text-bible-secondary {
-    color: rgb(147 197 253);
+    color: rgb(186 230 253);
+    font-weight: 500;
   }
 
   .text-bible-accent {
     color: rgb(253 224 71);
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .text-bible-muted {
+    color: rgb(156 163 175);
+    font-weight: 400;
   }
 
   /* Animation utilities */
@@ -146,57 +269,106 @@
     perspective: 1000px;
   }
 
-  /* Responsive text utilities */
+  /* Responsive text utilities with better readability */
+  .text-responsive-xs {
+    font-size: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+    line-height: 1.5;
+  }
+
   .text-responsive-sm {
-    font-size: 0.875rem;
+    font-size: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+    line-height: 1.6;
   }
 
   .text-responsive-base {
-    font-size: 1rem;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+    line-height: 1.7;
   }
 
   .text-responsive-lg {
-    font-size: 1.125rem;
+    font-size: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+    line-height: 1.7;
   }
 
   .text-responsive-xl {
-    font-size: 1.25rem;
+    font-size: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+    line-height: 1.6;
   }
 
   .text-responsive-2xl {
-    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+    line-height: 1.5;
+  }
+
+  .text-responsive-3xl {
+    font-size: clamp(1.875rem, 1.6rem + 1.375vw, 2.25rem);
+    line-height: 1.4;
+  }
+
+  .text-responsive-4xl {
+    font-size: clamp(2.25rem, 1.9rem + 1.75vw, 3rem);
+    line-height: 1.3;
+  }
+
+  .text-responsive-5xl {
+    font-size: clamp(3rem, 2.5rem + 2.5vw, 4rem);
+    line-height: 1.2;
   }
 
   @media (min-width: 768px) {
+    .text-responsive-xs {
+      font-size: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+      line-height: 1.6;
+    }
     .text-responsive-sm {
-      font-size: 1rem;
+      font-size: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+      line-height: 1.7;
     }
     .text-responsive-base {
-      font-size: 1.125rem;
+      font-size: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+      line-height: 1.7;
     }
     .text-responsive-lg {
-      font-size: 1.25rem;
+      font-size: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+      line-height: 1.6;
     }
     .text-responsive-xl {
-      font-size: 1.5rem;
+      font-size: clamp(1.5rem, 1.3rem + 1vw, 1.875rem);
+      line-height: 1.5;
     }
     .text-responsive-2xl {
-      font-size: 2rem;
+      font-size: clamp(2rem, 1.7rem + 1.5vw, 2.25rem);
+      line-height: 1.4;
+    }
+    .text-responsive-3xl {
+      font-size: clamp(2.25rem, 1.9rem + 1.75vw, 3rem);
+      line-height: 1.3;
     }
   }
 
   @media (min-width: 1024px) {
     .text-responsive-xl {
-      font-size: 1.875rem;
+      font-size: clamp(1.875rem, 1.6rem + 1.375vw, 2.25rem);
+      line-height: 1.4;
     }
     .text-responsive-2xl {
-      font-size: 2.25rem;
+      font-size: clamp(2.25rem, 1.9rem + 1.75vw, 3rem);
+      line-height: 1.3;
+    }
+    .text-responsive-3xl {
+      font-size: clamp(3rem, 2.5rem + 2.5vw, 4rem);
+      line-height: 1.2;
     }
   }
 
   @media (min-width: 1280px) {
     .text-responsive-2xl {
-      font-size: 3rem;
+      font-size: clamp(3rem, 2.5rem + 2.5vw, 4rem);
+      line-height: 1.2;
+    }
+    .text-responsive-3xl {
+      font-size: clamp(3.75rem, 3rem + 3.75vw, 5rem);
+      line-height: 1.1;
     }
   }
 

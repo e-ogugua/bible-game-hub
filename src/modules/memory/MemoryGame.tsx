@@ -345,7 +345,7 @@ export const MemoryGame: React.FC = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4 shadow-lg">
               <span className="text-2xl">🧠</span>
             </div>
-            <h2 className="text-3xl font-bold mb-4">
+            <h2 className="text-3xl font-bold mb-2 text-white">
               Scripture Memory Challenge
             </h2>
             <p className="text-blue-200 text-lg">
@@ -355,45 +355,45 @@ export const MemoryGame: React.FC = () => {
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             <motion.button
-              className="bg-gradient-to-br from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 p-6 rounded-xl font-semibold text-lg border border-blue-400/30"
+              className="bible-card p-6 rounded-xl font-semibold text-lg border border-blue-400/30 hover:border-blue-400/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent"
               onClick={() => setShowThemeSelection(true)}
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
               <div className="text-center">
                 <Target className="w-8 h-8 mx-auto mb-3 text-blue-300" />
-                <div className="font-bold">Classic Mode</div>
-                <div className="text-sm opacity-75 mt-1">
+                <div className="font-bold text-white">Classic Mode</div>
+                <div className="text-sm text-blue-200 mt-1">
                   Find all pairs at your own pace
                 </div>
               </div>
             </motion.button>
 
             <motion.button
-              className="bg-gradient-to-br from-green-600 to-teal-700 hover:from-green-700 hover:to-teal-800 p-6 rounded-xl font-semibold text-lg border border-green-400/30"
+              className="bible-card p-6 rounded-xl font-semibold text-lg border border-green-400/30 hover:border-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-transparent"
               onClick={() => setShowThemeSelection(true)}
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
               <div className="text-center">
                 <Timer className="w-8 h-8 mx-auto mb-3 text-green-300" />
-                <div className="font-bold">Time Trial</div>
-                <div className="text-sm opacity-75 mt-1">
+                <div className="font-bold text-white">Time Trial</div>
+                <div className="text-sm text-green-200 mt-1">
                   Race against time (2 minutes)
                 </div>
               </div>
             </motion.button>
 
             <motion.button
-              className="bg-gradient-to-br from-yellow-600 to-orange-700 hover:from-yellow-700 hover:to-orange-800 p-6 rounded-xl font-semibold text-lg border border-yellow-400/30"
+              className="bible-card p-6 rounded-xl font-semibold text-lg border border-yellow-400/30 hover:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-transparent"
               onClick={() => setShowThemeSelection(true)}
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
               <div className="text-center">
                 <Infinity className="w-8 h-8 mx-auto mb-3 text-yellow-300" />
-                <div className="font-bold">Endless Mode</div>
-                <div className="text-sm opacity-75 mt-1">
+                <div className="font-bold text-white">Endless Mode</div>
+                <div className="text-sm text-yellow-200 mt-1">
                   Keep playing for high scores
                 </div>
               </div>
@@ -417,7 +417,7 @@ export const MemoryGame: React.FC = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full mb-4 shadow-lg">
               <span className="text-2xl">📖</span>
             </div>
-            <h2 className="text-3xl font-bold mb-4">
+            <h2 className="text-3xl font-bold mb-4 text-white">
               Choose Your Scripture Theme
             </h2>
             <p className="text-blue-200 text-lg">
@@ -432,7 +432,7 @@ export const MemoryGame: React.FC = () => {
                 return (
                   <motion.button
                     key={theme}
-                    className={`bg-gradient-to-br ${themeInfo.color} hover:opacity-90 p-6 rounded-xl font-semibold text-lg border border-white/20`}
+                    className="bible-card p-6 rounded-xl font-semibold text-lg border border-white/20 hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent"
                     onClick={() => startNewGame(theme, gameMode)}
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
@@ -441,8 +441,8 @@ export const MemoryGame: React.FC = () => {
                       <span className="text-3xl mb-3 block">
                         {themeInfo.icon}
                       </span>
-                      <div className="font-bold">{themeInfo.name}</div>
-                      <div className="text-sm opacity-75 mt-1">
+                      <div className="font-bold text-white">{themeInfo.name}</div>
+                      <div className="text-sm text-blue-200 mt-1">
                         {theme === 'classic'
                           ? 'Mixed verses from different books'
                           : theme === 'new-testament'
@@ -460,7 +460,7 @@ export const MemoryGame: React.FC = () => {
 
           <div className="text-center">
             <motion.button
-              className="bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-lg font-semibold"
+              className="bible-button bible-button-secondary"
               onClick={() => setShowModeSelection(true)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -492,7 +492,7 @@ export const MemoryGame: React.FC = () => {
             <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-6" />
           </motion.div>
 
-          <h2 className="text-3xl font-bold mb-4">Challenge Complete!</h2>
+          <h2 className="text-responsive-3xl font-bold mb-4 text-white">Challenge Complete!</h2>
 
           <div className="space-y-4 mb-6">
             <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-lg p-4 border border-yellow-400/30">
@@ -535,7 +535,7 @@ export const MemoryGame: React.FC = () => {
 
           <div className="flex justify-center space-x-4">
             <motion.button
-              className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold flex items-center space-x-2"
+              className="bible-button bible-button-secondary"
               onClick={handleReplay}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -545,7 +545,7 @@ export const MemoryGame: React.FC = () => {
             </motion.button>
 
             <motion.button
-              className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold flex items-center space-x-2"
+              className="bible-button"
               onClick={() => {
                 setShowModeSelection(true)
                 setGameMode('classic')
@@ -558,7 +558,7 @@ export const MemoryGame: React.FC = () => {
             </motion.button>
 
             <motion.button
-              className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold flex items-center space-x-2"
+              className="bible-button bible-button-secondary"
               onClick={handleGoHome}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -582,7 +582,7 @@ export const MemoryGame: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="text-center md:text-left">
-            <h1 className="text-4xl font-bold mb-2">Scripture Memory</h1>
+            <h1 className="text-responsive-4xl font-bold mb-2 text-white">Scripture Memory</h1>
             <div className="flex items-center space-x-2 text-blue-200">
               <span className="text-lg">
                 {getThemeInfo(currentTheme).icon}{' '}
