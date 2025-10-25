@@ -164,6 +164,8 @@ export default function Home() {
         </div>
       </main>
     )
+  }
+
   // Show main content (loading state should be false by now)
   return (
     <main className="min-h-screen bg-bible-primary text-white">
