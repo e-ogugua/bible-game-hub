@@ -39,19 +39,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     // Only run on client side to avoid SSR issues
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') {
+      console.log('AuthContext: Server-side rendering detected, skipping user load')
+      setLoading(false)
+      return
+    }
+
+    console.log('AuthContext: Starting user profile load...')
 
     // Load user profile on mount
-    const loadUser = () => {
+    const loadUser = async () => {
       try {
+        console.log('AuthContext: Attempting to load user profile from localStorage')
         const storedUser = localStorage.getItem('bible_game_user_profile')
+
         if (storedUser) {
+          console.log('AuthContext: Found stored user data, parsing...')
           const userData = JSON.parse(storedUser)
+          console.log('AuthContext: Successfully parsed user data:', userData)
           setUser(userData)
+        } else {
+          console.log('AuthContext: No stored user data found')
         }
       } catch (error) {
-        console.error('Failed to load user profile:', error)
+        console.error('AuthContext: Failed to load user profile:', error)
+        // Clear corrupted data
+        try {
+          localStorage.removeItem('bible_game_user_profile')
+          localStorage.removeItem('bible_game_user_profiles')
+        } catch (clearError) {
+          console.error('AuthContext: Failed to clear corrupted data:', clearError)
+        }
       } finally {
+        console.log('AuthContext: Setting loading to false')
         setLoading(false)
       }
     }

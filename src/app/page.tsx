@@ -15,7 +15,6 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { localStorageService } from '@/lib/localStorage'
 import { dailyChallengesService, DailyChallenge } from '@/lib/dailyChallenges'
 
 export default function Home() {
@@ -26,12 +25,17 @@ export default function Home() {
   // Update daily challenges when user changes
   useEffect(() => {
     const loadChallenges = async () => {
+      console.log('Main page: Starting daily challenges load...')
       setChallengesLoading(true)
+
       try {
         if (user) {
+          console.log('Main page: Loading challenges for user:', user.id)
           const challenges = dailyChallengesService.getDailyChallenges(user.id)
+          console.log('Main page: Loaded user challenges:', challenges)
           setDailyChallenges(challenges)
         } else {
+          console.log('Main page: Loading default challenges for guest user')
           // Default challenges for non-logged-in users
           setDailyChallenges([
             {
@@ -55,14 +59,34 @@ export default function Home() {
           ])
         }
       } catch (error) {
-        console.error('Error loading daily challenges:', error)
+        console.error('Main page: Error loading daily challenges:', error)
+        // Set default challenges on error
+        setDailyChallenges([
+          {
+            id: 'daily_verse',
+            title: 'Daily Bible Verse',
+            description: "Memorize today's featured verse",
+            icon: BookOpen as LucideIcon,
+            completed: false,
+            type: 'daily_verse',
+          },
+        ])
       } finally {
+        console.log('Main page: Daily challenges loading complete')
         setChallengesLoading(false)
       }
     }
 
     loadChallenges()
   }, [user])
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      console.warn('Main page: Auth loading timeout reached, forcing render')
+      setChallengesLoading(false)
+    }, 5000) // 5 second timeout
+
+    return () => clearTimeout(timeout)
+  }, [])
 
   const games = [
     {
@@ -125,20 +149,6 @@ export default function Home() {
       await resetProgress()
     }
   }
-
-  const getBestScores = () => {
-    if (!user) return {}
-
-    return {
-      quiz: localStorageService.getBestScore('quiz', user.id)?.score || 0,
-      memory: localStorageService.getBestScore('memory', user.id)?.score || 0,
-      story: localStorageService.getBestScore('story', user.id)?.score || 0,
-      adventure:
-        localStorageService.getBestScore('adventure', user.id)?.score || 0,
-    }
-  }
-
-  getBestScores()
 
   // Show loading state while auth is loading
   if (authLoading) {
