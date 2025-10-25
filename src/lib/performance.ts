@@ -12,7 +12,8 @@ export const useOptimizedCallback = <T extends (...args: unknown[]) => unknown>(
   callback: T,
   deps: React.DependencyList
 ): T => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // These are utility functions that intentionally wrap React hooks
+  // eslint-disable-next-line react-hooks/rules-of-hooks, react-hooks/exhaustive-deps
   return useCallback(callback, deps)
 }
 
@@ -20,7 +21,8 @@ export const useOptimizedMemo = <T>(
   factory: () => T,
   deps: React.DependencyList
 ): T => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // These are utility functions that intentionally wrap React hooks
+  // eslint-disable-next-line react-hooks/rules-of-hooks, react-hooks/exhaustive-deps
   return useMemo(factory, deps)
 }
 
@@ -30,7 +32,8 @@ export const useGameStateMemo = <T, R>(
   computeFn: (state: T) => R,
   deps: readonly unknown[] = []
 ): R => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // These are utility functions that intentionally wrap hooks
+  // eslint-disable-next-line react-hooks/rules-of-hooks, react-hooks/exhaustive-deps
   return useMemo(() => computeFn(gameState), [gameState, computeFn, ...deps])
 }
 
