@@ -153,9 +153,8 @@ const nextConfig = {
     },
   },
   plugins: [
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // Tailwind plugins use require() - standard for Tailwind config
     require('@tailwindcss/forms'),
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('@tailwindcss/typography')
   ],
 }
