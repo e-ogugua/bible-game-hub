@@ -71,7 +71,7 @@ export const useSceneMemo = (sceneProps: Record<string, unknown>) => {
       optimizedProps: {
         ...sceneProps,
         // Pre-compute expensive calculations
-        computedValues: (sceneProps as any).expensiveCalculation?.(),
+        computedValues: (sceneProps as Record<string, () => unknown>).expensiveCalculation?.(),
       }
     }
   }, [sceneProps])

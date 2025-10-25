@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const nextConfig = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -71,7 +71,93 @@ module.exports = {
         88: '22rem',
         128: '32rem',
       },
+
+      // Enhanced responsive typography system
+      fontSize: {
+        'responsive-xs': 'clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem)',
+        'responsive-sm': 'clamp(0.875rem, 0.8rem + 0.375vw, 1rem)',
+        'responsive-base': 'clamp(1rem, 0.9rem + 0.5vw, 1.125rem)',
+        'responsive-lg': 'clamp(1.125rem, 1rem + 0.625vw, 1.25rem)',
+        'responsive-xl': 'clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem)',
+        'responsive-2xl': 'clamp(1.5rem, 1.3rem + 1vw, 2rem)',
+        'responsive-3xl': 'clamp(1.875rem, 1.6rem + 1.375vw, 2.25rem)',
+        'responsive-4xl': 'clamp(2.25rem, 1.9rem + 1.75vw, 3rem)',
+        'responsive-5xl': 'clamp(3rem, 2.5rem + 2.5vw, 4rem)',
+      },
+
+      // Responsive spacing system
+      padding: {
+        'responsive-xs': 'clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem)',
+        'responsive-sm': 'clamp(0.75rem, 0.6rem + 0.75vw, 1rem)',
+        'responsive-base': 'clamp(1rem, 0.8rem + 1vw, 1.5rem)',
+        'responsive-lg': 'clamp(1.5rem, 1.2rem + 1.5vw, 2rem)',
+        'responsive-xl': 'clamp(2rem, 1.6rem + 2vw, 3rem)',
+        'responsive-2xl': 'clamp(3rem, 2.4rem + 3vw, 4rem)',
+      },
+
+      margin: {
+        'responsive-xs': 'clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem)',
+        'responsive-sm': 'clamp(0.75rem, 0.6rem + 0.75vw, 1rem)',
+        'responsive-base': 'clamp(1rem, 0.8rem + 1vw, 1.5rem)',
+        'responsive-lg': 'clamp(1.5rem, 1.2rem + 1.5vw, 2rem)',
+        'responsive-xl': 'clamp(2rem, 1.6rem + 2vw, 3rem)',
+        'responsive-2xl': 'clamp(3rem, 2.4rem + 3vw, 4rem)',
+      },
+
+      // Responsive grid system
+      gridTemplateColumns: {
+        'responsive-1': 'repeat(1, minmax(0, 1fr))',
+        'responsive-2': 'repeat(auto-fit, minmax(300px, 1fr))',
+        'responsive-3': 'repeat(auto-fit, minmax(250px, 1fr))',
+        'responsive-4': 'repeat(auto-fit, minmax(200px, 1fr))',
+        'responsive-game-cards': 'repeat(auto-fit, minmax(min(100%, 350px), 1fr))',
+      },
+
+      // Responsive breakpoints with mobile-first approach
+      screens: {
+        'xs': '475px',
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1536px',
+        '3xl': '1920px',
+
+        // Touch device breakpoints
+        'touch': { 'raw': '(pointer: coarse)' },
+        'no-touch': { 'raw': '(pointer: fine)' },
+
+        // Orientation breakpoints
+        'landscape': { 'raw': '(orientation: landscape)' },
+        'portrait': { 'raw': '(orientation: portrait)' },
+
+        // High DPI displays
+        'retina': { 'raw': '(min-resolution: 2dppx)' },
+      },
+
+      // Touch-friendly sizing
+      minHeight: {
+        'touch-target': '44px', // WCAG touch target minimum
+        'touch-target-lg': '48px',
+      },
+
+      minWidth: {
+        'touch-target': '44px',
+        'touch-target-lg': '48px',
+      },
+
+      // AR/VR specific breakpoints
+      'ar-mobile': '360px',
+      'ar-tablet': '768px',
+      'ar-desktop': '1024px',
     },
   },
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
+  plugins: [
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    require('@tailwindcss/forms'),
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    require('@tailwindcss/typography')
+  ],
 }
+
+module.exports = nextConfig

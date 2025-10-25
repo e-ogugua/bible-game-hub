@@ -131,34 +131,35 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-bible-primary text-white">
-      <div className="container mx-auto container-padding section-padding">
+      <div className="container mx-auto p-responsive-lg">
         {/* Header with User Stats */}
-        <div className="mb-16">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6">
+        <div className="mb-responsive-2xl">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-responsive-lg gap-responsive-base">
             <div className="flex-1">
-              <h1 className="text-responsive-2xl font-bold font-serif mb-6 text-bible-primary">
+              <h1 className="text-responsive-5xl font-bold font-serif mb-responsive-base text-bible-primary">
                 Bible Game Hub
               </h1>
-              <p className="text-responsive-lg text-bible-secondary mb-4 max-w-2xl">
+              <p className="text-responsive-xl text-bible-secondary mb-responsive-base max-w-2xl">
                 Interactive Scripture Games & Biblical Knowledge
               </p>
               {user && (
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-                  <div className="flex items-center space-x-4 text-responsive-base">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-responsive-sm sm:gap-responsive-base">
+                  <div className="flex items-center space-x-responsive-sm text-responsive-base">
                     <div className="flex items-center space-x-2">
-                      <Star className="w-5 h-5 text-bible-accent" />
+                      <Star className="w-5 h-5 text-bible-accent" aria-hidden="true" />
                       <span>Level {user.level}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Trophy className="w-5 h-5 text-purple-400" />
+                      <Trophy className="w-5 h-5 text-purple-400" aria-hidden="true" />
                       <span>{user.xp} XP</span>
                     </div>
                   </div>
                   <button
                     onClick={handleResetProgress}
-                    className="flex items-center space-x-2 text-red-400 hover:text-red-300 transition-colors text-sm self-start"
+                    className="flex items-center space-x-2 text-red-400 hover:text-red-300 transition-colors text-sm self-start focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded"
+                    aria-label="Reset all progress and achievements"
                   >
-                    <RotateCcw className="w-4 h-4" />
+                    <RotateCcw className="w-4 h-4" aria-hidden="true" />
                     <span>Reset Progress</span>
                   </button>
                 </div>
@@ -166,10 +167,11 @@ export default function Home() {
             </div>
 
             {!user && (
-              <div className="mt-8 lg:mt-0 w-full sm:w-auto">
+              <div className="mt-responsive-lg lg:mt-0 w-full sm:w-auto">
                 <Link
                   href="/auth"
-                  className="bible-button w-full sm:w-auto text-center block"
+                  className="bible-button w-full sm:w-auto text-center block focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                  aria-label="Sign in to track your progress and achievements"
                 >
                   Sign In to Track Progress
                 </Link>
@@ -184,16 +186,25 @@ export default function Home() {
         </div>
 
         {/* Game Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 mb-16">
+        <div className="grid grid-responsive-game-cards gap-responsive-lg mb-responsive-2xl">
           {games.map((game, index) => (
             <Link key={game.id} href={game.href}>
               <motion.div
-                className="group relative bible-card bible-card-hover p-6 lg:p-8 overflow-hidden cursor-pointer h-full"
+                className="group relative bible-card bible-card-hover p-responsive-lg overflow-hidden cursor-pointer h-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 rounded-2xl"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 + 0.6 }}
                 whileHover={{ scale: 1.02, y: -5 }}
                 whileTap={{ scale: 0.98 }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Play ${game.title} - ${game.description}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    window.location.href = game.href
+                  }
+                }}
               >
                 {/* Animated background gradient */}
                 <div
@@ -205,19 +216,19 @@ export default function Home() {
 
                 {/* Icon with enhanced styling */}
                 <motion.div
-                  className={`inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br ${game.color} rounded-2xl mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
+                  className={`inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br ${game.color} rounded-2xl mb-responsive-base shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
                   whileHover={{ rotate: 5, scale: 1.05 }}
                   transition={{ type: 'spring', stiffness: 400 }}
                 >
-                  <game.icon className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
+                  <game.icon className="w-8 h-8 lg:w-10 lg:h-10 text-white" aria-hidden="true" />
                 </motion.div>
 
                 {/* Content with improved typography */}
-                <h3 className="text-responsive-lg font-bold mb-3 group-hover:text-bible-accent transition-colors duration-300">
+                <h3 className="text-responsive-xl font-bold mb-3 group-hover:text-bible-accent transition-colors duration-300">
                   {game.title}
                 </h3>
 
-                <p className="text-bible-secondary leading-relaxed mb-6 text-sm lg:text-base">
+                <p className="text-bible-secondary leading-relaxed mb-responsive-base text-responsive-sm lg:text-responsive-base">
                   {game.description}
                 </p>
 
@@ -228,6 +239,7 @@ export default function Home() {
                     className="ml-2"
                     animate={{ x: [0, 4, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
+                    aria-hidden="true"
                   >
                     →
                   </motion.div>
@@ -253,6 +265,7 @@ export default function Home() {
                         repeat: Infinity,
                         delay: i * 0.3,
                       }}
+                      aria-hidden="true"
                     />
                   ))}
                 </div>
@@ -262,31 +275,23 @@ export default function Home() {
         </div>
 
         {/* Daily Challenges */}
-        <div className="mb-16">
-          <div className="flex items-center mb-6">
-            <Calendar className="w-6 h-6 text-bible-accent mr-3" />
-            <h2 className="text-responsive-xl font-bold">Daily Challenges</h2>
+        <div className="mb-responsive-2xl">
+          <div className="flex items-center mb-responsive-base">
+            <Calendar className="w-6 h-6 text-bible-accent mr-3" aria-hidden="true" />
+            <h2 className="text-responsive-3xl font-bold">Daily Challenges</h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+          <div className="grid grid-responsive-2 gap-responsive-base lg:gap-responsive-lg">
             {dailyChallenges.map((challenge) => (
               <div
                 key={challenge.id}
-                className={`bible-card p-4 lg:p-6 ${
-                  challenge.completed
-                    ? 'border-green-400 bg-green-900/20'
-                    : 'border-white/20'
-                }`}
+                className={`bible-card p-responsive-base lg:p-responsive-lg ${
+                  challenge.completed ? 'border-green-400 bg-green-900/20' : 'border-white/20'
+                } focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 rounded-2xl`}
               >
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-responsive-sm">
                   <div className="flex items-center space-x-3 flex-1">
-                    {challenge.icon && (
-                      <challenge.icon
-                        className={`w-6 h-6 ${
-                          challenge.completed ? 'text-green-400' : 'text-blue-400'
-                        }`}
-                      />
-                    )}
+                    {challenge.icon && <challenge.icon className={`w-6 h-6 ${challenge.completed ? 'text-green-400' : 'text-blue-400'}`} aria-hidden="true" />}
                     <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-responsive-base truncate">
                         {challenge.title}
@@ -304,7 +309,8 @@ export default function Home() {
                 </div>
                 <Link
                   href="/stories/characters"
-                  className="bible-button w-full text-center text-sm"
+                  className="bible-button w-full text-center text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                  aria-label={`Continue with ${challenge.title} challenge`}
                 >
                   Continue
                 </Link>
@@ -315,28 +321,22 @@ export default function Home() {
 
         {/* Enhanced footer section */}
         <motion.div
-          className="text-center bible-card p-6 lg:p-8"
+          className="text-center bible-card p-responsive-lg lg:p-responsive-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2 }}
         >
-          <div className="flex justify-center items-center space-x-2 mb-6">
-            <Star className="w-6 h-6 text-bible-accent animate-pulse-slow" />
-            <Star
-              className="w-5 h-5 text-bible-accent animate-pulse-slow"
-              style={{ animationDelay: '0.5s' }}
-            />
-            <Star
-              className="w-6 h-6 text-bible-accent animate-pulse-slow"
-              style={{ animationDelay: '1s' }}
-            />
+          <div className="flex justify-center items-center space-x-2 mb-responsive-base">
+            <Star className="w-6 h-6 text-bible-accent animate-pulse-slow" aria-hidden="true" />
+            <Star className="w-5 h-5 text-bible-accent animate-pulse-slow" style={{ animationDelay: '0.5s' }} aria-hidden="true" />
+            <Star className="w-6 h-6 text-bible-accent animate-pulse-slow" style={{ animationDelay: '1s' }} aria-hidden="true" />
           </div>
 
-          <h2 className="text-responsive-xl font-bold mb-4 text-bible-primary">
+          <h2 className="text-responsive-3xl font-bold mb-responsive-sm text-bible-primary">
             Ready to Begin Your Journey?
           </h2>
 
-          <p className="text-responsive-base text-bible-secondary mb-6 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-responsive-base text-bible-secondary mb-responsive-lg max-w-2xl mx-auto leading-relaxed">
             Choose your path and discover the beauty, wisdom, and power of God&apos;s Word
             through immersive, interactive experiences that will strengthen your faith.
           </p>

@@ -95,9 +95,6 @@ const nextConfig = {
   // Compression for production
   compress: true,
 
-  // SWC optimizations
-  swcMinify: true,
-
   // Asset optimization
   assetPrefix: process.env.NODE_ENV === 'production' ? 'https://cdn.biblegamehub.com' : '',
 }
