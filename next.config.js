@@ -89,12 +89,6 @@ const nextConfig = {
     return config
   },
 
-  // Output configuration for better caching
-  output: 'standalone',
-
-  // Compression for production
-  compress: true,
-
   // Asset optimization
   assetPrefix: process.env.NODE_ENV === 'production' ? 'https://cdn.biblegamehub.com' : '',
 }

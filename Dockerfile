@@ -23,15 +23,13 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 biblegamehub
 
 COPY --from=builder /app/public ./public
-COPY --from=builder --chown=biblegamehub:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=biblegamehub:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=biblegamehub:nodejs /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
 USER biblegamehub
-
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/api/health || exit 1
 
 EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
