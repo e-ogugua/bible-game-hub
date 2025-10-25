@@ -37,20 +37,6 @@ const nextConfig = {
       }
     }
 
-    // Bundle analysis (commented out to avoid build issues)
-    // Uncomment when needed for development analysis
-    /*
-    if (dev && process.env.ANALYZE === 'true') {
-      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-      config.plugins.push(
-        new BundleAnalyzerPlugin({
-          analyzerMode: 'server',
-          openAnalyzer: true,
-        })
-      )
-    }
-    */
-
     // Optimize chunks
     config.optimization.splitChunks = {
       ...config.optimization.splitChunks,
@@ -89,8 +75,8 @@ const nextConfig = {
     return config
   },
 
-  // Asset optimization
-  assetPrefix: process.env.NODE_ENV === 'production' ? 'https://cdn.biblegamehub.com' : '',
+  // Asset optimization (no CDN prefix to avoid CSS loading issues)
+  // assetPrefix: process.env.NODE_ENV === 'production' ? 'https://cdn.biblegamehub.com' : '',
 }
 
 module.exports = nextConfig
