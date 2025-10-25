@@ -10,15 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write .",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "deploy": "node scripts/deploy.js",
-    "vercel:deploy": "vercel --prod",
-    "fix:deployment": "node scripts/fix-deployment.js",
-    "audit:performance": "node scripts/audit-lighthouse.js",
-    "audit:accessibility": "node scripts/audit-accessibility.js"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@react-three/drei": "^9.88.0",

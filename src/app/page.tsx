@@ -174,11 +174,11 @@ export default function Home() {
         <div className="mb-responsive-2xl">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-responsive-lg gap-responsive-base">
             <div className="flex-1">
-              <h1 className="text-responsive-5xl font-bold font-serif mb-responsive-base text-bible-primary">
+              <h1 className="text-responsive-5xl font-bold font-serif mb-responsive-base text-white">
                 Bible Game Hub
               </h1>
-              <p className="text-responsive-xl text-bible-secondary mb-responsive-base max-w-2xl">
-                Interactive Scripture Games & Biblical Knowledge
+              <p className="text-responsive-xl text-gray-300 mb-responsive-base max-w-2xl">
+                Interactive Bible games and challenges for spiritual growth
               </p>
               {user && (
                 <div className="flex flex-col sm:flex-row sm:items-center gap-responsive-sm sm:gap-responsive-base">
@@ -217,7 +217,7 @@ export default function Home() {
             )}
           </div>
 
-          <p className="text-responsive-base text-bible-secondary max-w-3xl leading-relaxed">
+          <p className="text-responsive-base text-gray-300 max-w-3xl leading-relaxed">
             Learn, play, and grow in your faith through engaging Bible games,
             quizzes, and interactive challenges for all ages
           </p>
@@ -250,7 +250,7 @@ export default function Home() {
                 </div>
 
                 {/* Content with improved typography */}
-                <h3 className="text-responsive-xl font-bold mb-3 group-hover:text-bible-accent transition-colors duration-300">
+                <h3 className="text-responsive-xl font-bold mb-3 text-white group-hover:text-bible-accent transition-colors duration-300">
                   {game.title}
                 </h3>
 
@@ -259,7 +259,7 @@ export default function Home() {
                 </p>
 
                 {/* Enhanced call-to-action */}
-                <div className="flex items-center text-sm font-medium text-purple-300 group-hover:text-bible-accent transition-colors duration-300">
+                <div className="flex items-center text-sm font-medium text-gray-300 group-hover:text-bible-accent transition-colors duration-300">
                   <span>Start Journey</span>
                   <div className="ml-2 transition-transform duration-300 group-hover:translate-x-1">
                     →
@@ -274,7 +274,7 @@ export default function Home() {
         <div className="mb-responsive-2xl">
           <div className="flex items-center mb-responsive-base">
             <Calendar className="w-6 h-6 text-bible-accent mr-3" aria-hidden="true" />
-            <h2 className="text-responsive-3xl font-bold">Daily Challenges</h2>
+            <h2 className="text-responsive-3xl font-bold text-white">Daily Challenges</h2>
           </div>
 
           {challengesLoading ? (
@@ -310,7 +310,7 @@ export default function Home() {
                     <div className="flex items-center space-x-3 flex-1">
                       {challenge.icon && <challenge.icon className={`w-6 h-6 ${challenge.completed ? 'text-green-400' : 'text-blue-400'}`} aria-hidden="true" />}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-responsive-base text-bible-primary truncate">
+                        <h3 className="font-bold text-responsive-base text-white truncate">
                           {challenge.title}
                         </h3>
                         <p className="text-responsive-sm text-bible-secondary truncate">
@@ -340,32 +340,30 @@ export default function Home() {
         {/* Enhanced footer section */}
         <div className="text-center bible-card p-responsive-lg lg:p-responsive-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
           <div className="flex justify-center items-center space-x-2 mb-responsive-base">
-            <Star className="w-6 h-6 text-bible-accent animate-pulse" aria-hidden="true" />
-            <Star className="w-5 h-5 text-bible-accent animate-pulse" style={{ animationDelay: '0.5s' }} aria-hidden="true" />
-            <Star className="w-6 h-6 text-bible-accent animate-pulse" style={{ animationDelay: '1s' }} aria-hidden="true" />
+            <Star className="w-5 h-5 text-bible-accent animate-pulse" aria-hidden="true" />
           </div>
 
-          <h2 className="text-responsive-3xl font-bold mb-responsive-sm text-bible-primary">
+          <h2 className="text-responsive-3xl font-bold mb-responsive-sm text-white">
             Ready to Begin Your Journey?
           </h2>
 
-          <p className="text-responsive-base text-bible-secondary mb-responsive-lg max-w-2xl mx-auto leading-relaxed">
-            Choose your path and discover the beauty, wisdom, and power of God&apos;s Word
-            through immersive, interactive experiences that will strengthen your faith.
+          <p className="text-responsive-base text-gray-300 mb-responsive-lg max-w-2xl mx-auto leading-relaxed">
+            Embark on an interactive journey through Scripture with engaging games,
+            challenges, and immersive biblical experiences designed to strengthen your faith.
           </p>
 
           <div className="flex flex-wrap justify-center gap-3">
             <span className="bible-pill bible-pill-primary">
-              3D Visualizations
+              Interactive Learning
             </span>
             <span className="bible-pill bible-pill-secondary">
-              Immersive Audio
+              Scripture Memory
             </span>
             <span className="bible-pill">
-              Bible-Based Stories
+              Biblical Stories
             </span>
             <span className="bible-pill">
-              Interactive Gameplay
+              Multiplayer Games
             </span>
           </div>
         </div>
