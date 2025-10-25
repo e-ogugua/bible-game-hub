@@ -16,6 +16,7 @@
     "test:coverage": "jest --coverage",
     "deploy": "node scripts/deploy.js",
     "vercel:deploy": "vercel --prod",
+    "fix:deployment": "node scripts/fix-deployment.js",
     "audit:performance": "node scripts/audit-lighthouse.js",
     "audit:accessibility": "node scripts/audit-accessibility.js"
   },
